@@ -1,0 +1,44 @@
+# Global .gitignore for both client and backend
+client/node_modules/       # Angular dependencies
+client/dist/               # Build output
+client/.angular/           # Angular cache folder
+client/.vscode/            # VSCode settings (optional, depends on team preferences)
+client/.metadata/
+# Ignore for Angular (client)
+
+# Ignore for Spring Boot (whatscooking backend)
+whatscooking/target/       # Compiled classes and other build artifacts
+whatscooking/logs/         # Logs folder
+whatscooking/.mvn/         # Maven wrapper files
+whatscooking/.settings/    # Eclipse settings
+whatscooking/.classpath    # Eclipse classpath file
+whatscooking/.project      # Eclipse project file
+
+# Ignore IDE-specific files
+.vscode/                   # Visual Studio Code settings
+.idea/                     # IntelliJ settings
+*.iml                      # IntelliJ module files
+*.log                      # Log files
+*.swp                      # Swap files
+.DS_Store                  # macOS specific files
+Thumbs.db                  # Windows specific files
+.metadata                  # Eclipse workspace metadata
+
+# Ignore for Maven
+whatscooking/pom.xml.tag
+whatscooking/pom.xml.releaseBackup
+whatscooking/pom.xml.versionsBackup
+whatscooking/.recommenders/
+
+# Ignore misc OS files
+.DS_Store                  # macOS specific
+Thumbs.db                  # Windows specific
+
+# Ignore test results
+whatscooking/target/surefire-reports/  # Test reports
+whatscooking/target/failsafe-reports/
+
+# Ignore build artifacts
+client/build/              # Build artifacts for Angular
+client/out-tsc/            # Angular TypeScript compilation output
+whatscooking/target/       # Spring Boot build artifacts
