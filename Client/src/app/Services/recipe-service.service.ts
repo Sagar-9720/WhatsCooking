@@ -1,3 +1,4 @@
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Recipe } from '../Models/Recipe';
@@ -11,5 +12,9 @@ export class RecipeServiceService {
 
   addRecipe(recipe: Recipe) {
     return this.httpModule.post(this.URL, recipe);
+  }
+
+  getAllRecipes(): Observable<any> {
+    return this.httpModule.get<any>(this.URL + '/all');
   }
 }

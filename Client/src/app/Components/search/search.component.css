@@ -1,0 +1,17 @@
+section {
+  height: 50vh;
+  /* margin-top: 10px; */
+  background: url('src/assets/WelcomePageBg.jpg') no-repeat center center/cover;
+}
+
+section div {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+section input[type="text"] {
+  padding: 10px;
+  font-size: 16px;
+}

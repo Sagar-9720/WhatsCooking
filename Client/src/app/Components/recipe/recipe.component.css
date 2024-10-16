@@ -1,0 +1,7 @@
+.card-header {
+  background-color: #f8f9fa;
+  cursor: pointer;
+}
+.card-header:hover {
+  background-color: #e2e6ea;
+}

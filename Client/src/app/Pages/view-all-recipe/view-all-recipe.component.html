@@ -1,0 +1,30 @@
+<app-navbar></app-navbar>
+
+<div class="recipe-list">
+  <table class="styled-table">
+    <thead>
+      <tr>
+        <th>Sr No</th>
+        <th>Recipe Name</th>
+        <th>Meal Type</th>
+        <th>Meal Timing</th>
+        <th>Cuisine</th>
+        <th>Seasonal</th>
+        <th>Endorsed By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let recipe of recipeList; let i = index">
+        <td>{{ i + 1 }}</td>
+        <td>{{ recipe.recipe_name }}</td>
+        <td>{{ recipe.meal_type }}</td>
+        <td>{{ recipe.meal_timing }}</td>
+        <td>{{ recipe.cuisine }}</td>
+        <td>{{ recipe.seasonal }}</td>
+        <td>{{ recipe.isEndorsed ? "Yes" : "No" }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<app-footer></app-footer>

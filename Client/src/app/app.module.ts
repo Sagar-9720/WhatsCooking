@@ -20,6 +20,7 @@ import { LoginComponent } from './Pages/login/login.component';
 import { ProfileComponent } from './Pages/profile/profile.component';
 import { RegisterComponent } from './Pages/register/register.component';
 import { RouterModule } from '@angular/router';
+import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,6 +37,7 @@ import { RouterModule } from '@angular/router';
     LoginComponent,
     ProfileComponent,
     RegisterComponent,
+    ViewAllRecipeComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,12 @@
+body {
+  background-image: url('src/assets/HomePageBg.jpg');
+  background-size: cover;
+  background-position: center;
+  height: 94vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  text-align: center;
+}

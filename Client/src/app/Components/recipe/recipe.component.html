@@ -1,18 +1,17 @@
 <div class="card" style="width: 18rem">
-  <div class="card-header">Endorsed by</div>
-  <img src="path/to/your/image.jpg" class="card-img-top" alt="Recipe Image" />
+  <div class="card-header">
+    <!-- Display endorsement status -->
+    <span *ngIf="recipe?.isEndorsed"
+      >Endorsed by {{ recipe?.nutritionist?.name }}</span
+    >
+  </div>
+  <!-- Display the recipe image -->
+  <img src="assets/vegetable.jpeg" class="card-img-top" alt="Recipe Image" />
+
   <div class="card-body">
-    <h5 class="card-title">Recipe Name</h5>
+    <!-- Display the recipe name -->
+    <h5 class="card-title">{{ recipe?.recipe_name }}</h5>
+    <!-- Display the recipe rating -->
     <button class="btn btn-primary">Like</button>
   </div>
 </div>
-
-<style>
-  .card-header {
-    background-color: #f8f9fa;
-    cursor: pointer;
-  }
-  .card-header:hover {
-    background-color: #e2e6ea;
-  }
-</style>
