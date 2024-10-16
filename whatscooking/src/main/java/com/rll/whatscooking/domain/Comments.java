@@ -17,7 +17,8 @@ import lombok.Data;
 public class Comments {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int comment_id;
+	private int commentId;
+
 	private String comment;
 
 	@ManyToOne(fetch = FetchType.LAZY)

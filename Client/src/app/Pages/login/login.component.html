@@ -1,0 +1,107 @@
+<p>login works!</p>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-3">
+        <div class="card shadow-lg">
+          <div class="card-header bg-primary text-white text-center">
+            
+            <h2 *ngIf="!forgotPasswordActive">User Login</h2>
+            <h2 *ngIf="forgotPasswordActive && !otpSent && !otpVerified">Forgot Password</h2>
+            <h2 *ngIf="otpSent && !otpVerified">Enter OTP</h2>
+            <h2 *ngIf="otpVerified">Reset Password</h2>
+          </div>
+          <div class="card-body">
+          
+            <form *ngIf="!forgotPasswordActive" #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" class="form-control" name="username" [(ngModel)]="user.username" required minlength="3" #username="ngModel" placeholder="Enter your username">
+                <div *ngIf="username.invalid && username.touched" class="text-danger">
+                  <small *ngIf="username.errors?.['required']">Username is required.</small>
+                  <small *ngIf="username.errors?.['minlength']">Username must be at least 3 characters long.</small>
+                </div>
+              </div>
+  
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" class="form-control" name="password" [(ngModel)]="user.password" required minlength="6" #password="ngModel" placeholder="Enter your password">
+                <div *ngIf="password.invalid && password.touched" class="text-danger">
+                  <small *ngIf="password.errors?.['required']">Password is required.</small>
+                  <small *ngIf="password.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                </div>
+              </div>
+
+              
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-link" (click)="forgotPassword()">Forgot Password?</button>
+              </div>
+  
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="loginForm.invalid">Login</button>
+              </div>
+  
+  
+              <div class="d-grid gap-2">
+                <button type="button" class="btn btn-secondary" (click)="goToRegister()">Not yet registered? Register Here</button>
+              </div>
+            </form>
+  
+           
+            <form *ngIf="forgotPasswordActive && !otpSent && !otpVerified" #forgotPasswordForm="ngForm" (ngSubmit)="sendOtp(forgotPasswordForm)">
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-control" name="email" [(ngModel)]="user.email" required #email="ngModel" placeholder="Enter your email">
+                <div *ngIf="email.invalid && email.touched" class="text-danger">
+                  <small *ngIf="email.errors?.['required']">Email is required.</small>
+                </div>
+              </div>
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" id="username" class="form-control" name="username" [(ngModel)]="user.username" required minlength="3" #username="ngModel" placeholder="Enter your username">
+                <div *ngIf="username.invalid && username.touched" class="text-danger">
+                  <small *ngIf="username.errors?.['required']">Username is required.</small>
+                  <small *ngIf="username.errors?.['minlength']">Username must be at least 3 characters long.</small>
+                </div>
+              </div>
+  
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="forgotPasswordForm.invalid">Send OTP</button>
+              </div>
+            </form>
+  
+            <form *ngIf="otpSent && !otpVerified" #otpForm="ngForm" (ngSubmit)="verifyOtp(otpForm)">
+              <div class="mb-3">
+                <label for="otp" class="form-label">OTP</label>
+                <input type="text" id="otp" class="form-control" name="otp" [(ngModel)]="user.otp" required minlength="6" maxlength="6" #otp="ngModel" placeholder="Enter the OTP">
+                <div *ngIf="otp.invalid && otp.touched" class="text-danger">
+                  <small *ngIf="otp.errors?.['required']">OTP is required.</small>
+                  <small *ngIf="otp.errors?.['minlength']">OTP must be 6 characters long.</small>
+                </div>
+              </div>
+  
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="otpForm.invalid">Verify OTP</button>
+              </div>
+            </form>
+  
+            <form *ngIf="otpVerified" #resetPasswordForm="ngForm" (ngSubmit)="resetPassword(resetPasswordForm)">
+              <div class="mb-3">
+                <label for="newPassword" class="form-label">New Password</label>
+                <input type="password" id="newPassword" class="form-control" name="newPassword" [(ngModel)]="user.newPassword" required minlength="6" #newPassword="ngModel" placeholder="Enter your new password">
+                <div *ngIf="newPassword.invalid && newPassword.touched" class="text-danger">
+                  <small *ngIf="newPassword.errors?.['required']">Password is required.</small>
+                  <small *ngIf="newPassword.errors?.['minlength']">Password must be at least 6 characters long.</small>
+                </div>
+              </div>
+  
+              <div class="d-grid gap-2">
+                <button type="submit" class="btn btn-primary" [disabled]="resetPasswordForm.invalid">Reset Password</button>
+              </div>
+            </form>
+  
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

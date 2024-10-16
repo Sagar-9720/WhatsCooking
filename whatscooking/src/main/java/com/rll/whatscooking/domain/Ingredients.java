@@ -1,5 +1,6 @@
 package com.rll.whatscooking.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.Entity;
@@ -12,12 +13,12 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Ingredients {
+public class Ingredients { // Class name should be singular
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int ingredient_id;
+    private int ingredientId;
     private String name;
-    
-    @ManyToMany(fetch = FetchType.LAZY)
-    private List<Recipe> recipes;
+
+    @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
+    private List<Recipe> recipes = new ArrayList<>();
 }

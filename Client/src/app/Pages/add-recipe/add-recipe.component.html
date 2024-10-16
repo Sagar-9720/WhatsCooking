@@ -1,0 +1,157 @@
+<form
+  [formGroup]="recipeForm"
+  (ngSubmit)="onSubmit()"
+  style="
+    width: 50vw;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+  "
+>
+  <div class="form-group">
+    <label for="recipeName">Name of Recipe</label>
+    <input
+      type="text"
+      class="form-control"
+      id="recipeName"
+      formControlName="recipe_name"
+      placeholder="Enter recipe name"
+      autocomplete="off"
+    />
+  </div>
+
+  <div class="form-group"></div>
+  <label for="ingredients">Ingredients</label>
+  <div formArrayName="ingredients" id="ingredients">
+    <div
+      *ngFor="let ingredient of ingredients.controls; let i = index"
+      [formGroupName]="i"
+      class="input-group mb-2"
+    >
+      <input
+        type="text"
+        class="form-control"
+        formControlName="name"
+        placeholder="Enter ingredient"
+        autocomplete="off"
+      />
+      <div class="input-group-append">
+        <button
+          class="btn btn-outline-secondary"
+          type="button"
+          *ngIf="i === ingredients.length - 1"
+          (click)="addIngredient()"
+        >
+          +
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label for="recipeSteps">Preparation Steps</label>
+    <textarea
+      class="form-control"
+      id="recipeSteps"
+      formControlName="recipe_steps"
+      rows="3"
+      placeholder="Enter preparation steps"
+      autocomplete="off"
+    ></textarea>
+  </div>
+
+  <div class="form-group">
+    <label for="mealTiming">Meal Timing</label>
+    <select
+      class="form-control"
+      id="mealTiming"
+      formControlName="meal_timing"
+      autocomplete="off"
+    >
+      <option value="">None</option>
+      <option *ngFor="let timing of mealTimings" [value]="timing">
+        {{ timing }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="mealType">Meal Type</label>
+    <select
+      class="form-control"
+      id="mealType"
+      formControlName="meal_type"
+      autocomplete="off"
+    >
+      <option value="">None</option>
+      <option *ngFor="let type of mealTypes" [value]="type">{{ type }}</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="seasonal">Seasonal</label>
+    <select
+      class="form-control"
+      id="seasonal"
+      formControlName="seasonal"
+      autocomplete="off"
+    >
+      <option value="">None</option>
+      <option *ngFor="let season of seasons" [value]="season">
+        {{ season }}
+      </option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="cuisine">Cuisine</label>
+    <select
+      class="form-control"
+      id="cuisine"
+      formControlName="cuisine"
+      autocomplete="off"
+    >
+      <option value="">None</option>
+      <option *ngFor="let cuisine of cuisines" [value]="cuisine">
+        {{ cuisine }}
+      </option>
+    </select>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<style>
+  body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f0f2f5;
+    margin: 0;
+  }
+
+  form {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .form-group {
+    margin-bottom: 15px;
+  }
+
+  .form-control {
+    border-radius: 5px;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #004085;
+  }
+</style>
