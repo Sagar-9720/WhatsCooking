@@ -1,1 +1,53 @@
-<p>contact works!</p>
+<app-navbar></app-navbar>
+<body>
+  <div class="container contact-form border-radius-2 mt-5 p-4 shadow-lg">
+    <form method="post">
+      <h3 class="text-center mb-4">Drop Us a Message</h3>
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form-group mb-3">
+            <input
+              type="text"
+              name="txtName"
+              class="form-control"
+              placeholder="Your Name *"
+              value=""
+              required
+            />
+          </div>
+          <div class="form-group mb-3">
+            <input
+              type="email"
+              name="txtEmail"
+              class="form-control"
+              placeholder="Your Email *"
+              value=""
+              required
+            />
+          </div>
+          <div class="form-group">
+            <input
+              type="submit"
+              name="btnSubmit"
+              class="btn btn-primary w-100"
+              value="Send Message"
+            />
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <textarea
+              name="txtMsg"
+              class="form-control"
+              placeholder="Your Message *"
+              style="width: 100%; height: 150px"
+              required
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+</body>
+<app-footer></app-footer>
+

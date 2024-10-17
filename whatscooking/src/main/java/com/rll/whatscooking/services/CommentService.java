@@ -1,5 +1,6 @@
 package com.rll.whatscooking.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import com.rll.whatscooking.repository.iCommentRepository;
 
 @Service
 public class CommentService implements iCommentRepository {
+
     @Autowired
     private CommentRepository commentRepository;
 
@@ -23,9 +25,25 @@ public class CommentService implements iCommentRepository {
     public Comments uncommentRecipe(Comments comments) {
         Optional<Comments> optionalComments = commentRepository.findById(comments.getCommentId());
         if (optionalComments.isPresent()) {
-            commentRepository.delete(optionalComments.get());
-            return optionalComments.get();
+            Comments deletedComments = optionalComments.get();
+            commentRepository.delete(deletedComments);
+            return deletedComments;
         }
         return null;
+    }
+
+    @Override
+    public List<Comments> getAllComments() {
+        return commentRepository.findAll();
+    }
+
+    @Override
+    public List<Comments> findByRecipeId(Integer recipeId) {
+        return commentRepository.findByRecipeId(recipeId);
+    }
+
+    @Override
+    public Comments getCommentByUserIdAndRecipeId(int recipeId, int userId) {
+        return commentRepository.getCommentByUserIdAndRecipeId(recipeId, userId);
     }
 }

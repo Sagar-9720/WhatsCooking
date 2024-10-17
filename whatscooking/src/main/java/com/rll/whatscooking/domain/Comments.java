@@ -13,19 +13,20 @@ import lombok.Data;
 
 @Entity
 @Data
-@Table(name = "comments", uniqueConstraints = { @UniqueConstraint(columnNames = { "user_id", "recipe_id" }) })
+@Table(name = "comments", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"user_id", "recipe_id"})})
 public class Comments {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int commentId;
 
-	private String comment;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int commentId;
+    private String comment;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "user_id")
-	private User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "recipe_id")
-	private Recipe recipe;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "recipe_id")
+    private Recipe recipe;
 }

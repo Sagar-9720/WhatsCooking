@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 public class recipeCard {
+
     private int recipe_id;
     private String recipe_name;
     // categories
@@ -18,10 +19,11 @@ public class recipeCard {
     private Cuisine cuisine;
 
     private int recipe_rating;
-    private boolean isEndorsed = false;
+    private boolean recipe_status;
+    private boolean isEndorsed;
     private String nutritionistName;
 
-    public recipeCard(int recipeId, String recipeName, MealTiming mealTiming, MealType mealType, Seasonal seasonal, Cuisine cuisine, int recipeRating, boolean endorsed, String firstName) {
+    public recipeCard(int recipeId, String recipeName, MealTiming mealTiming, MealType mealType, Seasonal seasonal, Cuisine cuisine, int recipeRating, boolean recipe_status, boolean endorsed, String firstName) {
         this.recipe_id = recipeId;
         this.recipe_name = recipeName;
         this.meal_timing = mealTiming;
@@ -29,8 +31,9 @@ public class recipeCard {
         this.seasonal = seasonal;
         this.cuisine = cuisine;
         this.recipe_rating = recipeRating;
+        this.recipe_status = recipe_status;
         this.isEndorsed = endorsed;
         this.nutritionistName = firstName;
-        
+
     }
 }

@@ -21,6 +21,9 @@ import { ProfileComponent } from './Pages/profile/profile.component';
 import { RegisterComponent } from './Pages/register/register.component';
 import { RouterModule } from '@angular/router';
 import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.component';
+import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.component';
+import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
+import { SignoutComponent } from './Pages/signout/signout.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -38,6 +41,9 @@ import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.
     ProfileComponent,
     RegisterComponent,
     ViewAllRecipeComponent,
+    ModifyrecipeComponent,
+    ViewrecipeComponent,
+    SignoutComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { User } from 'src/app/Models/User'; // No changes to the User model
+import { User } from 'src/app/Models/User';
 import { UserserviceService } from 'src/app/Services/userservice.service';
+
 
 @Component({
   selector: 'app-profile',
@@ -9,15 +10,7 @@ import { UserserviceService } from 'src/app/Services/userservice.service';
   styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent {
-  user: User = {
-    username: '',
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    verifyPassword: '',
-    role: 'user',
-  };
+  user: User =new User();
 
   passwordDetails = {
     currentPassword: '',
@@ -63,7 +56,7 @@ export class ProfileComponent {
         this.passwordDetails.verifyNewPassword
       ) {
         this.userService
-          .changePassword(this.user, this.passwordDetails.newPassword)
+          .changePassword(this.user)
           .subscribe(
             (success: boolean) => {
               if (success) {

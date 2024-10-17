@@ -1,52 +1,121 @@
-<!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">What's Cooking</a>
-  <div class="collapse navbar-collapse">
-    <ul class="navbar-nav mr-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Home Page</a>
-      </li>
-    </ul>
-    <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Profile</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Logout</a>
-      </li>
-    </ul>
-  </div>
-</nav> -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light" style="height: 10vh;">
+<nav
+  *ngIf="role !== undefined"
+  class="navbar navbar-expand-lg navbar-light bg-light"
+>
   <div class="container-fluid">
-    <a class="navbar-brand" routerLink="">What's Cooking</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <!-- Left Aligned Brand -->
+    <a class="navbar-brand fw-bold" routerLink="/">WhatsCooking</a>
+
+    <!-- Toggler for mobile view -->
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNav"
+      aria-controls="navbarNav"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
       <span class="navbar-toggler-icon"></span>
     </button>
+
+    <!-- Right Aligned Navbar Items -->
     <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav ms-auto"> 
-        <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="home">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="register">Register</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="login">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="recipe">Recipes</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="profile">Profile</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="about">About</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="contact">Contact</a>
-        </li>
+      <ul class="navbar-nav ms-auto" [ngSwitch]="role">
+        <!-- Admin Navbar -->
+        <ng-container *ngSwitchCase="'admin'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="add-recipe">Add Recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+              >Log Out</a
+            >
+          </li>
+        </ng-container>
+
+        <!-- User Navbar -->
+        <ng-container *ngSwitchCase="'user'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Endorse recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+              >Logout</a
+            >
+          </li>
+        </ng-container>
+
+        <!-- Nutritionist Navbar -->
+        <ng-container *ngSwitchCase="'nutritionist'">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="add-recipe">Add Recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Endorse By Me</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="profile">Profile</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+              >Logout</a
+            >
+          </li>
+        </ng-container>
+
+        <!-- Default Navbar (Not Logged In) -->
+        <ng-container *ngSwitchDefault>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link btn btn-outline-primary ms-2" routerLink="/login"
+              >Login</a
+            >
+          </li>
+          <li class="nav-item">
+            <a
+              class="nav-link btn btn-outline-success ms-2"
+              routerLink="/register"
+              >Register</a
+            >
+          </li>
+        </ng-container>
       </ul>
     </div>
   </div>
 </nav>
 
+<style>
+  .navbar-nav .nav-link {
+    margin-right: 10px;
+  }
+  .navbar-brand {
+    font-size: 1.5rem;
+  }
+</style>

@@ -1,0 +1,43 @@
+<app-navbar></app-navbar>
+<body>
+  <div>
+    <app-recipe></app-recipe>
+  </div>
+  <div class="col-md-8">
+    <form>
+      <div class="form-group">
+        <label for="recipeName">Name of Recipe</label>
+        <input
+          type="text"
+          class="form-control"
+          value="Spaghetti Carbonara"
+          readonly
+        />
+      </div>
+      <div class="form-group">
+        <label for="ingredients">Ingredients</label>
+        <div id="ingredients">
+          <div
+            class="input-group mb-2"
+            *ngFor="let ingredient of recipe.ingredients"
+          >
+            <input
+              type="text"
+              class="form-control"
+              [value]="ingredient.name"
+              readonly
+            />
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="recipeSteps">Recipe Steps</label>
+        <textarea class="form-control" readonly>
+Boil pasta. Cook bacon. Mix eggs and cheese. Combine all ingredients.</textarea
+        >
+      </div>
+      <button type="button" class="btn btn-secondary">Edit</button>
+    </form>
+  </div>
+</body>
+<app-footer></app-footer>

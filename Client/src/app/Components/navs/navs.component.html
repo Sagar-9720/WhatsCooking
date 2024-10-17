@@ -1,48 +1,104 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="#">Navbar</a>
-  <button
-    class="navbar-toggler"
-    type="button"
-    data-toggle="collapse"
-    data-target="#navbarNav"
-    aria-controls="navbarNav"
-    aria-expanded="false"
-    aria-label="Toggle navigation"
+<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link active"
+      id="meal-type-tab"
+      data-toggle="tab"
+      href="#meal-type"
+      role="tab"
+      aria-controls="meal-type"
+      aria-selected="true"
+    >
+      Meal Type
+    </a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link"
+      id="seasonal-tab"
+      data-toggle="tab"
+      href="#seasonal"
+      role="tab"
+      aria-controls="seasonal"
+      aria-selected="false"
+    >
+      Seasonal
+    </a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link"
+      id="cuisine-tab"
+      data-toggle="tab"
+      href="#cuisine"
+      role="tab"
+      aria-controls="cuisine"
+      aria-selected="false"
+    >
+      Cuisine
+    </a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a
+      class="nav-link"
+      id="meal-timing-tab"
+      data-toggle="tab"
+      href="#meal-timing"
+      role="tab"
+      aria-controls="meal-timing"
+      aria-selected="false"
+    >
+      Meal Timing
+    </a>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div
+    class="tab-pane fade show active"
+    id="meal-type"
+    role="tabpanel"
+    aria-labelledby="meal-type-tab"
   >
-    <span class="navbar-toggler-icon"></span>
-  </button>
-  <div class="collapse navbar-collapse" id="navbarNav">
-    <ul class="navbar-nav">
-      <li class="nav-item">
-        <a class="nav-link" href="#">Tab 1</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Tab 2</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Tab 3</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" href="#">Tab 4</a>
-      </li>
-      <li class="nav-item dropdown">
-        <a
-          class="nav-link dropdown-toggle"
-          href="#"
-          id="navbarDropdown"
-          role="button"
-          data-toggle="dropdown"
-          aria-haspopup="true"
-          aria-expanded="false"
-        >
-          Tab 5
-        </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-          <a class="dropdown-item" href="#">Dropdown 1</a>
-          <a class="dropdown-item" href="#">Dropdown 2</a>
-          <a class="dropdown-item" href="#">Dropdown 3</a>
-        </div>
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of MealType | keyvalue">
+        {{ item.value }}
       </li>
     </ul>
   </div>
-</nav>
+  <div
+    class="tab-pane fade"
+    id="seasonal"
+    role="tabpanel"
+    aria-labelledby="seasonal-tab"
+  >
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of Seasonal | keyvalue">
+        {{ item.value }}
+      </li>
+    </ul>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="cuisine"
+    role="tabpanel"
+    aria-labelledby="cuisine-tab"
+  >
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of Cuisine | keyvalue">
+        {{ item.value }}
+      </li>
+    </ul>
+  </div>
+  <div
+    class="tab-pane fade"
+    id="meal-timing"
+    role="tabpanel"
+    aria-labelledby="meal-timing-tab"
+  >
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let item of MealTiming | keyvalue">
+        {{ item.value }}
+      </li>
+    </ul>
+  </div>
+</div> -->

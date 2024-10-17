@@ -13,19 +13,24 @@ import com.rll.whatscooking.domain.Recipe;
 import com.rll.whatscooking.domain.User;
 import com.rll.whatscooking.repository.IngredientRepository;
 import com.rll.whatscooking.repository.RecipeRepository;
+import com.rll.whatscooking.repository.UserRepository;
 import com.rll.whatscooking.repository.iRecipeRepository;
 
 @Service
 public class RecipeService implements iRecipeRepository {
+
     @Autowired
     private RecipeRepository recipeRepository;
 
     @Autowired
     private IngredientRepository ingredientsRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @Override
     public Recipe addRecipe(Recipe recipe) {
-        recipe.setUser(null);
+
         recipe.setNutrition(null);
         // Initialize endorsed and likedUser
         recipe.setEndorsed(false);
@@ -44,7 +49,7 @@ public class RecipeService implements iRecipeRepository {
                     ingredient = ingredientsRepository.save(ingredient);
                 } else {
                     // Fetch the existing ingredient to ensure it's managed
-                    ingredient = ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
+                    ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
 
                 }
             }
@@ -66,7 +71,6 @@ public class RecipeService implements iRecipeRepository {
             existingRecipe.setRecipe_status(recipe.isRecipe_status());
             existingRecipe.setRecipe_steps(recipe.getRecipe_steps());
             existingRecipe.setNutrition(recipe.getNutrition());
-            existingRecipe.setUser(recipe.getUser());
             existingRecipe.setLikedUser(recipe.getLikedUser());
             existingRecipe.setEndorsed(recipe.isEndorsed());
 
@@ -118,7 +122,7 @@ public class RecipeService implements iRecipeRepository {
         if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
             existingRecipe.setEndorsed(true);
-            existingRecipe.setUser(recipe.getUser());
+
             existingRecipe.setNutrition(recipe.getNutrition());
             return recipeRepository.save(existingRecipe);
         }
@@ -148,8 +152,9 @@ public class RecipeService implements iRecipeRepository {
     @Override
     public List<recipeCard> viewAllRecipes() {
         List<recipeCard> recipeCardList = new ArrayList<>();
-        recipeRepository.findAll().stream().filter(Recipe::isRecipe_status).forEach(recipe -> {
-            String userName = recipe.getUser() != null ? recipe.getUser().getFirstName() : "Unknown";
+        recipeRepository.findAll().stream().forEach(recipe -> {
+            String userName = (recipe.getNutrition() != null) ? recipe.getNutrition().getUser().getFirstName()
+                    : "Unknown";
             recipeCardList.add(new recipeCard(
                     recipe.getRecipe_id(),
                     recipe.getRecipe_name(),
@@ -158,6 +163,7 @@ public class RecipeService implements iRecipeRepository {
                     recipe.getSeasonal(),
                     recipe.getCuisine(),
                     recipe.getLikedUser().size(),
+                    recipe.isRecipe_status(),
                     recipe.isEndorsed(),
                     userName));
         });
@@ -165,22 +171,81 @@ public class RecipeService implements iRecipeRepository {
     }
 
     @Override
-    public boolean likeRecipe(Recipe recipe, User user) {
-        if (!recipe.getLikedUser().contains(user)) {
-            recipe.getLikedUser().add(user);
-            recipeRepository.save(recipe);
-            return true;
+    public Recipe likeRecipe(Recipe recipe) {
+        if (recipe == null) {
+            throw new IllegalArgumentException("Recipe must not be null");
         }
-        return false;
+        // Check if the recipe exists in the database
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
+        if (!optionalRecipe.isPresent()) {
+            throw new IllegalArgumentException("Recipe does not exist");
+        }
+        // Check if the user exists in the database
+        User user = recipe.getLikedUser().get(0);
+        Optional<User> optionalUser = userRepository.findById(user.getUserId());
+        if (!optionalUser.isPresent()) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+
+        user = optionalUser.get();
+        // Check if the user already liked the recipe
+        Recipe existingRecipe = optionalRecipe.get();
+        if (!existingRecipe.getLikedUser().contains(user)) {
+            existingRecipe.getLikedUser().add(user);
+            return recipeRepository.save(existingRecipe);
+
+        }
+        return null;
     }
 
     @Override
-    public boolean unlikeRecipe(Recipe recipe, User user) {
-        if (recipe.getLikedUser().contains(user)) {
-            recipe.getLikedUser().remove(user);
-            recipeRepository.save(recipe);
-            return true;
+    public Recipe unlikeRecipe(Recipe recipe) {
+        if (recipe == null) {
+            throw new IllegalArgumentException("Recipe must not be null");
         }
-        return false;
+        // Check if the recipe exists in the database
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
+        if (!optionalRecipe.isPresent()) {
+            throw new IllegalArgumentException("Recipe does not exist");
+        }
+        // Check if the user exists in the database
+        User user = recipe.getLikedUser().get(0);
+        Optional<User> optionalUser = userRepository.findById(user.getUserId());
+        if (!optionalUser.isPresent()) {
+            throw new IllegalArgumentException("User does not exist");
+        }
+
+        user = optionalUser.get();
+        // Check if the user already liked the recipe
+        Recipe existingRecipe = optionalRecipe.get();
+        if (existingRecipe.getLikedUser().contains(user)) {
+            existingRecipe.getLikedUser().remove(user);
+            return recipeRepository.save(existingRecipe);
+
+        }
+        return null;
+    }
+
+    @Override
+    public Recipe enabledRecipe(Recipe recipe) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
+        if (optionalRecipe.isPresent()) {
+            Recipe existingRecipe = optionalRecipe.get();
+            existingRecipe.setRecipe_status(true);
+            return recipeRepository.save(existingRecipe);
+        }
+        return null;
+    }
+
+    @Override
+    public Recipe disableRecipe(Recipe recipe) {
+        Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
+        if (optionalRecipe.isPresent()) {
+            Recipe existingRecipe = optionalRecipe.get();
+            existingRecipe.setRecipe_status(false);
+            return recipeRepository.save(existingRecipe);
+
+        }
+        return null;
     }
 }

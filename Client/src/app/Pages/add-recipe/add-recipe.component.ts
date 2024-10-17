@@ -1,8 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
-import { Ingredient } from '../../Models/Ingredients';
-import { Nutritionist } from '../../Models/Nutritionist';
-import { Nutrition } from '../../Models/Nutrition';
 import {
   Recipe,
   MealTiming,
@@ -10,6 +7,8 @@ import {
   Seasonal,
   Cuisine,
 } from '../../Models/Recipe';
+import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
+import { ToastService } from 'angular-toastify';
 
 @Component({
   selector: 'app-add-recipe',
@@ -22,8 +21,15 @@ export class AddRecipeComponent implements OnInit {
   mealTypes = Object.keys(MealType).filter((key) => isNaN(Number(key)));
   seasons = Object.keys(Seasonal).filter((key) => isNaN(Number(key)));
   cuisines = Object.keys(Cuisine).filter((key) => isNaN(Number(key)));
+  selectedFile: File | null = null;
+  imageUrl: string | null = null;
+  recipe: Recipe | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private recipeService: RecipeServiceService,
+    private toastService: ToastService
+  ) {}
 
   ngOnInit(): void {
     this.recipeForm = this.fb.group({
@@ -79,7 +85,15 @@ export class AddRecipeComponent implements OnInit {
         formValues.nutrition,
         formValues.ingredients
       );
-      console.log(recipe);
+      this.recipeService.addRecipe(recipe).subscribe((data) => {
+        this.recipe = data;
+      });
+      if (this.recipe) {
+        this.toastService.success('Recipe Added Successfully');
+        
+      } else {
+        this.toastService.error('Failed to add recipe');
+      }
     } else {
       this.recipeForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
       Object.keys(this.recipeForm.controls).forEach((key) => {
@@ -89,6 +103,28 @@ export class AddRecipeComponent implements OnInit {
         }
       });
       console.log('Form is invalid');
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  onUpload() {
+    if (this.selectedFile) {
+      console.log('Uploading:', this.selectedFile.name);
+      alert('Image Uploaded Successfully...');
+    } else {
+      console.error('No file selected!');
+      alert('Failed to Uplaod the Image');
     }
   }
 }

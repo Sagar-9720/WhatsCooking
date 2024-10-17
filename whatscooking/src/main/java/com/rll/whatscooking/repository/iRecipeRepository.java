@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.rll.whatscooking.View.recipeCard;
 import com.rll.whatscooking.domain.Recipe;
-import com.rll.whatscooking.domain.User;
 
 public interface iRecipeRepository {
 
@@ -20,8 +19,12 @@ public interface iRecipeRepository {
 
     List<recipeCard> viewAllRecipes();
 
-    boolean likeRecipe(Recipe recipe, User user);
+    Recipe likeRecipe(Recipe recipe);
 
-    boolean unlikeRecipe(Recipe recipe, User user);
+    Recipe unlikeRecipe(Recipe recipe);
+
+    Recipe enabledRecipe(Recipe recipe);
+
+    Recipe disableRecipe(Recipe recipe);
 
 }

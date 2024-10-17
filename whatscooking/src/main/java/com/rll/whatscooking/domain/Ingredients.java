@@ -3,6 +3,8 @@ package com.rll.whatscooking.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -13,12 +15,14 @@ import lombok.Data;
 
 @Entity
 @Data
-public class Ingredients { // Class name should be singular
+public class Ingredients {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int ingredientId;
     private String name;
 
     @ManyToMany(mappedBy = "ingredients", fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Recipe> recipes = new ArrayList<>();
 }

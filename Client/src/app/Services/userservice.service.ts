@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-
 import { User } from '../Models/User';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
@@ -12,34 +11,47 @@ export class UserserviceService {
 
   constructor(private http: HttpClient) {}
 
-  addUser(user: User): Observable<User> {
+  addUser(user: User): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<User>(`${this.apiUrl}/addUser`, user, { headers });
+    return this.http.post<any>(`${this.apiUrl}/addUser`, user, { headers });
   }
 
-  loginUser(user: User): Observable<User> {
+  loginUser(user: User): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post<User>(`${this.apiUrl}/loginUser`, user, { headers });
+    return this.http
+      .put<any>(`${this.apiUrl}/loginUser`, user, { headers })
+      .pipe(
+        tap((response) => {
+          if (response) {
+            console.log('User logged in:', response);
+            sessionStorage.setItem('user', JSON.stringify(response));
+          }
+        })
+      );
   }
 
-  updateProfile(user: User): Observable<User> {
+  updateProfile(user: User): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<User>(`${this.apiUrl}/updateUser`, user, { headers });
+    return this.http.put<any>(`${this.apiUrl}/updateUser`, user, { headers });
   }
 
-  changePassword(user: User, newPassword: string): Observable<boolean> {
+  changePassword(user: User): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put<boolean>(
-      `${this.apiUrl}/changepassword/${newPassword}`,
-      user,
-      { headers }
-    );
-  }
-
-  getUserDetails(userName: string): Observable<User> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get<User>(`${this.apiUrl}/username/${userName}`, {
+    return this.http.put<any>(`${this.apiUrl}/changepassword`, user, {
       headers,
     });
+  }
+
+  getUserDetails(userName: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(`${this.apiUrl}/username`, {
+      headers,
+      params: { username: userName },
+    });
+  }
+
+  getAllUsers(): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(`${this.apiUrl}/usernames`, { headers });
   }
 }

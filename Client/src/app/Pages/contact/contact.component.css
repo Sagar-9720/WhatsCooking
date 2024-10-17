@@ -1,0 +1,37 @@
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
+  background-image: url("../../../assets/Images/bg.avif");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-form {
+  background: rgba(255, 255, 255, 0.9);
+  width: 90%;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+  border-radius: 1rem;
+}
+
+.contact-form .form-control {
+  border-radius: 0.5rem;
+}
+
+.contact-form h3 {
+  color: #0062cc;
+}
+
+.btn-primary {
+  background-color: #0062cc;
+  border: none;
+}
