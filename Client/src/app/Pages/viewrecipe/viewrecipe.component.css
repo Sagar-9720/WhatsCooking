@@ -1,101 +1,149 @@
 body {
-    width: 100%;
-    height: auto; /* Changed to auto for better responsiveness */
-  }
-  
-  h1 {
-    margin-bottom: 20px;
-  }
-  
-  .recipe-list {
-    margin: 20px auto;
-    max-width: 1200px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  }
-  
-  .styled-table {
-    width: 100%;
-    border-collapse: collapse;
-    font-size: 1em;
-    font-family: "Arial", sans-serif;
-  }
-  
-  .styled-table thead tr {
-    background-color: #009879;
-    color: #ffffff;
-    text-align: left;
-  }
-  
-  .styled-table th,
-  .styled-table td {
-    padding: 12px 15px;
-  }
-  
-  .styled-table tbody tr {
-    border-bottom: 1px solid #dddddd;
-  }
-  
-  .styled-table tbody tr:nth-of-type(even) {
-    background-color: #f3f3f3;
-  }
-  
-  .styled-table tbody tr:last-of-type {
-    border-bottom: 2px solid #009879;
-  }
-  
-  .styled-table tbody tr:hover {
-    background-color: #f1f1f1;
-  }
-  
-  .comments-section {
-    max-width: 600px; /* Max width for the comments section */
-    margin: 20px auto; /* Center the section */
-    padding: 20px;
-    border: 1px solid #ddd; /* Light border */
-    border-radius: 8px; /* Rounded corners */
-    background-color: #f9f9f9; /* Light background color */
-  }
-  
-  .comments {
-    margin-bottom: 20px; /* Space between comments and button */
-  }
-  
-  .comment {
-    padding: 10px;
-    border: 1px solid #ccc; /* Border for each comment */
-    border-radius: 4px; /* Rounded corners */
-    margin-bottom: 10px; /* Space between comments */
-    background-color: #fff; /* White background for comments */
-  }
-  
-  .comment .author {
-    font-weight: bold; /* Bold author name */
-  }
-  
-  .comment .text {
-    margin-top: 5px; /* Space above comment text */
-  }
-  
-  .btn-primary {
-    background-color: #007bff; /* Bootstrap primary color */
-    color: white;
-    border: none; /* No border */
-    padding: 10px 20px; /* Padding */
-    border-radius: 4px; /* Rounded corners */
-    cursor: pointer; /* Pointer cursor on hover */
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3; /* Darker blue on hover */
-  }
-  
-  .ingredient-item {
-    background-color: #e0f7fa; /* Light blue for ingredient items */
-    padding: 5px;
-    border-radius: 4px;
-    margin-bottom: 5px;
-  }
-  
+  min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+  width: 100%;
+  background-image: url("../../../assets/Images/bg.avif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+.div-main {
+  /* background-color:white; */
+  backdrop-filter: blur(20px);
+  width: 80%;
+  height: auto;
+  justify-content: center;
+  /* text-align: center; */
+  margin-left: 180px;
+}
+.image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer; /* Change cursor to pointer */
+}
+
+.image {
+  width: 100%; /* Adjust as necessary */
+  height: auto; /* Maintain aspect ratio */
+}
+
+.heart-symbol {
+  position: absolute; /* Position the heart symbol over the image */
+  top: 10px; /* Adjust to position the heart */
+  right: 10px; /* Adjust to position the heart */
+  font-size: 50px; /* Size of the heart */
+  color: white; /* Default color for the outline */
+  pointer-events: none; /* Prevent clicking on the heart */
+}
+
+.heart-symbol.filled {
+  color: rgb(240, 13, 13); /* Color when filled */
+}
+.text-overlay {
+  position: absolute; /* Position the text overlay */
+  bottom: 10px; /* Distance from the bottom */
+  left: 10px; /* Distance from the left */
+  color: white; /* Text color */
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+  padding: 5px 10px; /* Padding around the text */
+  border-radius: 4px; /* Rounded corners */
+  font-size: 18px; /* Font size */
+}
+
+h1 {
+  margin-top: 15px;
+  margin-bottom: 20px;
+  color: white;
+}
+
+.recipe-list {
+  margin: 20px auto;
+  max-width: 1200px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.styled-table {
+  width: 100%;
+  /* border:solid; */
+  font-size: 1em;
+  font-family: "Arial", sans-serif;
+  margin-top: 20px;
+}
+
+.styled-table thead tr {
+  background-color: #6ea4eb;
+  color: #ffffff;
+  text-align: left;
+}
+
+.styled-table th,
+.styled-table td {
+  padding: 12px 15px;
+}
+
+.styled-table tbody tr {
+  border-bottom: 1px solid #dddddd;
+}
+
+.comments-section {
+  max-width: 600px; /* Max width for the comments section */
+  margin: 20px auto; /* Center the section */
+  padding: 20px;
+  /* border: 1px solid #ddd; Light border */
+  border-radius: 8px; /* Rounded corners */
+  /* background-color: #f9f9f9; Light background color */
+}
+
+.comments {
+  margin-bottom: 20px; /* Space between comments and button */
+}
+
+.comment {
+  padding: 10px;
+  border: 1px solid #ccc; /* Border for each comment */
+  border-radius: 4px; /* Rounded corners */
+  margin-bottom: 10px; /* Space between comments */
+  margin-top: 10px;
+  /* background-color: wheat; White background for comments */
+}
+
+.comment .author {
+  font-weight: bold; /* Bold author name */
+}
+
+.comment .text {
+  margin-top: 5px; /* Space above comment text */
+}
+
+.btn-primary {
+  background-color: #007bff; /* Bootstrap primary color */
+  color: white;
+  border: none; /* No border */
+  padding: 10px 20px; /* Padding */
+  border-radius: 4px; /* Rounded corners */
+  cursor: pointer; /* Pointer cursor on hover */
+}
+
+.btn-primary:hover {
+  background-color: #0056b3; /* Darker blue on hover */
+}
+
+.ingredient-item {
+  background-color: #e0f7fa; /* Light blue for ingredient items */
+  padding: 5px;
+  border-radius: 4px;
+  margin-bottom: 5px;
+}
+.rating-section {
+  margin-top: 20px;
+}
+
+.stars {
+  font-size: 24px; /* Size of the stars */
+  color: white; /* Default color for unfilled stars */
+}
+
+.stars .filled {
+  color: black; /* Color for filled stars */
+}

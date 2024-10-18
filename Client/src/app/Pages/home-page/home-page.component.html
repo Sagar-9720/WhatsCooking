@@ -1,69 +1,97 @@
 <app-navbar></app-navbar>
-<app-navs></app-navs>
-<app-search></app-search>
+<body style="min-height: 100vh">
+  <app-navs></app-navs>
+  <!-- Search Component -->
+  <app-search></app-search>
 
-<div
-  class="recipe-container"
-  style="
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 5vh;
-    justify-content: center;
-    align-items: center;
-  "
->
+  <!-- Recipe Cards and Pagination -->
   <div
-    class="recipe-card"
-    *ngFor="let recipe of paginatedRecipes[currentPage]"
+    class="recipe-container"
     style="
-      flex: 1 1 calc(20% - 10px);
-      margin: 10px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      border-radius: 8px;
-      overflow: hidden;
-      transition: transform 0.2s;
       display: flex;
-      justify-content: center;
+      flex-direction: column;
+      flex-grow: 1;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0;
     "
-    (mouseover)="onMouseOver($event)"
-    (mouseout)="onMouseOut($event)"
   >
-    <app-recipe [recipe]="recipe"></app-recipe>
-  </div>
-</div>
+    <!-- Recipe Card Grid -->
+    <div
+      style="
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+        max-width: 1200px;
+        margin: 20px auto;
+      "
+    >
+      <button
+        (click)="prevPage()"
+        [disabled]="!hasPrevPage"
+        style="
+          padding: 10px 15px;
+          margin: 0 20px;
+          border: none;
+          background-color: transparent;
+          color: #808080;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 50px;
+          font-weight: bold;
+          transition: background-color 0.3s;
+        "
+      >
+        &lt;
+      </button>
+      <div
+        class="recipe-card"
+        *ngFor="let recipe of paginatedRecipes[currentPage]"
+        style="
+          flex: 1 1 calc(25% - 20px);
+          margin: 10px;
+          box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+          border-radius: 8px;
+          overflow: hidden;
+          transition: transform 0.2s;
+          display: flex;
+          justify-content: center;
+        "
+        (mouseover)="onMouseOver($event)"
+        (mouseout)="onMouseOut($event)"
+      >
+        <app-recipe [recipe]="recipe"></app-recipe>
+      </div>
+      <button
+        (click)="nextPage()"
+        [disabled]="!hasNextPage"
+        style="
+          padding: 10px 15px;
+          margin: 0 20px;
+          border: none;
+          background-color: transparent;
+          color: #808080;
+          border-radius: 50%;
+          cursor: pointer;
+          font-size: 50px;
+          font-weight: bold;
+          transition: background-color 0.3s;
+        "
+      >
+        &gt;
+      </button>
+    </div>
 
-<div style="text-align: center; margin-top: 20px">
-  <button
-    (click)="prevPage()"
-    [disabled]="!hasPrevPage"
-    style="
-      padding: 10px 20px;
-      margin: 0 10px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    "
-  >
-    Previous
-  </button>
-  <button
-    (click)="nextPage()"
-    [disabled]="!hasNextPage"
-    style="
-      padding: 10px 20px;
-      margin: 0 10px;
-      border: none;
-      background-color: #007bff;
-      color: white;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: background-color 0.3s;
-    "
-  >
-    Next
-  </button>
-</div>
-<app-footer></app-footer>
+    <!-- Pagination Info (e.g., Page X of Y) -->
+    <div
+      class="pagination-info"
+      style="text-align: center; margin-top: 20px; font-size: 18px; color: #666"
+    >
+      Page {{ currentPage + 1 }} of {{ paginatedRecipes.length }}
+    </div>
+  </div>
+
+  <!-- Footer should be aligned at the bottom -->
+</body>
+<app-footer style="margin-top: 0"></app-footer>

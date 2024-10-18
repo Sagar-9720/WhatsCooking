@@ -46,20 +46,29 @@ public class UserService implements iUserRepository {
         Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
-            existingUser.setUsername(user.getUsername());
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
-            existingUser.setPassword(user.getPassword());
-            existingUser.setRole(user.getRole());
             return userRepository.save(existingUser);
         } else {
             return null;
         }
     }
 
-    public Optional<User> getUserByUsername(String username) {
-        return userRepository.findByUsername(username);
+    public UserView getUserByUsername(String username) {
+        Optional<User> user = userRepository.findByUsername(username);
+        if (user.isPresent()) {
+            UserView userView = new UserView();
+            userView.setUserId(user.get().getUserId());
+            userView.setUsername(user.get().getUsername());
+            userView.setFirstName(user.get().getFirstName());
+            userView.setLastName(user.get().getLastName());
+            userView.setEmail(user.get().getEmail());
+            userView.setRole(user.get().getRole());
+            return userView;
+        } else {
+            return null;
+        }
     }
 
     @Override

@@ -1,10 +1,17 @@
 <nav
   *ngIf="role !== undefined"
-  class="navbar navbar-expand-lg navbar-light bg-light"
+  class="navbar navbar-expand-lg navbar-light bg-light shadow-sm glass-effect"
 >
   <div class="container-fluid">
     <!-- Left Aligned Brand -->
-    <a class="navbar-brand fw-bold" routerLink="/">WhatsCooking</a>
+    <a
+      class="navbar-brand fw-bold text-primary"
+      [routerLink]="role ? '/welcome' : null"
+      [class.disabled]="!role"
+      (click)="role === null ? $event.preventDefault() : null"
+    >
+      WhatsCooking
+    </a>
 
     <!-- Toggler for mobile view -->
     <button
@@ -23,66 +30,78 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto" [ngSwitch]="role">
         <!-- Admin Navbar -->
-        <ng-container *ngSwitchCase="'admin'">
+        <ng-container *ngSwitchCase="'Admin'">
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Home</a>
+            <a class="nav-link" routerLink="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="add-recipe">Add Recipe</a>
+            <a class="nav-link" routerLink="/add-recipe">Add Recipe</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+            <a class="nav-link" routerLink="/view-all-recipe"
+              >View All Recipe</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="profile">Profile</a>
+            <a class="nav-link" routerLink="/profile">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+            <a
+              class="nav-link btn btn-outline-danger ms-2"
+              routerLink="/signout"
               >Log Out</a
             >
           </li>
         </ng-container>
 
         <!-- User Navbar -->
-        <ng-container *ngSwitchCase="'user'">
+        <ng-container *ngSwitchCase="'Customer'">
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Home</a>
+            <a class="nav-link" routerLink="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+            <a class="nav-link" routerLink="/view-all-recipe"
+              >View All Recipe</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Endorse recipe</a>
+            <a class="nav-link" routerLink="">Endorsed recipe</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="profile">Profile</a>
+            <a class="nav-link" routerLink="/profile">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+            <a
+              class="nav-link btn btn-outline-danger ms-2"
+              routerLink="/signout"
               >Logout</a
             >
           </li>
         </ng-container>
 
         <!-- Nutritionist Navbar -->
-        <ng-container *ngSwitchCase="'nutritionist'">
+        <ng-container *ngSwitchCase="'Nutritionist'">
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Home</a>
+            <a class="nav-link" routerLink="/">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="add-recipe">Add Recipe</a>
+            <a class="nav-link" routerLink="/add-recipe">Add Recipe</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="view-all-recipe">View All Recipe</a>
+            <a class="nav-link" routerLink="/view-all-recipe"
+              >View All Recipe</a
+            >
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Endorse By Me</a>
+            <a class="nav-link" routerLink="">Endorsed By Me</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" routerLink="profile">Profile</a>
+            <a class="nav-link" routerLink="/profile">Profile</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link btn btn-outline-danger ms-2" routerLink="signout"
+            <a
+              class="nav-link btn btn-outline-danger ms-2"
+              routerLink="/signout"
               >Logout</a
             >
           </li>
@@ -91,7 +110,7 @@
         <!-- Default Navbar (Not Logged In) -->
         <ng-container *ngSwitchDefault>
           <li class="nav-item">
-            <a class="nav-link" routerLink="">Home</a>
+            <a class="nav-link" routerLink="/">Home</a>
           </li>
           <li class="nav-item">
             <a class="nav-link btn btn-outline-primary ms-2" routerLink="/login"
@@ -112,10 +131,56 @@
 </nav>
 
 <style>
-  .navbar-nav .nav-link {
-    margin-right: 10px;
+  .navbar {
+    backdrop-filter: blur(12px);
+    background-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease-in-out;
   }
+
+  .navbar-nav .nav-link {
+    font-weight: 600;
+    color: #333;
+    margin-right: 10px;
+    transition: color 0.2s ease-in-out;
+  }
+
+  .navbar-nav .nav-link:hover {
+    color: #007bff;
+  }
+
   .navbar-brand {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: #007bff;
+    transition: all 0.3s ease-in-out;
+  }
+
+  .navbar-brand:hover {
+    color: #0056b3;
+  }
+
+  .navbar-toggler {
+    border: none;
+  }
+
+  .navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+  }
+
+  .glass-effect {
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+  }
+
+  .navbar-nav .btn {
+    transition: all 0.2s ease-in-out;
+  }
+
+  .navbar-nav .btn:hover {
+    transform: scale(1.05);
   }
 </style>

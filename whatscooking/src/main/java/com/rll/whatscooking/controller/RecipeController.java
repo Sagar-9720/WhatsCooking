@@ -29,11 +29,12 @@ public class RecipeController {
 
     @PostMapping
     public ResponseEntity<String> addRecipe(@RequestBody Recipe recipe) {
+        System.out.println("this is the recipe: " + recipe);
         Recipe addedRecipe = recipeService.addRecipe(recipe);
         if (addedRecipe != null) {
-            return new ResponseEntity<>("Recipe added successfully", HttpStatus.CREATED);
+            return new ResponseEntity<String>("Recipe added successfully", HttpStatus.CREATED);
         } else {
-            return new ResponseEntity<>("Failed to add recipe", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<String>("Failed to add recipe", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

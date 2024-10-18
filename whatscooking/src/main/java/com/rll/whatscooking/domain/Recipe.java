@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -25,6 +26,7 @@ public class Recipe {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int recipe_id;
     private String recipe_name;
+    @Column(columnDefinition = "TEXT")
     private String recipe_steps;
     private boolean recipe_status;
     private boolean isEndorsed = false;
@@ -44,12 +46,13 @@ public class Recipe {
     private Nutrition nutrition; // Nullable Nutrition
 
     // Ingredients: Many to many relation with ingredients
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
     @JoinTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
+
     private List<Ingredients> ingredients = new ArrayList<>();
 
     // Users who liked the recipe: Initialized as an empty list
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
     @JoinTable(name = "recipe_likes", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likedUser = new ArrayList<>();
 

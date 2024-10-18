@@ -1,25 +1,36 @@
-<div
-  class="card shadow-sm"
-  style="width: 18rem; border-radius: 10px; overflow: hidden"
->
-  <div class="card-header bg-success text-white">
+<div class="card recipe-card shadow-lg border-0 rounded-3">
+  <div
+    class="card-header bg-success text-white d-flex align-items-center justify-content-between"
+  >
     <!-- Display endorsement status -->
     <span *ngIf="recipe?.isEndorsed"
       >Endorsed by {{ recipe?.nutritionist?.name }}</span
     >
   </div>
-  <!-- Display the recipe image -->
-  <img
-    src="assets/vegetable.jpeg"
-    class="card-img-top"
-    alt="Recipe Image"
-    style="height: 200px; object-fit: cover"
-  />
 
-  <div class="card-body">
+  <!-- Wrap the image and heart symbol in image-container for like functionality -->
+  <div class="image-container" (click)="toggleLike()">
+    <img
+      src="assets/vegetable.jpeg"
+      class="card-img-top recipe-image"
+      alt="Recipe Image"
+    />
+    <span
+      class="heart-symbol"
+      [ngClass]="{ filled: isLiked }"
+      [innerHTML]="isLiked ? '♥' : '&#9825;'"
+    ></span>
+  </div>
+
+  <div class="card-body p-3">
     <!-- Display the recipe name -->
-    <h5 class="card-title">{{ recipe?.recipe_name }}</h5>
+    <h5 class="card-title text-dark fw-semibold">{{ recipe?.recipe_name }}</h5>
+
     <!-- Display the recipe rating -->
-    <button class="btn btn-primary btn-block">Like</button>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star checked"></span>
+    <span class="fa fa-star"></span>
   </div>
 </div>

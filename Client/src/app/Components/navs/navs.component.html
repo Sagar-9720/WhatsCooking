@@ -1,104 +1,103 @@
-<!-- <ul class="nav nav-tabs" id="myTab" role="tablist">
-  <li class="nav-item" role="presentation">
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+  <li class="nav-item dropdown" role="presentation">
     <a
-      class="nav-link active"
+      class="nav-link"
       id="meal-type-tab"
-      data-toggle="tab"
-      href="#meal-type"
+      data-bs-toggle="dropdown"
       role="tab"
       aria-controls="meal-type"
-      aria-selected="true"
+      aria-expanded="false"
+      aria-selected="false"
     >
       Meal Type
     </a>
+    <ul class="dropdown-menu" aria-labelledby="meal-type-tab">
+      <li
+        class="list-group-item"
+        *ngFor="let item of mealTypeValues"
+        (click)="selectMealType(item)"
+        style="cursor: pointer"
+      >
+        {{ item }}
+      </li>
+    </ul>
   </li>
-  <li class="nav-item" role="presentation">
+  <li class="nav-item dropdown" role="presentation">
     <a
       class="nav-link"
       id="seasonal-tab"
-      data-toggle="tab"
-      href="#seasonal"
+      data-bs-toggle="dropdown"
       role="tab"
       aria-controls="seasonal"
+      aria-expanded="false"
       aria-selected="false"
     >
       Seasonal
     </a>
+    <ul class="dropdown-menu" aria-labelledby="seasonal-tab">
+      <li
+        class="list-group-item"
+        *ngFor="let item of seasonalValues"
+        (click)="selectSeasonal(item)"
+        style="cursor: pointer"
+      >
+        {{ item }}
+      </li>
+    </ul>
   </li>
-  <li class="nav-item" role="presentation">
+  <li class="nav-item dropdown" role="presentation">
     <a
       class="nav-link"
       id="cuisine-tab"
-      data-toggle="tab"
-      href="#cuisine"
+      data-bs-toggle="dropdown"
       role="tab"
       aria-controls="cuisine"
+      aria-expanded="false"
       aria-selected="false"
     >
       Cuisine
     </a>
+    <ul class="dropdown-menu" aria-labelledby="cuisine-tab">
+      <li
+        class="list-group-item"
+        *ngFor="let item of cuisineValues"
+        (click)="selectCuisine(item)"
+        style="cursor: pointer"
+      >
+        {{ item }}
+      </li>
+    </ul>
   </li>
-  <li class="nav-item" role="presentation">
+  <li class="nav-item dropdown" role="presentation">
     <a
       class="nav-link"
       id="meal-timing-tab"
-      data-toggle="tab"
-      href="#meal-timing"
+      data-bs-toggle="dropdown"
       role="tab"
       aria-controls="meal-timing"
+      aria-expanded="false"
       aria-selected="false"
     >
       Meal Timing
     </a>
+    <ul class="dropdown-menu" aria-labelledby="meal-timing-tab">
+      <li
+        class="list-group-item"
+        *ngFor="let item of mealTimingValues"
+        (click)="selectMealTiming(item)"
+        style="cursor: pointer"
+      >
+        {{ item }}
+      </li>
+    </ul>
   </li>
 </ul>
-<div class="tab-content" id="myTabContent">
-  <div
-    class="tab-pane fade show active"
-    id="meal-type"
-    role="tabpanel"
-    aria-labelledby="meal-type-tab"
-  >
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of MealType | keyvalue">
-        {{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="seasonal"
-    role="tabpanel"
-    aria-labelledby="seasonal-tab"
-  >
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of Seasonal | keyvalue">
-        {{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="cuisine"
-    role="tabpanel"
-    aria-labelledby="cuisine-tab"
-  >
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of Cuisine | keyvalue">
-        {{ item.value }}
-      </li>
-    </ul>
-  </div>
-  <div
-    class="tab-pane fade"
-    id="meal-timing"
-    role="tabpanel"
-    aria-labelledby="meal-timing-tab"
-  >
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let item of MealTiming | keyvalue">
-        {{ item.value }}
-      </li>
-    </ul>
-  </div>
-</div> -->
+<!-- 
+<p>
+  Selected Meal Type: {{ selectedMealType }} <br />
+  Selected Seasonal: {{ selectedSeasonal }} <br />
+  Selected Cuisine: {{ selectedCuisine }} <br />
+  Selected Meal Timing: {{ selectedMealTiming }}
+</p> -->
+
+

@@ -11,7 +11,7 @@ export class HomePageComponent implements OnInit {
   recipeList: Recipe[] = [];
   paginatedRecipes: Recipe[][] = [];
   currentPage: number = 0;
-  pageSize: number = 2;
+  pageSize: number = 4;
 
   constructor(private recipeService: RecipeServiceService) {}
 

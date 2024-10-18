@@ -1,0 +1,26 @@
+#myTab a {
+  color: white;
+  background: transparent;
+  backdrop-filter: blur(12px);
+  margin: 0 5px;
+}
+.nav-item .dropdown-menu {
+  display: none;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.nav-item:hover .dropdown-menu {
+  display: block;
+  opacity: 1;
+}
+
+.list-group-item:hover {
+  background-color: black;
+}
+
+.dropdown-menu {
+  background: transparent;
+  backdrop-filter: blur(12px);
+  color: antiquewhite;
+}

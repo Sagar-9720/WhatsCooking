@@ -1,14 +1,33 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormArray, Validators } from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 import {
   Recipe,
-  MealTiming,
   MealType,
+  MealTiming,
   Seasonal,
   Cuisine,
 } from '../../Models/Recipe';
-import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
-import { ToastService } from 'angular-toastify';
+import { Ingredient } from '../../Models/Ingredients';
+import { Nutrition } from '../../Models/Nutrition';
+import { User } from 'src/app/Models/User';
+import { ToastrService } from 'ngx-toastr';
+
+function getMealTypeList(): string[] {
+  return Object.keys(MealType).filter((key) => isNaN(Number(key)));
+}
+
+function getSeasonalList(): string[] {
+  return Object.keys(Seasonal).filter((key) => isNaN(Number(key)));
+}
+
+function getCuisineList(): string[] {
+  return Object.keys(Cuisine).filter((key) => isNaN(Number(key)));
+}
+
+function getMealTimingList(): string[] {
+  return Object.keys(MealTiming).filter((key) => isNaN(Number(key)));
+}
 
 @Component({
   selector: 'app-add-recipe',
@@ -16,115 +35,86 @@ import { ToastService } from 'angular-toastify';
   styleUrls: ['./add-recipe.component.css'],
 })
 export class AddRecipeComponent implements OnInit {
-  recipeForm!: FormGroup;
-  mealTimings = Object.keys(MealTiming).filter((key) => isNaN(Number(key)));
-  mealTypes = Object.keys(MealType).filter((key) => isNaN(Number(key)));
-  seasons = Object.keys(Seasonal).filter((key) => isNaN(Number(key)));
-  cuisines = Object.keys(Cuisine).filter((key) => isNaN(Number(key)));
+  recipe: Recipe = new Recipe();
+  ingredients: Ingredient[] = [{ ingredient_id: 0, name: '' }];
+
+  userRole: string = '';
+
+  isNutritionist: boolean = false;
+
   selectedFile: File | null = null;
   imageUrl: string | null = null;
-  recipe: Recipe | null = null;
 
+  mealTypes: string[] = [];
+  seasons: string[] = [];
+  cuisines: string[] = [];
+  mealTimings: string[] = [];
+
+  loggedInUser: User = new User();
+  nutrition: Nutrition = new Nutrition();
   constructor(
-    private fb: FormBuilder,
     private recipeService: RecipeServiceService,
-    private toastService: ToastService
+    private toast: ToastrService
   ) {}
 
   ngOnInit(): void {
-    this.recipeForm = this.fb.group({
-      recipe_name: [
-        '',
-        [
-          Validators.required,
-          Validators.minLength(3),
-          Validators.maxLength(50),
-        ],
-      ],
-      ingredients: this.fb.array([this.createIngredient()]),
-      recipe_steps: ['', [Validators.required, Validators.minLength(10)]],
-      meal_timing: [''], // Removed Validators.required
-      meal_type: [''], // Removed Validators.required
-      seasonal: [''], // Removed Validators.required
-      cuisine: [''], // Removed Validators.required
-      recipe_rating: [null],
-      isEndorsed: [false],
-      nutritionist: [null],
-      nutrition: [null],
-    });
+    this.loggedInUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    this.userRole = this.loggedInUser.role || '';
+    this.isNutritionist = this.userRole === 'nutritionist';
+    this.mealTypes = getMealTypeList(); // ['VEGETARIAN', 'NON_VEGETARIAN', ...]
+    this.seasons = getSeasonalList(); // ['WINTER', 'SPRING', 'SUMMER', 'FALL']
+    this.cuisines = getCuisineList(); // ['ITALIAN', 'CHINESE', 'MEXICAN', ...]
+    this.mealTimings = getMealTimingList(); // ['BREAKFAST', 'LUNCH', 'DINNER', ...]
   }
 
-  get ingredients(): FormArray {
-    return this.recipeForm.get('ingredients') as FormArray;
+  addIngredient() {
+    this.ingredients.push({ ingredient_id: 0, name: '' });
   }
 
-  createIngredient(): FormGroup {
-    return this.fb.group({
-      name: ['', Validators.required],
-    });
-  }
-
-  addIngredient(): void {
-    this.ingredients.push(this.createIngredient());
-  }
-
-  onSubmit(): void {
-    if (this.recipeForm.valid) {
-      const formValues = this.recipeForm.value;
-      const recipe = new Recipe(
-        undefined,
-        formValues.recipe_name,
-        formValues.recipe_steps,
-        formValues.meal_timing,
-        formValues.meal_type,
-        formValues.seasonal,
-        formValues.cuisine,
-        formValues.recipe_rating,
-        formValues.isEndorsed,
-        formValues.nutritionist,
-        formValues.nutrition,
-        formValues.ingredients
-      );
-      this.recipeService.addRecipe(recipe).subscribe((data) => {
-        this.recipe = data;
-      });
-      if (this.recipe) {
-        this.toastService.success('Recipe Added Successfully');
-        
-      } else {
-        this.toastService.error('Failed to add recipe');
+  onSubmit(recipeForm: NgForm) {
+    if (recipeForm.valid) {
+      const nutrition = this.isNutritionist ? this.nutrition : undefined;
+      if (nutrition) {
+        nutrition.user = this.loggedInUser;
       }
-    } else {
-      this.recipeForm.markAllAsTouched(); // Mark all fields as touched to show validation errors
-      Object.keys(this.recipeForm.controls).forEach((key) => {
-        const controlErrors = this.recipeForm.get(key)?.errors;
-        if (controlErrors) {
-          console.log(`Validation errors for ${key}:`, controlErrors);
-        }
+      const likedUsers: User[] = [];
+      const newRecipe = new Recipe(
+        undefined,
+        recipeForm.value.recipe_name,
+        recipeForm.value.recipe_steps,
+        true,
+        recipeForm.value?.meal_timing || null,
+        recipeForm.value.meal_type || null,
+        recipeForm.value.seasonal || null,
+        recipeForm.value.cuisine || null,
+        nutrition,
+        this.ingredients,
+        0,
+        likedUsers,
+        recipeForm.value.endorsed || false
+      );
+      console.log('New Recipe:', newRecipe);
+      this.recipeService.addRecipe(newRecipe).subscribe({
+        next: (response: string) => {
+          if (response) {
+            this.toast.success('Recipe added successfully');
+            recipeForm.reset();
+          } else {
+            this.toast.error('Failed to add recipe');
+            console.error('Error adding recipe: Unknown error');
+          }
+        },
+        error: (error) => {
+          this.toast.error('Failed to add recipe');
+          console.error('Error adding recipe:', error);
+        },
       });
-      console.log('Form is invalid');
-    }
-  }
-
-  onFileSelected(event: Event) {
-    const input = event.target as HTMLInputElement;
-    if (input.files && input.files.length > 0) {
-      this.selectedFile = input.files[0];
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.imageUrl = reader.result as string;
-      };
-      reader.readAsDataURL(this.selectedFile);
-    }
-  }
-
-  onUpload() {
-    if (this.selectedFile) {
-      console.log('Uploading:', this.selectedFile.name);
-      alert('Image Uploaded Successfully...');
     } else {
-      console.error('No file selected!');
-      alert('Failed to Uplaod the Image');
+      this.toast.error('Invalid form. Please check the form for errors.');
+      Object.keys(recipeForm.controls).forEach((key) => {
+        const control = recipeForm.controls[key];
+        console.log('Invalid control:', control);
+      });
     }
   }
 }

@@ -2,23 +2,23 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Comments } from '../Models/Comments';
-
+import { environment } from 'src/Environment/environment';
 @Injectable({
   providedIn: 'root',
 })
 export class CommentserviceService {
-  private baseUrl = 'http://localhost:9097/comment';
+  private apiUrl = environment.apiBaseUrl + 'comment';
 
   constructor(private http: HttpClient) {}
 
   commentRecipe(comments: Comments): Observable<any> {
-    return this.http.post<any>(this.baseUrl, comments, {
+    return this.http.post<any>(this.apiUrl, comments, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     });
   }
 
   uncommentRecipe(comments: Comments): Observable<any> {
-    return this.http.delete<any>(this.baseUrl, {
+    return this.http.delete<any>(this.apiUrl, {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
       body: comments,
     });
@@ -32,6 +32,6 @@ export class CommentserviceService {
     if (userId !== undefined) {
       params.userId = userId;
     }
-    return this.http.get<any>(this.baseUrl, { params });
+    return this.http.get<any>(this.apiUrl, { params });
   }
 }

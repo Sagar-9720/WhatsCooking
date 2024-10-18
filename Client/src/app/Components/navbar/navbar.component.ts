@@ -10,10 +10,22 @@ export class NavbarComponent {
 
   ngOnInit() {
     const user = sessionStorage.getItem('user');
-    console.log('in the navbar component'+user);
     if (user) {
       const parsedUser = JSON.parse(user);
-      this.role = parsedUser.role.toLowerCase();
+      this.role = parsedUser.role;
+    } else {
+      this.role = null;
+    }
+  }
+  constructor() {
+    this.reloadComponent();
+  }
+
+  reloadComponent() {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      const parsedUser = JSON.parse(user);
+      this.role = parsedUser.role;
     } else {
       this.role = null;
     }

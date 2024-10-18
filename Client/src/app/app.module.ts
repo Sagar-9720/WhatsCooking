@@ -6,7 +6,7 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { WelcomepageComponent } from './Pages/welcomepage/welcomepage.component';
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HomePageComponent } from './Pages/home-page/home-page.component';
 import { NavbarComponent } from './Components/navbar/navbar.component';
 import { NavsComponent } from './Components/navs/navs.component';
@@ -23,7 +23,8 @@ import { RouterModule } from '@angular/router';
 import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.component';
 import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.component';
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
-import { SignoutComponent } from './Pages/signout/signout.component';
+import { LogoutComponent } from './Pages/logout/logout.component';
+import { ToastrModule } from 'ngx-toastr';
 @NgModule({
   declarations: [
     AppComponent,
@@ -43,15 +44,17 @@ import { SignoutComponent } from './Pages/signout/signout.component';
     ViewAllRecipeComponent,
     ModifyrecipeComponent,
     ViewrecipeComponent,
-    SignoutComponent,
+    LogoutComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    BrowserAnimationsModule,
     FormsModule,
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
+    ToastrModule.forRoot(),
   ],
   providers: [],
   bootstrap: [AppComponent],

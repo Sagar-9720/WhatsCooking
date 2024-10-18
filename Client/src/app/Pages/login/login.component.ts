@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { User } from 'src/app/Models/User';
 import * as emailjs from 'emailjs-com';
 import { UserserviceService } from 'src/app/Services/userservice.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -21,14 +22,32 @@ export class LoginComponent {
 
   constructor(
     private router: Router,
-    private userService: UserserviceService
+    private userService: UserserviceService,
+    private toastr: ToastrService
   ) {}
 
   onSubmit(registerForm: any) {
     if (registerForm.valid) {
-      this.userService.loginUser(this.user).subscribe((c) => (this.user = c));
-      alert('User logged in Successfully');
-      this.router.navigate(['/welcome']);
+      this.userService.loginUser(this.user).subscribe(
+        (response) => {
+          this.user = response;
+          if (this.user && this.user.role) {
+            localStorage.setItem('role', this.user.role);
+            this.router.navigate(['/welcome']);
+            console.log('Logged in successfully!');
+            this.toastr.success('Logged in successfully!');
+          }
+        },
+        (error) => {
+          if (error.status === 401) {
+            console.error('Unauthorized:', error);
+            this.toastr.error('Unauthorized. Please check your credentials.');
+          } else {
+            console.error('Error:', error);
+            this.toastr.error('An error occurred during login.');
+          }
+        }
+      );
     }
   }
 
@@ -67,10 +86,12 @@ export class LoginComponent {
               response.status,
               response.text
             );
+            this.toastr.success('OTP sent successfully');
             this.otpSent = true;
             this.setView('otp');
           },
           (err: any) => {
+            this.toastr.error('Failed to send OTP');
             console.error('Failed to send OTP', err);
           }
         );
@@ -81,8 +102,10 @@ export class LoginComponent {
     if (otpForm.valid) {
       if (this.user.otp === this.generatedOtp) {
         this.otpVerified = true;
+        this.toastr.success('OTP verified successfully');
         this.setView('resetPassword');
       } else {
+        this.toastr.error('Invalid OTP');
         console.log('Invalid OTP');
       }
     }
@@ -93,13 +116,15 @@ export class LoginComponent {
       this.userService
         .getUserDetails(this.user.username!)
         .subscribe((existingUser) => {
-          existingUser.password = this.user.password!;
+          existingUser.password = this.user.password;
           this.userService.changePassword(existingUser).subscribe((success) => {
             if (success) {
+              this.toastr.success('Password reset successfully');
               console.log(`Password reset successfully for ${this.user.email}`);
               this.flag = true;
               this.setView('login');
             } else {
+              this.toastr.error('Password reset failed');
               console.error('Password reset failed.');
               this.flag = false;
             }

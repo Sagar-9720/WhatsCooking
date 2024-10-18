@@ -1,7 +1,42 @@
-.card-header {
-  background-color: #f8f9fa;
-  cursor: pointer;
+
+.recipe-card {
+  width: 18rem;
+  overflow: hidden;
+  border-radius: 10px;
+  text-align: center;
 }
-.card-header:hover {
-  background-color: #e2e6ea;
+ 
+/* Styling for the image */
+.recipe-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 10px;
+  display: block;
+  position: relative;
+}
+ 
+/* Styling for the image container */
+.image-container {
+  position: relative;
+  display: inline-block;
+  cursor: pointer; /* Makes the image clickable */
+  width: 100%;
+}
+ 
+/* Heart symbol styling */
+.heart-symbol {
+  position: absolute;
+  top: 2px;
+  right: 10px;
+  font-size: 40px;
+  color: white; /* Default color for outline heart */
+  pointer-events: none; /* Prevents interaction with the heart itself */
+}
+ 
+.heart-symbol.filled {
+  color: rgb(240, 13, 13); /* Filled heart color */
+}
+.checked{
+  color: orange;
 }

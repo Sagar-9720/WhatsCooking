@@ -1,61 +1,84 @@
 import { Observable } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Recipe } from '../Models/Recipe';
+import { environment } from 'src/Environment/environment';
+import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root',
 })
 export class RecipeServiceService {
-  URL: string = 'http://localhost:9097/recipe';
+  apiUrl: string = environment.apiBaseUrl + 'recipe';
 
   constructor(private httpModule: HttpClient) {}
 
   addRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.post<any>(this.URL, recipe);
+    return this.httpModule.post(this.apiUrl, recipe, { responseType: 'text' });
   }
 
   deleteRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.delete<any>(this.URL, { body: recipe });
+    return this.httpModule.delete(this.apiUrl, {
+      body: recipe,
+      responseType: 'text',
+    });
   }
 
-  updateRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(this.URL, recipe);
+  updateRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule.put(this.apiUrl, recipe, { responseType: 'text' });
   }
 
   getRecipe(recipeId: number): Observable<any> {
-    return this.httpModule.get<any>(`${this.URL}/view`, {
-      params: { recipeId: recipeId.toString() },
-    });
+    return this.httpModule
+      .get<any>(`${this.apiUrl}/view`, {
+        params: { recipeId: recipeId.toString() },
+        observe: 'response',
+      })
+      .pipe(map((response: any) => response.body as Recipe));
   }
 
   getAllRecipes(): Observable<any> {
-    return this.httpModule.get<any>(`${this.URL}/all`);
+    return this.httpModule
+      .get<any>(`${this.apiUrl}/all`, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 
-  getRecipesByIngredients(ingredientIds: number[]): Observable<any> {
-    return this.httpModule.get<any>(`${this.URL}/byIngredients`, {
-      params: { ingredientIds: ingredientIds.join(',') },
-    });
+  getRecipesByIngredients(ingredientIds: number[]): Observable<Recipe[]> {
+    return this.httpModule
+      .get<Recipe[]>(`${this.apiUrl}/byIngredients`, {
+        params: { ingredientIds: ingredientIds.join(',') },
+        observe: 'response',
+      })
+      .pipe(map((response: any) => response.body || []));
   }
 
-  endorseRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(`${this.URL}/endorse`, recipe);
+  endorseRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule
+      .put(`${this.apiUrl}/endorse`, recipe, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 
-  enableRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(`${this.URL}/enable`, recipe);
+  enableRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule
+      .put(`${this.apiUrl}/enable`, recipe, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 
-  disableRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(`${this.URL}/disable`, recipe);
+  disableRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule
+      .put(`${this.apiUrl}/disable`, recipe, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 
-  likeRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(`${this.URL}/like`, recipe);
+  likeRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule
+      .put(`${this.apiUrl}/like`, recipe, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 
-  unlikeRecipe(recipe: Recipe): Observable<any> {
-    return this.httpModule.put<any>(`${this.URL}/unlike`, recipe);
+  unlikeRecipe(recipe: Recipe): Observable<string> {
+    return this.httpModule
+      .put(`${this.apiUrl}/unlike`, recipe, { observe: 'response' })
+      .pipe(map((response: HttpResponse<any>) => response.body));
   }
 }

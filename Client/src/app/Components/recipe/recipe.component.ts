@@ -8,4 +8,9 @@ import { Component, Input } from '@angular/core';
 export class RecipeComponent {
   // Input property to receive recipe data from parent
   @Input() recipe: any;
+  isLiked: boolean = false;
+
+  toggleLike() {
+    this.isLiked = !this.isLiked;
+  }
 }

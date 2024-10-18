@@ -1,5 +1,11 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 body {
-  background-image: url('src/assets/HomePageBg.jpg');
+  background-image: url("../../../assets/Images/welcome.jfif");
   background-size: cover;
   background-position: center;
   height: 94vh;
@@ -7,6 +13,35 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  color: wheat;
+  text-align: top-left;
+  background-repeat: no-repeat;
+  font-family: "Sofia", sans-serif;
+}
+
+.top-left {
+  position: fixed;
+  top: 0;
+  left: 0;
+  padding: 10px;
+  margin-top: 15vh;
+}
+
+.navbar {
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Semi-transparent background */
   color: white;
-  text-align: center;
+  padding: 15px;
+
+  width: 100%;
+
+  /* Ensures navbar is above other content */
+}
+
+#p1 {
+  font-family: "Sofia", sans-serif;
+  padding-bottom: 10px;
+  padding-top: 20px;
+  color: wheat;
+  position: fixed;
 }

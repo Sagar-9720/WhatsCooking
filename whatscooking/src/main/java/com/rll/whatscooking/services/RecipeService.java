@@ -16,6 +16,8 @@ import com.rll.whatscooking.repository.RecipeRepository;
 import com.rll.whatscooking.repository.UserRepository;
 import com.rll.whatscooking.repository.iRecipeRepository;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class RecipeService implements iRecipeRepository {
 
@@ -30,8 +32,8 @@ public class RecipeService implements iRecipeRepository {
 
     @Override
     public Recipe addRecipe(Recipe recipe) {
-
         recipe.setNutrition(null);
+
         // Initialize endorsed and likedUser
         recipe.setEndorsed(false);
         recipe.setLikedUser(new ArrayList<>());
@@ -39,22 +41,26 @@ public class RecipeService implements iRecipeRepository {
         // Ensure that ingredients are properly handled
         List<Ingredients> ingredients = recipe.getIngredients();
 
-        // If ingredients are not empty, ensure they are managed
         if (ingredients != null && !ingredients.isEmpty()) {
-            for (Ingredients ingredient : ingredients) {
-                // Fetch the ingredient if it exists, or save it if it's a new entity
+            for (int i = 0; i < ingredients.size(); i++) {
+                Ingredients ingredient = ingredients.get(i);
+
+                // Fetch or save the ingredient based on its ID
                 if (ingredient.getIngredientId() == 0) {
-                    // This is a new ingredient, so persist it
-                    // Optionally persist or merge based on your requirements
+                    // New ingredient, so save it
                     ingredient = ingredientsRepository.save(ingredient);
                 } else {
-                    // Fetch the existing ingredient to ensure it's managed
-                    ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
-
+                    // Fetch existing ingredient
+                    ingredient = ingredientsRepository.findById(ingredient.getIngredientId())
+                            .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
                 }
+
+                // Update the ingredient in the recipe's list with the managed entity
+                ingredients.set(i, ingredient);
             }
         }
-        // Finally, save the recipe
+
+        // Finally, save the recipe with the updated ingredients
         return recipeRepository.save(recipe);
     }
 

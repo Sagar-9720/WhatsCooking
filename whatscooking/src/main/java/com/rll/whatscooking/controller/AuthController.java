@@ -1,7 +1,6 @@
 package com.rll.whatscooking.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,9 +27,13 @@ public class AuthController {
     private UserService userService;
 
     @PostMapping("/addUser")
-    public ResponseEntity<User> addUser(@RequestBody User user) {
+    public ResponseEntity<?> addUser(@RequestBody User user) {
         User newUser = userService.addUser(user);
-        return new ResponseEntity<>(newUser, HttpStatus.CREATED);
+        if (newUser != null) {
+            return new ResponseEntity<>("Successfully registered", HttpStatus.CREATED);
+        } else {
+            return new ResponseEntity<>("Error Registering the User", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @PutMapping("/loginUser")
@@ -44,19 +47,23 @@ public class AuthController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity<String> updateUser(@RequestBody User user) {
         User updatedUser = userService.updateUser(user);
         if (updatedUser != null) {
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+            return new ResponseEntity<>("Successfully Updated", HttpStatus.OK);
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Error Updating the User", HttpStatus.NOT_FOUND);
         }
     }
 
     @GetMapping("/username")
-    public ResponseEntity<User> getUserByUsername(@RequestParam String username) {
-        Optional<User> user = userService.getUserByUsername(username);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public ResponseEntity<UserView> getUserByUsername(@RequestParam String username) {
+        UserView user = userService.getUserByUsername(username);
+        if (user != null) {
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PutMapping("/changepassword")

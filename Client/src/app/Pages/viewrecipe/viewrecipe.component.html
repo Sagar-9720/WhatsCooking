@@ -1,26 +1,14 @@
 <app-navbar></app-navbar>
 
 <body>
-  <h1 style="text-align: center">{{ recipe.recipe_name }} Receipe Details</h1>
-  <div class="container mt-4">
-    <div class="row border rounded p-3">
+  <h1 style="text-align: center">{{ recipe.recipe_name }}</h1>
+  <div class="container mt-4" class="div-main">
+    <div class="row rounded p-3">
       <div class="col-lg-8">
-        <table class="table table-hover table-bordered">
-          <thead>
-            <tr>
-              <th>Items</th>
-              <th>Details</th>
-            </tr>
-          </thead>
+        <table class="table table-borderd" class="styled-table">
           <tbody>
             <tr>
-              <td>Name</td>
-              <td>
-                {{ recipe.recipe_name }}
-              </td>
-            </tr>
-            <tr>
-              <td>Ingredients</td>
+              <th>Ingredients</th>
               <td>
                 <div style="display: flex; flex-direction: column">
                   <div *ngFor="let ingredient of recipe.ingredients">
@@ -30,7 +18,7 @@
               </td>
             </tr>
             <tr>
-              <td>Description</td>
+              <th>Description</th>
               <td>
                 <div style="white-space: pre-wrap">
                   {{ recipe.recipe_steps }}
@@ -40,37 +28,55 @@
           </tbody>
         </table>
       </div>
-      <div class="col-lg-4">
+      <div class="col-lg-4" style="background: transparent">
         <div class="comments-section">
-          <div class="mb-3">
+          <div class="image-container" (click)="toggleLike()">
             <img
-              [src]="'assets/VegetableStirFry.webp'"
-              alt="Dish Image"
-              class="img-fluid rounded"
+              [src]="'assets/vegetable.jpeg'"
+              alt="Recipe Description"
+              class="image"
             />
+            <span
+              class="heart-symbol"
+              [ngClass]="{ filled: isLiked }"
+              [innerHTML]="isLiked ? '♥' : '&#9825;'"
+            ></span>
+            <!-- Conditional heart -->
+            <div class="text-overlay"></div>
           </div>
+          <div id="message">{{ message }}</div>
           <div id="p2">
-            <h3>Comments</h3>
+            <!-- <h3>Comments</h3> -->
             <div class="comments">
-              <div class="comment mb-2 border p-2 rounded">
-                <div class="author font-weight-bold">John Doe</div>
-                <div class="text">This is a great recipe!</div>
-              </div>
-              <div class="comment mb-2 border p-2 rounded">
-                <div class="author font-weight-bold">Jane Smith</div>
-                <div class="text">I love this dish!</div>
-              </div>
               <div
-                class="comment more mb-2 border p-2 rounded"
-                style="display: none"
+                *ngFor="let comment of displayedComments"
+                class="comment mb-2 border p-2 rounded"
               >
-                <div class="author font-weight-bold">Mike Johnson</div>
-                <div class="text">Can’t wait to try this!</div>
+                <div class="author font-weight-bold">{{ comment.author }}</div>
+                <div class="text">{{ comment.text }}</div>
               </div>
             </div>
-            <button id="view-more" class="btn btn-primary mt-2">
-              View More
+            <button
+              *ngIf="hasMoreComments()"
+              id="view-more"
+              class="btn btn-warning mt-2"
+              (click)="toggleShowMore()"
+            >
+              {{ showMore ? "Show Less" : "Comments" }}
             </button>
+          </div>
+          <div class="rating-section mt-4">
+            <h4>Rate this Recipe:</h4>
+            <div class="stars">
+              <span
+                *ngFor="let star of [1, 2, 3, 4, 5]"
+                (click)="rateRecipe(star)"
+                [ngClass]="{ filled: star <= rating }"
+              >
+                ★
+              </span>
+            </div>
+            <div>Your Rating: {{ rating }}</div>
           </div>
         </div>
       </div>

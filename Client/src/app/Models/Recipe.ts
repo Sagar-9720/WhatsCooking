@@ -7,47 +7,46 @@ export class Recipe {
   recipe_name?: string;
   recipe_steps?: string;
   recipe_status?: boolean;
-  isEndorsed?: boolean;
-  //category?: Category;
+
   meal_timing?: MealTiming;
   meal_type?: MealType;
   seasonal?: Seasonal;
   cuisine?: Cuisine;
-  //rating?: Rating;
-  recipe_rating?: number;
-  //classFields
+
   nutrition?: Nutrition;
   ingredients?: Ingredient[];
-  user?: User;
+  recipe_rating?: number;
+  likedUser?: User[];
+  endorsed?: boolean;
 
   constructor(
     recipe_id?: number,
     recipe_name?: string,
     recipe_steps?: string,
     recipe_status?: boolean,
-    isEndorsed?: boolean,
     meal_timing?: MealTiming,
     meal_type?: MealType,
     seasonal?: Seasonal,
     cuisine?: Cuisine,
-    recipe_rating?: number,
     nutrition?: Nutrition,
     ingredients?: Ingredient[],
-    user?: User
+    recipe_rating?: number,
+    likedUser?: User[],
+    endorsed?: boolean
   ) {
     this.recipe_id = recipe_id;
     this.recipe_name = recipe_name;
     this.recipe_steps = recipe_steps;
     this.recipe_status = recipe_status;
-    this.isEndorsed = isEndorsed;
     this.meal_timing = meal_timing;
     this.meal_type = meal_type;
     this.seasonal = seasonal;
     this.cuisine = cuisine;
-    this.recipe_rating = recipe_rating;
     this.nutrition = nutrition;
     this.ingredients = ingredients;
-    this.user = user;
+    this.recipe_rating = recipe_rating;
+    this.likedUser = likedUser;
+    this.endorsed = endorsed;
   }
 }
 

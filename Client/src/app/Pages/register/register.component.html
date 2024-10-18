@@ -221,7 +221,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="role" class="form-label">Role</label>
+            <label for="role" class="form-label">Select Your Role</label>
             <select
               id="role"
               class="form-select"
@@ -230,8 +230,9 @@
               required
               #role="ngModel"
               autocomplete="off"
+              aria-placeholder="Select your role"
             >
-              <option value="" disabled>Select your role</option>
+              <option value="" disabled selected>Select Your Role</option>
               <option value="Admin">Admin</option>
               <option value="Customer">Customer</option>
               <option value="Nutritionist">Nutritionist</option>

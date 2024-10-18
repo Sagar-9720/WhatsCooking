@@ -11,7 +11,7 @@ import { ProfileComponent } from './Pages/profile/profile.component';
 import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.component';
 import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.component';
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
-import { SignoutComponent } from './Pages/signout/signout.component';
+import { LogoutComponent } from './Pages/logout/logout.component';
 
 const routes: Routes = [
   {
@@ -60,7 +60,7 @@ const routes: Routes = [
   },
   {
     path: 'signout',
-    component: SignoutComponent,
+    component: LogoutComponent,
   },
 ];
 
