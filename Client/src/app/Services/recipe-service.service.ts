@@ -28,13 +28,18 @@ export class RecipeServiceService {
     return this.httpModule.put(this.apiUrl, recipe, { responseType: 'text' });
   }
 
-  getRecipe(recipeId: number): Observable<any> {
+  getRecipe(recipeId: number): Observable<Recipe> {
     return this.httpModule
-      .get<any>(`${this.apiUrl}/view`, {
+      .get<Recipe>(`${this.apiUrl}/view`, {
         params: { recipeId: recipeId.toString() },
         observe: 'response',
       })
-      .pipe(map((response: any) => response.body as Recipe));
+      .pipe(
+        map((response: HttpResponse<Recipe>) => {
+          const recipe = response.body as Recipe;
+          return recipe;
+        })
+      );
   }
 
   getAllRecipes(): Observable<any> {

@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rll.whatscooking.View.recipeCard;
 import com.rll.whatscooking.domain.Ingredients;
+import com.rll.whatscooking.domain.Nutrition;
 import com.rll.whatscooking.domain.Recipe;
 import com.rll.whatscooking.domain.User;
 import com.rll.whatscooking.repository.IngredientRepository;
@@ -159,8 +160,7 @@ public class RecipeService implements iRecipeRepository {
     public List<recipeCard> viewAllRecipes() {
         List<recipeCard> recipeCardList = new ArrayList<>();
         recipeRepository.findAll().stream().forEach(recipe -> {
-            String userName = (recipe.getNutrition() != null) ? recipe.getNutrition().getUser().getFirstName()
-                    : "Unknown";
+            Nutrition nutrition = (recipe.getNutrition() != null) ? recipe.getNutrition() : null;
             recipeCardList.add(new recipeCard(
                     recipe.getRecipe_id(),
                     recipe.getRecipe_name(),
@@ -171,7 +171,8 @@ public class RecipeService implements iRecipeRepository {
                     recipe.getLikedUser().size(),
                     recipe.isRecipe_status(),
                     recipe.isEndorsed(),
-                    userName));
+                    nutrition
+            ));
         });
         return recipeCardList;
     }

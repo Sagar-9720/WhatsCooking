@@ -4,7 +4,7 @@ import com.rll.whatscooking.domain.Cuisine;
 import com.rll.whatscooking.domain.MealTiming;
 import com.rll.whatscooking.domain.MealType;
 import com.rll.whatscooking.domain.Seasonal;
-
+import com.rll.whatscooking.domain.Nutrition;
 import lombok.Data;
 
 @Data
@@ -21,9 +21,9 @@ public class recipeCard {
     private int recipe_rating;
     private boolean recipe_status;
     private boolean isEndorsed;
-    private String nutritionistName;
+    private Nutrition nutrition;
 
-    public recipeCard(int recipeId, String recipeName, MealTiming mealTiming, MealType mealType, Seasonal seasonal, Cuisine cuisine, int recipeRating, boolean recipe_status, boolean endorsed, String firstName) {
+    public recipeCard(int recipeId, String recipeName, MealTiming mealTiming, MealType mealType, Seasonal seasonal, Cuisine cuisine, int recipeRating, boolean recipe_status, boolean endorsed,Nutrition nutrition) {
         this.recipe_id = recipeId;
         this.recipe_name = recipeName;
         this.meal_timing = mealTiming;
@@ -33,7 +33,7 @@ public class recipeCard {
         this.recipe_rating = recipeRating;
         this.recipe_status = recipe_status;
         this.isEndorsed = endorsed;
-        this.nutritionistName = firstName;
+        this.nutrition = nutrition;
 
     }
 }

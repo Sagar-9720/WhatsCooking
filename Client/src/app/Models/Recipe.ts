@@ -17,7 +17,7 @@ export class Recipe {
   ingredients?: Ingredient[];
   recipe_rating?: number;
   likedUser?: User[];
-  endorsed?: boolean;
+  isEndorsed?: boolean;
 
   constructor(
     recipe_id?: number,
@@ -32,7 +32,7 @@ export class Recipe {
     ingredients?: Ingredient[],
     recipe_rating?: number,
     likedUser?: User[],
-    endorsed?: boolean
+    isEndorsed?: boolean
   ) {
     this.recipe_id = recipe_id;
     this.recipe_name = recipe_name;
@@ -46,7 +46,7 @@ export class Recipe {
     this.ingredients = ingredients;
     this.recipe_rating = recipe_rating;
     this.likedUser = likedUser;
-    this.endorsed = endorsed;
+    this.isEndorsed = isEndorsed;
   }
 }
 

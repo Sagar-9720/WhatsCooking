@@ -1,6 +1,6 @@
 <app-navbar></app-navbar>
 
-<div class="recipe-list">
+<div class="recipe-list" style="width: 90vw; overflow-x: auto">
   <table class="styled-table">
     <thead>
       <tr>
@@ -11,17 +11,63 @@
         <th>Cuisine</th>
         <th>Seasonal</th>
         <th>Endorsed By</th>
+        <th *ngIf="role !== 'Customer'">Enable/Disable</th>
+        <th *ngIf="role !== 'Customer'">Want To Modify</th>
+        <th *ngIf="role !== 'Customer'">Want To Remove</th>
       </tr>
     </thead>
     <tbody>
-      <tr *ngFor="let recipe of recipeList; let i = index">
+      <tr
+        *ngFor="let recipe of recipeList; let i = index"
+        (click)="viewRecipe(recipe)"
+      >
         <td>{{ i + 1 }}</td>
         <td>{{ recipe.recipe_name }}</td>
         <td>{{ recipe.meal_type }}</td>
         <td>{{ recipe.meal_timing }}</td>
         <td>{{ recipe.cuisine }}</td>
         <td>{{ recipe.seasonal }}</td>
-        <td>{{ recipe.endorsed ? "Yes" : "No" }}</td>
+        <td>
+          <!-- Display the user's first name if the recipe is endorsed -->
+          <span *ngIf="recipe.isEndorsed; else notEndorsed">
+            {{ recipe.nutrition?.user?.firstName }}
+          </span>
+
+          <!-- If not endorsed, check the role and display the button or 'None' -->
+          <ng-template #notEndorsed>
+            <span *ngIf="role === 'Nutritionist'; else noButton">
+              <button (click)="$event.stopPropagation()">
+                Want to endorse
+              </button>
+            </span>
+            <ng-template #noButton> None </ng-template>
+          </ng-template>
+        </td>
+
+        <td *ngIf="role !== 'Customer'">
+          <button
+            class="btn btn-primary"
+            (click)="$event.stopPropagation(); enableDisableRecipe(recipe)"
+          >
+            {{ recipe.recipe_status ? "Enable" : "Disable" }}
+          </button>
+        </td>
+        <td *ngIf="role !== 'Customer'">
+          <button
+            class="btn btn-primary"
+            (click)="$event.stopPropagation(); modifyRecipe(recipe)"
+          >
+            Modify
+          </button>
+        </td>
+        <td *ngIf="role !== 'Customer'">
+          <button
+            class="btn btn-primary"
+            (click)="$event.stopPropagation(); deleteRecipe(recipe)"
+          >
+            Remove
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
