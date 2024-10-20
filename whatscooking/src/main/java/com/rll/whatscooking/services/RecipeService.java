@@ -1,5 +1,10 @@
 package com.rll.whatscooking.services;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -8,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rll.whatscooking.View.recipeCard;
+import com.rll.whatscooking.domain.Comments;
 import com.rll.whatscooking.domain.Ingredients;
 import com.rll.whatscooking.domain.Nutrition;
 import com.rll.whatscooking.domain.Recipe;
@@ -30,6 +36,9 @@ public class RecipeService implements iRecipeRepository {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private CommentService commentService;
 
     @Override
     public Recipe addRecipe(Recipe recipe) {
@@ -107,8 +116,12 @@ public class RecipeService implements iRecipeRepository {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
+            List<Comments> comments = commentService.findByRecipeId(existingRecipe.getRecipe_id());
+            if (comments != null && !comments.isEmpty()) {
+                commentService.deleteCommentByRecipeId(existingRecipe.getRecipe_id());
+            }
             // Ensure that ingredients are properly handled
-            List<Ingredients> ingredients = existingRecipe.getIngredients();
+            List< Ingredients> ingredients = existingRecipe.getIngredients();
 
             // If ingredients are not empty, ensure they are managed
             if (ingredients != null && !ingredients.isEmpty()) {
@@ -254,5 +267,25 @@ public class RecipeService implements iRecipeRepository {
 
         }
         return null;
+    }
+
+    public String uploadImage(String previousFileName, String recipeName) {
+        // Locate the image file in the asset/recipe_images directory
+        Path imagePath = Paths.get("E:\\RLL\\Client\\src\\assets\\Recipe_Images\\", previousFileName);
+        if (!Files.exists(imagePath)) {
+            throw new RuntimeException("Image file not found: " + previousFileName);
+        }
+
+        // Define the new file name and path
+        Path newImagePath = Paths.get("E:\\RLL\\Client\\src\\assets\\Recipe_Images\\", recipeName);
+
+        try {
+            // Rename the file
+            Files.move(imagePath, newImagePath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to rename image file", e);
+        }
+
+        return newImagePath.toString();
     }
 }

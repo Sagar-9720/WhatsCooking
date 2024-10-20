@@ -86,7 +86,7 @@ public class RecipeController {
     public ResponseEntity<String> endorseRecipe(@RequestBody Recipe recipe) {
         Recipe endorsedRecipe = recipeService.endorseRecipe(recipe);
         if (endorsedRecipe != null) {
-            return new ResponseEntity<>("Recipe enabled successfully", HttpStatus.OK);
+            return new ResponseEntity<>("Recipe endorsed successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Recipe not found", HttpStatus.NOT_FOUND);
         }
@@ -114,6 +114,7 @@ public class RecipeController {
 
     @PutMapping("/like")
     public ResponseEntity<String> likeRecipe(@RequestBody Recipe recipe) {
+        System.out.println("Called Like Recipe");
         Recipe liked = recipeService.likeRecipe(recipe);
         if (liked != null) {
             return new ResponseEntity<>("Recipe liked successfully", HttpStatus.OK);
@@ -124,11 +125,22 @@ public class RecipeController {
 
     @PutMapping("/unlike")
     public ResponseEntity<String> unlikeRecipe(@RequestBody Recipe recipe) {
+        System.out.println("Called Unlike Recipe");
         Recipe unliked = recipeService.unlikeRecipe(recipe);
         if (unliked != null) {
             return new ResponseEntity<>("Recipe unliked successfully", HttpStatus.OK);
         } else {
             return new ResponseEntity<>("Recipe not liked yet", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PostMapping("/upload")
+    public ResponseEntity<String> uploadImage(@RequestParam String previousFileName, @RequestParam String recipeName) {
+        try {
+            recipeService.uploadImage(previousFileName, recipeName);
+            return new ResponseEntity<>("Image uploaded successfully", HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Failed to upload image", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

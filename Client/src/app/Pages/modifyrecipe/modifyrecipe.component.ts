@@ -1,41 +1,61 @@
-import { Component } from '@angular/core';
+import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
+import { Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { Recipe } from 'src/app/Models/Recipe';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-modifyrecipe',
   templateUrl: './modifyrecipe.component.html',
   styleUrls: ['./modifyrecipe.component.css'],
 })
-export class ModifyrecipeComponent {
-  recipe: any = {
-    recipe_id: 1,
-    recipe_name: 'Spaghetti Carbonara',
-    recipe_steps:
-      'Boil pasta. Cook bacon. Mix eggs and cheese. Combine all ingredients.',
-    meal_timing: 'DINNER',
-    meal_type: 'PASTA',
-    seasonal: 'WINTER',
-    cuisine: 'ITALIAN',
-    recipe_rating: 4.5,
-    isEndorsed: true,
-    nutritionist: {
-      id: 1,
-      name: 'Jane Doe',
-      credentials: 'Registered Dietitian',
-    },
-    nutrition: { calories: 600, protein: 20, carbs: 75, fat: 25 },
-    ingredients: [
-      { name: 'Spaghetti' },
-      { name: 'Bacon' },
-      { name: 'Eggs' },
-      { name: 'Parmesan cheese' },
-      { name: 'Black pepper' },
-    ],
-    likedUser: [
-      { id: 1, username: 'user1' },
-      { id: 2, username: 'user2' },
-    ],
-  };
-  submitted: boolean = false;
-  selectedRecipeIndex: number | null | undefined;
-  recipes: any;
+export class ModifyrecipeComponent implements OnInit {
+  recipe: Recipe = new Recipe();
+
+  constructor(
+    private route: Router,
+    private recipeService: RecipeServiceService,
+    private toastr: ToastrService
+  ) {
+    this.fetchRecipe();
+  }
+
+  ngOnInit(): void {}
+
+  fetchRecipe() {
+    const navigation = this.route.getCurrentNavigation();
+    const state = navigation?.extras.state as { recipe: Recipe };
+    const recipe = state.recipe;
+    if (recipe) {
+      setTimeout(async () => {
+        try {
+          const data = await this.recipeService
+            .getRecipe(recipe.recipe_id ? recipe.recipe_id : 0)
+            .toPromise();
+          if (data) {
+            this.recipe = data;
+          }
+        } catch (error) {
+          this.toastr.error('Error fetching recipe');
+        }
+      }, 1000);
+    }
+  }
+  editName: boolean = false;
+  editSteps: boolean = false;
+  editIngredients: boolean[] = [];
+
+  updateRecipe() {
+    // this.recipeService.updateRecipe(this.recipe).subscribe(
+    //   (data) => {
+    //     this.toastr.success('Recipe updated successfully');
+    //     this.route.navigate(['/viewrecipe'], {
+    //       state: { recipe: this.recipe },
+    //     });
+    //   },
+    //   (error) => {
+    //     this.toastr.error('Error updating recipe');
+    //   }
+    // );
+  }
 }

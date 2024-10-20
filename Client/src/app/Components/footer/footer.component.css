@@ -7,13 +7,13 @@
   padding: 0;
   list-style: none;
   text-align: center;
-  font-size: 18px;
+  font-size: 1.125rem; /* 18px to rem */
   line-height: 1.6;
   margin-bottom: 0;
 }
 
 .footer-basic li {
-  padding: 0 10px;
+  padding: 0 0.625rem; /* 10px to rem */
 }
 
 .footer-basic ul a {
@@ -30,19 +30,19 @@
   display: flex;
   justify-content: center; /* Center aligns the icons */
   align-items: center; /* Vertically aligns the icons */
-  padding-bottom: 25px;
+  padding-bottom: 2.5vh; /* 25px to vh */
 }
 
 .footer-basic .social > a {
-  font-size: 24px;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
+  font-size: 1.5rem; /* 24px to rem */
+  width: 2.5rem; /* 40px to rem */
+  height: 2.5rem; /* 40px to rem */
+  line-height: 2.5rem; /* 40px to rem */
   display: inline-block;
   text-align: center;
   border-radius: 50%;
-  border: 1px solid #ccc;
-  margin: 0 8px;
+  border: 0.0625rem solid #ccc; /* 1px to rem */
+  margin: 0 0.5rem; /* 8px to rem */
   color: inherit;
   opacity: 0.75;
 }
@@ -56,12 +56,13 @@
   height: auto;
   background-size: 10vh;
 }
+
 .copyright {
   color: #4b4c4d;
   text-align: center; /* Centers the text */
-  margin-top: 15px; /* Add space above */
-  margin-bottom: 20px; /* Add space below */
-  font-size: 13px; /* Adjust font size if needed */
+  margin-top: 1.5vh; /* 15px to vh */
+  margin-bottom: 2vh; /* 20px to vh */
+  font-size: 0.8125rem; /* 13px to rem */
 }
 
 footer {

@@ -46,13 +46,13 @@ public class Recipe {
     private Nutrition nutrition; // Nullable Nutrition
 
     // Ingredients: Many to many relation with ingredients
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
     @JoinTable(name = "recipe_ingredients", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "ingredient_id"))
 
     private List<Ingredients> ingredients = new ArrayList<>();
 
     // Users who liked the recipe: Initialized as an empty list
-    @ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REMOVE })
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(name = "recipe_likes", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<User> likedUser = new ArrayList<>();
 

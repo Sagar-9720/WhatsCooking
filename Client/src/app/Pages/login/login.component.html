@@ -1,265 +1,276 @@
-<div class="container mt-5">
-  <div class="row justify-content-center">
-    <div class="col-md-6">
-      <div class="card shadow-lg border-0 rounded-lg">
-        <div class="card-body p-4">
-          <h2
-            class="card-title text-center"
-            [ngClass]="{
-              'text-primary': !forgotPasswordActive,
-              'text-warning': forgotPasswordActive && !otpSent && !otpVerified,
-              'text-info': otpSent && !otpVerified,
-              'text-success': otpVerified
-            }"
-          >
-            {{ getTitle() }}
-          </h2>
+<body>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div
+          class="card shadow-lg border-0 rounded-lg"
+          id="loginuser"
+          style="background: transparent"
+        >
+          <div class="p-4">
+            <h2
+              class="card-title text-center"
+              [ngClass]="{
+                'text-primary': !forgotPasswordActive,
+                'text-warning':
+                  forgotPasswordActive && !otpSent && !otpVerified,
+                'text-info': otpSent && !otpVerified,
+                'text-success': otpVerified
+              }"
+            >
+              {{ getTitle() }}
+            </h2>
 
-          <div [ngSwitch]="currentView">
-            <!-- Login Form Section -->
-            <div *ngSwitchCase="'login'">
-              <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    [(ngModel)]="user.username"
-                    required
-                    minlength="3"
-                    #username="ngModel"
-                    placeholder="Enter your username"
-                    autocomplete="off"
-                  />
-                  <div
-                    *ngIf="username.invalid && username.touched"
-                    class="text-danger"
-                  >
-                    <small *ngIf="username.errors?.['required']"
-                      >Username is required.</small
+            <div [ngSwitch]="currentView">
+              <!-- Login Form Section -->
+              <div *ngSwitchCase="'login'">
+                <form #loginForm="ngForm" (ngSubmit)="onSubmit(loginForm)">
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      name="username"
+                      [(ngModel)]="user.username"
+                      required
+                      minlength="3"
+                      #username="ngModel"
+                      placeholder="Enter your username"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="username.invalid && username.touched"
+                      class="text-danger"
                     >
-                    <small *ngIf="username.errors?.['minlength']"
-                      >Username must be at least 3 characters long.</small
-                    >
+                      <small *ngIf="username.errors?.['required']"
+                        >Username is required.</small
+                      >
+                      <small *ngIf="username.errors?.['minlength']"
+                        >Username must be at least 3 characters long.</small
+                      >
+                    </div>
                   </div>
-                </div>
 
-                <div class="form-group">
-                  <label for="password">Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="password"
-                    name="password"
-                    [(ngModel)]="user.password"
-                    required
-                    minlength="6"
-                    #password="ngModel"
-                    placeholder="Enter your password"
-                    autocomplete="off"
-                  />
-                  <div
-                    *ngIf="password.invalid && password.touched"
-                    class="text-danger"
-                  >
-                    <small *ngIf="password.errors?.['required']"
-                      >Password is required.</small
+                  <div class="form-group">
+                    <label for="password">Password</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="password"
+                      name="password"
+                      [(ngModel)]="user.password"
+                      required
+                      minlength="6"
+                      #password="ngModel"
+                      placeholder="Enter your password"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="password.invalid && password.touched"
+                      class="text-danger"
                     >
-                    <small *ngIf="password.errors?.['minlength']"
-                      >Password must be at least 6 characters long.</small
-                    >
+                      <small *ngIf="password.errors?.['required']"
+                        >Password is required.</small
+                      >
+                      <small *ngIf="password.errors?.['minlength']"
+                        >Password must be at least 6 characters long.</small
+                      >
+                    </div>
                   </div>
-                </div>
 
-                <div class="form-group text-center">
-                  <button
-                    type="button"
-                    class="btn btn-link"
-                    (click)="setView('forgotPassword')"
-                  >
-                    Forgot Password?
-                  </button>
-                </div>
-
-                <div class="form-group text-center">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="loginForm.invalid"
-                  >
-                    Login
-                  </button>
-                </div>
-
-                <div class="form-group text-center">
-                  <button
-                    type="button"
-                    class="btn btn-link"
-                    (click)="goToRegister()"
-                  >
-                    Not yet registered? Register Here
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Forgot Password Form Section -->
-            <div *ngSwitchCase="'forgotPassword'">
-              <form
-                #forgotPasswordForm="ngForm"
-                (ngSubmit)="sendOtp(forgotPasswordForm)"
-              >
-                <div class="form-group">
-                  <label for="email">Email</label>
-                  <input
-                    type="email"
-                    class="form-control"
-                    id="email"
-                    name="email"
-                    [(ngModel)]="user.email"
-                    required
-                    #email="ngModel"
-                    placeholder="Enter your email"
-                    autocomplete="off"
-                  />
-                  <div
-                    *ngIf="email.invalid && email.touched"
-                    class="text-danger"
-                  >
-                    <small *ngIf="email.errors?.['required']"
-                      >Email is required.</small
+                  <div class="form-group">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="loginForm.invalid"
                     >
+                      Login
+                    </button>
                   </div>
-                </div>
-                <div class="form-group">
-                  <label for="username">Username</label>
-                  <input
-                    type="text"
-                    class="form-control"
-                    id="username"
-                    name="username"
-                    [(ngModel)]="user.username"
-                    required
-                    minlength="3"
-                    #username="ngModel"
-                    placeholder="Enter your username"
-                    autocomplete="off"
-                  />
-                  <div
-                    *ngIf="username.invalid && username.touched"
-                    class="text-danger"
-                  >
-                    <small *ngIf="username.errors?.['required']"
-                      >Username is required.</small
+
+                  <div class="form-forgot">
+                    <a
+                      href="#"
+                      class="btn btn-link"
+                      (click)="setView('forgotPassword')"
                     >
-                    <small *ngIf="username.errors?.['minlength']"
-                      >Username must be at least 3 characters long.</small
-                    >
+                      Forgot Password?
+                    </a>
                   </div>
-                </div>
 
-                <div class="form-group text-center">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="forgotPasswordForm.invalid"
-                  >
-                    Send OTP
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- OTP Verification Form Section -->
-            <div *ngSwitchCase="'otp'">
-              <form #otpForm="ngForm" (ngSubmit)="verifyOtp(otpForm)">
-                <div class="form-group">
-                  <label for="otp">OTP</label>
-                  <input
-                    type="text"
-                    class="form-control text-center"
-                    id="otp"
-                    name="otp"
-                    [(ngModel)]="user.otp"
-                    required
-                    minlength="6"
-                    maxlength="6"
-                    #otp="ngModel"
-                    placeholder="Enter OTP"
-                    autocomplete="off"
-                    style="font-size: 2rem; letter-spacing: 0.5rem; width: 100%"
-                  />
-                  <div *ngIf="otp.invalid && otp.touched" class="text-danger">
-                    <small *ngIf="otp.errors?.['required']"
-                      >OTP is required.</small
+                  <div class="form-register">
+                    <button
+                      type="button"
+                      class="btn btn-link"
+                      (click)="goToRegister()"
                     >
-                    <small *ngIf="otp.errors?.['minlength']"
-                      >OTP must be 6 characters long.</small
-                    >
+                      Not yet registered? Register Here
+                    </button>
                   </div>
-                </div>
+                </form>
+              </div>
 
-                <div class="form-group text-center">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="otpForm.invalid"
-                  >
-                    Verify OTP
-                  </button>
-                </div>
-              </form>
-            </div>
-
-            <!-- Reset Password Form Section -->
-            <div *ngSwitchCase="'resetPassword'">
-              <form
-                #resetPasswordForm="ngForm"
-                (ngSubmit)="resetPassword(resetPasswordForm)"
-              >
-                <div class="form-group">
-                  <label for="newPassword">New Password</label>
-                  <input
-                    type="password"
-                    class="form-control"
-                    id="newPassword"
-                    name="newPassword"
-                    [(ngModel)]="user.password"
-                    required
-                    minlength="6"
-                    #newPassword="ngModel"
-                    placeholder="Enter your new password"
-                    autocomplete="off"
-                  />
-                  <div
-                    *ngIf="newPassword.invalid && newPassword.touched"
-                    class="text-danger"
-                  >
-                    <small *ngIf="newPassword.errors?.['required']"
-                      >Password is required.</small
+              <!-- Forgot Password Form Section -->
+              <div *ngSwitchCase="'forgotPassword'">
+                <form
+                  #forgotPasswordForm="ngForm"
+                  (ngSubmit)="sendOtp(forgotPasswordForm)"
+                >
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      [(ngModel)]="user.email"
+                      required
+                      #email="ngModel"
+                      placeholder="Enter your email"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="email.invalid && email.touched"
+                      class="text-danger"
                     >
-                    <small *ngIf="newPassword.errors?.['minlength']"
-                      >Password must be at least 6 characters long.</small
-                    >
+                      <small *ngIf="email.errors?.['required']"
+                        >Email is required.</small
+                      >
+                    </div>
                   </div>
-                </div>
+                  <div class="form-group">
+                    <label for="username">Username</label>
+                    <input
+                      type="text"
+                      class="form-control"
+                      id="username"
+                      name="username"
+                      [(ngModel)]="user.username"
+                      required
+                      minlength="3"
+                      #username="ngModel"
+                      placeholder="Enter your username"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="username.invalid && username.touched"
+                      class="text-danger"
+                    >
+                      <small *ngIf="username.errors?.['required']"
+                        >Username is required.</small
+                      >
+                      <small *ngIf="username.errors?.['minlength']"
+                        >Username must be at least 3 characters long.</small
+                      >
+                    </div>
+                  </div>
 
-                <div class="form-group text-center">
-                  <button
-                    type="submit"
-                    class="btn btn-primary"
-                    [disabled]="resetPasswordForm.invalid"
-                  >
-                    Reset Password
-                  </button>
-                </div>
-              </form>
+                  <div class="form-group text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="forgotPasswordForm.invalid"
+                    >
+                      Send OTP
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- OTP Verification Form Section -->
+              <div *ngSwitchCase="'otp'">
+                <form #otpForm="ngForm" (ngSubmit)="verifyOtp(otpForm)">
+                  <div class="form-group">
+                    <label for="otp">OTP</label>
+                    <input
+                      type="text"
+                      class="form-control text-center"
+                      id="otp"
+                      name="otp"
+                      [(ngModel)]="user.otp"
+                      required
+                      minlength="6"
+                      maxlength="6"
+                      #otp="ngModel"
+                      placeholder="Enter OTP"
+                      autocomplete="off"
+                      style="
+                        font-size: 2rem;
+                        letter-spacing: 0.5rem;
+                        width: 100%;
+                      "
+                    />
+                    <div *ngIf="otp.invalid && otp.touched" class="text-danger">
+                      <small *ngIf="otp.errors?.['required']"
+                        >OTP is required.</small
+                      >
+                      <small *ngIf="otp.errors?.['minlength']"
+                        >OTP must be 6 characters long.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="otpForm.invalid"
+                    >
+                      Verify OTP
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Reset Password Form Section -->
+              <div *ngSwitchCase="'resetPassword'">
+                <form
+                  #resetPasswordForm="ngForm"
+                  (ngSubmit)="resetPassword(resetPasswordForm)"
+                >
+                  <div class="form-group">
+                    <label for="newPassword">New Password</label>
+                    <input
+                      type="password"
+                      class="form-control"
+                      id="newPassword"
+                      name="newPassword"
+                      [(ngModel)]="user.password"
+                      required
+                      minlength="6"
+                      #newPassword="ngModel"
+                      placeholder="Enter your new password"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="newPassword.invalid && newPassword.touched"
+                      class="text-danger"
+                    >
+                      <small *ngIf="newPassword.errors?.['required']"
+                        >Password is required.</small
+                      >
+                      <small *ngIf="newPassword.errors?.['minlength']"
+                        >Password must be at least 6 characters long.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="resetPasswordForm.invalid"
+                    >
+                      Reset Password
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-</div>
+</body>

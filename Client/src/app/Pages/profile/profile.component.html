@@ -1,272 +1,316 @@
 <app-navbar></app-navbar>
-<div
-  class="container profile-container mt-5 p-4 border rounded bg-light"
-  style="max-width: 700px"
->
-  <h2 class="text-center mb-4">User Profile</h2>
+<div class="background-img">
+  <div class="container profile-container p-4 border rounded">
+    <h2 class="text-center mb-4">User Profile</h2>
 
-  <!-- Navigation bar with two options -->
-  <nav>
-    <ul class="nav nav-tabs justify-content-center mb-4">
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          [class.active]="currentSection === 'userDetails'"
-          (click)="showSection('userDetails')"
-        >
-          Modify User Details
-        </button>
-      </li>
-      <li class="nav-item">
-        <button
-          class="nav-link"
-          [class.active]="currentSection === 'changePassword'"
-          (click)="showSection('changePassword')"
-        >
-          Change Password
-        </button>
-      </li>
-    </ul>
-  </nav>
+    <!-- Navigation bar with two options -->
+    <nav>
+      <ul class="nav nav-tabs justify-content-center mb-4">
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            [class.active]="currentSection === 'userDetails'"
+            (click)="showSection('userDetails')"
+          >
+            Modify User Details
+          </button>
+        </li>
+        <li class="nav-item">
+          <button
+            class="nav-link"
+            [class.active]="currentSection === 'changePassword'"
+            (click)="showSection('changePassword')"
+          >
+            Change Password
+          </button>
+        </li>
+      </ul>
+    </nav>
 
-  <!-- Show User Details section when 'Modify User Details' is selected -->
-  <div *ngIf="currentSection === 'userDetails'">
-    <h3 class="text-center mb-4">Modify User Details</h3>
+    <!-- Show User Details section when 'Modify User Details' is selected -->
+    <div *ngIf="currentSection === 'userDetails'">
+      <h3 class="text-center mb-4">Modify User Details</h3>
 
-    <form
-      #userDetailsForm="ngForm"
-      (ngSubmit)="onUpdateProfile(userDetailsForm)"
-    >
-      <div class="form-group row mb-4">
-        <label for="firstName" class="col-sm-3 col-form-label"
-          >First Name:</label
-        >
-        <div class="col-sm-7">
-          <input
-            type="text"
-            id="firstName"
-            [(ngModel)]="user.firstName"
-            name="firstName"
-            class="form-control"
-            [disabled]="!isUserDetailsEditable"
-            required
-          />
+      <form
+        #userDetailsForm="ngForm"
+        (ngSubmit)="onUpdateProfile(userDetailsForm)"
+      >
+        <div class="form-group row mb-4">
+          <label for="firstName" class="col-sm-3 col-form-label"
+            >First Name:</label
+          >
+          <div class="col-sm-7">
+            <input
+              type="text"
+              id="firstName"
+              [(ngModel)]="user.firstName"
+              name="firstName"
+              class="form-control"
+              [disabled]="!isFieldEditable.firstName"
+              required
+            />
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="enableField('firstName')"
+              [disabled]="isFieldEditable.firstName"
+              [hidden]="isFieldEditable.firstName"
+            >
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!isFieldEditable.firstName"
+              [hidden]="!isFieldEditable.firstName"
+            >
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
         </div>
-        <div class="col-sm-2">
+
+        <div class="form-group row mb-4">
+          <label for="lastName" class="col-sm-3 col-form-label"
+            >Last Name:</label
+          >
+          <div class="col-sm-7">
+            <input
+              type="text"
+              id="lastName"
+              [(ngModel)]="user.lastName"
+              name="lastName"
+              class="form-control"
+              [disabled]="!isFieldEditable.lastName"
+              required
+            />
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="enableField('lastName')"
+              [disabled]="isFieldEditable.lastName"
+              [hidden]="isFieldEditable.lastName"
+            >
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!isFieldEditable.lastName"
+              [hidden]="!isFieldEditable.lastName"
+            >
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
+        </div>
+
+        <div class="form-group row mb-4">
+          <label for="email" class="col-sm-3 col-form-label">Email:</label>
+          <div class="col-sm-7">
+            <input
+              type="email"
+              id="email"
+              [(ngModel)]="user.email"
+              name="email"
+              class="form-control"
+              [disabled]="!isFieldEditable.email"
+              required
+            />
+          </div>
+          <div class="col-sm-2">
+            <button
+              type="button"
+              class="btn btn-primary"
+              (click)="enableField('email')"
+              [disabled]="isFieldEditable.email"
+              [hidden]="isFieldEditable.email"
+            >
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!isFieldEditable.email"
+              [hidden]="!isFieldEditable.email"
+            >
+              <i class="fas fa-check"></i>
+            </button>
+          </div>
+        </div>
+
+        <div *ngIf="showOtpInput" class="form-group row mb-4">
+          <label for="otp" class="col-sm-3 col-form-label">Enter OTP:</label>
+          <div class="col-sm-7">
+            <input
+              type="text"
+              id="otp"
+              [(ngModel)]="otp"
+              name="otp"
+              class="form-control"
+              required
+            />
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-success" (click)="verifyOtp()">
+              Verify OTP
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Show Change Password section when 'Change Password' is selected -->
+    <div *ngIf="currentSection === 'changePassword'">
+      <h3 class="text-center mb-4">Change Password</h3>
+
+      <form
+        #changePasswordForm="ngForm"
+        (ngSubmit)="onChangePassword(changePasswordForm)"
+      >
+        <!-- Current Password -->
+        <div class="mb-3">
+          <label for="currentPassword" class="form-label"
+            >Current Password</label
+          >
+          <div class="input-group">
+            <input
+              [type]="showPassword.current ? 'text' : 'password'"
+              id="currentPassword"
+              class="form-control"
+              name="currentPassword"
+              [(ngModel)]="prevUser.password"
+              required
+              minlength="7"
+              #currentPassword="ngModel"
+              placeholder="Enter your current password"
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordVisibility('current')"
+            >
+              <i
+                class="fas"
+                [ngClass]="showPassword.current ? 'fa-eye-slash' : 'fa-eye'"
+              ></i>
+            </button>
+          </div>
+          <div
+            *ngIf="currentPassword.invalid && currentPassword.touched"
+            class="text-danger"
+          >
+            <small *ngIf="currentPassword.errors?.['required']"
+              >Current Password is required.</small
+            >
+            <small *ngIf="currentPassword.errors?.['minlength']"
+              >Current Password must be at least 7 characters long.</small
+            >
+          </div>
+        </div>
+
+        <!-- New Password -->
+        <div class="mb-3">
+          <label for="password" class="form-label">New Password</label>
+          <div class="input-group">
+            <input
+              [type]="showPassword.new ? 'text' : 'password'"
+              id="password"
+              class="form-control"
+              name="password"
+              [(ngModel)]="user.password"
+              required
+              minlength="7"
+              #password="ngModel"
+              placeholder="Enter your new password"
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordVisibility('new')"
+            >
+              <i
+                class="fas"
+                [ngClass]="showPassword.new ? 'fa-eye-slash' : 'fa-eye'"
+              ></i>
+            </button>
+          </div>
+          <div *ngIf="password.invalid && password.touched" class="text-danger">
+            <small *ngIf="password.errors?.['required']"
+              >New Password is required.</small
+            >
+            <small *ngIf="password.errors?.['minlength']"
+              >New Password must be at least 7 characters long.</small
+            >
+          </div>
+        </div>
+
+        <!-- Verify New Password -->
+        <div class="mb-3">
+          <label for="verifyPassword" class="form-label"
+            >Verify New Password</label
+          >
+          <div class="input-group">
+            <input
+              [type]="showPassword.verify ? 'text' : 'password'"
+              id="verifyPassword"
+              class="form-control"
+              name="verifyPassword"
+              [(ngModel)]="user.verifyPassword"
+              required
+              [pattern]="user.password || ''"
+              #verifyPassword="ngModel"
+              placeholder="Re-enter your new password"
+              autocomplete="off"
+            />
+            <button
+              type="button"
+              class="btn btn-outline-secondary"
+              (click)="togglePasswordVisibility('verify')"
+            >
+              <i
+                class="fas"
+                [ngClass]="showPassword.verify ? 'fa-eye-slash' : 'fa-eye'"
+              ></i>
+            </button>
+          </div>
+          <div
+            *ngIf="verifyPassword.invalid && verifyPassword.touched"
+            class="text-danger"
+          >
+            <small *ngIf="verifyPassword.errors?.['pattern']"
+              >Passwords do not match.</small
+            >
+          </div>
+        </div>
+
+        <div *ngIf="showPasswordErrorButtons" class="text-danger mt-3">
+          <small>Incorrect current password. Please try again.</small><br />
           <button
             type="button"
-            class="btn btn-primary"
-            (click)="enableUserDetails()"
-            [disabled]="isUserDetailsEditable"
+            class="btn btn-secondary"
+            (click)="resetPasswordFields()"
           >
-            Modify
+            Try Again
           </button>
+          <a class="btn btn-link" routerLink="/login">forgot password??</a>
+        </div>
+
+        <div class="text-center">
           <button
             type="submit"
-            class="btn btn-success"
-            [disabled]="!isUserDetailsEditable"
+            class="btn btn-warning mt-3"
+            [disabled]="!changePasswordForm.valid"
           >
-            Update
+            Update Password
           </button>
         </div>
-      </div>
-
-      <div class="form-group row mb-4">
-        <label for="lastName" class="col-sm-3 col-form-label">Last Name:</label>
-        <div class="col-sm-7">
-          <input
-            type="text"
-            id="lastName"
-            [(ngModel)]="user.lastName"
-            name="lastName"
-            class="form-control"
-            [disabled]="!isUserDetailsEditable"
-            required
-          />
-        </div>
-        <div class="col-sm-2">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="enableUserDetails()"
-            [disabled]="isUserDetailsEditable"
-          >
-            Modify
-          </button>
-          <button
-            type="submit"
-            class="btn btn-success"
-            [disabled]="!isUserDetailsEditable"
-          >
-            Update
-          </button>
-        </div>
-      </div>
-
-      <div class="form-group row mb-4">
-        <label for="email" class="col-sm-3 col-form-label">Email:</label>
-        <div class="col-sm-7">
-          <input
-            type="email"
-            id="email"
-            [(ngModel)]="user.email"
-            name="email"
-            class="form-control"
-            [disabled]="!isUserDetailsEditable"
-            required
-          />
-        </div>
-        <div class="col-sm-2">
-          <button
-            type="button"
-            class="btn btn-primary"
-            (click)="enableUserDetails()"
-            [disabled]="isUserDetailsEditable"
-          >
-            Modify
-          </button>
-          <button
-            type="submit"
-            class="btn btn-success"
-            [disabled]="!isUserDetailsEditable"
-          >
-            Update
-          </button>
-        </div>
-      </div>
-
-      <div *ngIf="showOtpInput" class="form-group row mb-4">
-        <label for="otp" class="col-sm-3 col-form-label">Enter OTP:</label>
-        <div class="col-sm-7">
-          <input
-            type="text"
-            id="otp"
-            [(ngModel)]="otp"
-            name="otp"
-            class="form-control"
-            required
-          />
-        </div>
-        <div class="col-sm-2">
-          <button type="button" class="btn btn-success" (click)="verifyOtp()">
-            Verify OTP
-          </button>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <!-- Show Change Password section when 'Change Password' is selected -->
-  <div *ngIf="currentSection === 'changePassword'">
-    <h3 class="text-center mb-4">Change Password</h3>
-
-    <form
-      #changePasswordForm="ngForm"
-      (ngSubmit)="onChangePassword(changePasswordForm)"
-    >
-      <!-- Current Password -->
-      <div class="mb-3">
-        <label for="currentPassword" class="form-label">Current Password</label>
-        <input
-          type="password"
-          id="currentPassword"
-          class="form-control"
-          name="currentPassword"
-          [(ngModel)]="prevUser.password"
-          required
-          minlength="7"
-          #currentPassword="ngModel"
-          placeholder="Enter your current password"
-          autocomplete="off"
-        />
-        <div
-          *ngIf="currentPassword.invalid && currentPassword.touched"
-          class="text-danger"
-        >
-          <small *ngIf="currentPassword.errors?.['required']"
-            >Current Password is required.</small
-          >
-          <small *ngIf="currentPassword.errors?.['minlength']"
-            >Current Password must be at least 7 characters long.</small
-          >
-        </div>
-      </div>
-
-      <!-- New Password -->
-      <div class="mb-3">
-        <label for="password" class="form-label">New Password</label>
-        <input
-          type="password"
-          id="password"
-          class="form-control"
-          name="password"
-          [(ngModel)]="user.password"
-          required
-          minlength="7"
-          #password="ngModel"
-          placeholder="Enter your new password"
-          autocomplete="off"
-        />
-        <div *ngIf="password.invalid && password.touched" class="text-danger">
-          <small *ngIf="password.errors?.['required']"
-            >New Password is required.</small
-          >
-          <small *ngIf="password.errors?.['minlength']"
-            >New Password must be at least 7 characters long.</small
-          >
-        </div>
-      </div>
-
-      <!-- Verify New Password -->
-      <div class="mb-3">
-        <label for="verifyPassword" class="form-label"
-          >Verify New Password</label
-        >
-        <input
-          type="password"
-          id="verifyPassword"
-          class="form-control"
-          name="verifyPassword"
-          [(ngModel)]="user.verifyPassword"
-          required
-          [pattern]="user.password || ''"
-          #verifyPassword="ngModel"
-          placeholder="Re-enter your new password"
-          autocomplete="off"
-        />
-        <div
-          *ngIf="verifyPassword.invalid && verifyPassword.touched"
-          class="text-danger"
-        >
-          <small *ngIf="verifyPassword.errors?.['pattern']"
-            >Passwords do not match.</small
-          >
-        </div>
-      </div>
-
-      <div *ngIf="showPasswordErrorButtons" class="text-danger mt-3">
-        <small>Incorrect current password. Please try again.</small><br />
-        <button
-          type="button"
-          class="btn btn-secondary"
-          (click)="resetPasswordFields()"
-        >
-          Try Again
-        </button>
-        <a class="nav-link" routerLink="/login">forgot password??</a>
-      </div>
-
-      <div class="text-center">
-        <button
-          type="submit"
-          class="btn btn-warning mt-3"
-          [disabled]="!changePasswordForm.valid"
-        >
-          Update Password
-        </button>
-      </div>
-    </form>
+      </form>
+    </div>
   </div>
 </div>
-
 <app-footer></app-footer>

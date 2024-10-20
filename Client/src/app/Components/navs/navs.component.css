@@ -2,7 +2,7 @@
   color: white;
   background: transparent;
   backdrop-filter: blur(12px);
-  margin: 0 5px;
+  margin: 0 0.3125rem; /* 5px to rem */
 }
 .nav-item .dropdown-menu {
   display: none;

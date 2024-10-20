@@ -12,11 +12,12 @@ import { ViewAllRecipeComponent } from './Pages/view-all-recipe/view-all-recipe.
 import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.component';
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
 import { LogoutComponent } from './Pages/logout/logout.component';
-
+import { AuthGuard } from './Services/auth.guard';
 const routes: Routes = [
   {
     path: 'welcome',
     component: WelcomepageComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: '',
@@ -25,10 +26,12 @@ const routes: Routes = [
   {
     path: 'add-recipe',
     component: AddRecipeComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'modifyrecipe',
     component: ModifyrecipeComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'register',
@@ -53,14 +56,22 @@ const routes: Routes = [
   {
     path: 'view-all-recipe',
     component: ViewAllRecipeComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'viewrecipe',
     component: ViewrecipeComponent,
+    canActivate: [AuthGuard],
   },
   {
     path: 'signout',
     component: LogoutComponent,
+  },
+  {
+    path: 'view-all-recipe',
+    component: ViewAllRecipeComponent,
+    data: { endorsed: true },
+    canActivate: [AuthGuard],
   },
 ];
 

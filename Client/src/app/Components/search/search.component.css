@@ -11,11 +11,11 @@ body {
 
 .searchTerm {
   width: 100%;
-  border: 3px solid rgb(153, 226, 159);
+  border: 0.2rem solid rgb(153, 226, 159);
   border-right: none;
-  padding: 20px;
-  height: 20px;
-  border-radius: 20px 20px 20px 20px;
+  padding: 2rem;
+  height: 2rem;
+  border-radius: 2rem;
   outline: none;
   color: black;
   margin-bottom: 20vh;
@@ -26,16 +26,16 @@ body {
 }
 
 .searchButton {
-  width: 50px;
-  height: 45px;
-  border: 1px solid rgb(153, 226, 159);
+  width: 5rem;
+  height: 4.5rem;
+  border: 0.1rem solid rgb(153, 226, 159);
   background: lightgreen;
   text-align: center;
   color: #fff;
-  border-radius: 10px 10px 10px 10px;
+  border-radius: 1rem;
   cursor: pointer;
-  font-size: 20px;
-  margin-bottom: 35px;
+  font-size: 2rem;
+  margin-bottom: 3.5rem;
 }
 
 .wrap {
@@ -46,9 +46,10 @@ body {
   flex-direction: column;
   justify-content: center;
 }
+
 .note {
   font-family: "Sofia", sans-serif;
   color: rebeccapurple;
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(2rem);
   margin-bottom: 5vh;
 }

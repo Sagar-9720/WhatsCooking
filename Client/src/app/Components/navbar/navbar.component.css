@@ -1,0 +1,59 @@
+.navbar {
+  backdrop-filter: blur(12px);
+  background-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0rem 0.5rem 2rem rgba(0, 0, 0, 0.1);
+  border-radius: 6.25rem;
+  transition: all 0.3s ease-in-out;
+  height: 10vh;
+}
+
+.navbar-nav .nav-link {
+  font-weight: 600;
+  color: #333;
+  margin-right: 0.625rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #007bff;
+}
+
+.navbar-brand {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: rgb(5, 66, 5);
+  transition: all 0.3s ease-in-out;
+  font-family: "Sofia", sans-serif;
+  margin-left: 0.3125rem;
+}
+
+.navbar-toggler {
+  border: none;
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 0.5%29' stroke-width='0.125rem' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.glass-effect {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(15px);
+  border: 0.0625rem solid rgba(255, 255, 255, 0.3);
+  border-radius: 0.75rem;
+}
+
+.navbar-nav .btn {
+  transition: all 0.2s ease-in-out;
+}
+
+.navbar-nav .btn:hover {
+  transform: scale(1.05);
+}
+
+.logo {
+  height: 2rem;
+  margin-right: 0.625rem;
+  vertical-align: middle;
+}
+
+

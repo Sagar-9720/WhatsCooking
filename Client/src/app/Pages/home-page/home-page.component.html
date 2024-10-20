@@ -61,7 +61,7 @@
         (mouseover)="onMouseOver($event)"
         (mouseout)="onMouseOut($event)"
       >
-        <app-recipe [recipe]="recipe"></app-recipe>
+        <app-recipe (click)="viewRecipe(recipe)" [recipe]="recipe"></app-recipe>
       </div>
       <button
         (click)="nextPage()"

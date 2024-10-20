@@ -1,5 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
+import { Comments } from 'src/app/Models/Comments';
 import { Recipe } from 'src/app/Models/Recipe';
+import { User } from 'src/app/Models/User';
+import { CommentserviceService } from 'src/app/Services/commentservice.service';
 import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 
 @Component({
@@ -7,73 +12,163 @@ import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
   templateUrl: './viewrecipe.component.html',
   styleUrls: ['./viewrecipe.component.css'],
 })
-export class ViewrecipeComponent {
-  recipeName: any;
-  recipe: any = {
-    recipe_name: 'Potato Fry',
-    recipe_steps:
-      'Indulge in the delight of Crispy Potato Fries, a beloved classic that transforms simple potatoes into golden, crunchy perfection. Start with fresh Russet or Yukon Gold potatoes, which are ideal for achieving that perfect texture. After cutting them into uniform sticks, soak them in cold water to remove excess starch, ensuring extra crispiness. Once dried, fry the potatoes in hot oil until they turn a beautiful golden brown, then drain them and season with salt and your choice of spices for added flavor. Best served immediately, these fries make a perfect side dish or snack, paired wonderfully with your favorite dipping sauces like ketchup or aioli. Enjoy the satisfying crunch and the comforting taste of homemade fries that are sure to please any crowd!',
-    ingredients: [
-      { id: 1, name: 'medium-sized potatoes' },
-      { id: 2, name: 'oil' },
-      { id: 3, name: 'mustard seeds' },
-      { id: 4, name: 'cumin seeds' },
-      { id: 5, name: 'turmeric powder' },
-      { id: 6, name: ' red chili powder' },
-      { id: 7, name: 'salt' },
-      { id: 8, name: 'fresh coriander leaves' },
-      { id: 9, name: 'lemon juice' },
-    ],
-  };
-
+export class ViewrecipeComponent implements OnInit {
+  recipe: Recipe = new Recipe();
   message: string = '';
-  comments = [
-    { author: 'Raji', text: 'This is the first comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Jagadish', text: 'This is the third comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-    { author: 'Nihaa', text: 'This is the second comment!' },
-  ];
+  comments: Comments[] = [];
   displayedComments: any[] = [];
-
-  constructor(private recipeService: RecipeServiceService) {}
-
-  // viewRecipe(): any {
-  //   this.recipeService
-  //     .viewRecipe(this.recipe.recipe_name)
-  //     .subscribe((r) => (this.recipeName = r));
-  // }
+  user: User = new User();
   showMore = false;
+  isLiked: boolean = false;
+  rating: number = 0;
+  newComment: Comments = new Comments();
+  canAddComment: boolean = true;
+
+  constructor(
+    private recipeService: RecipeServiceService,
+    private router: Router,
+    private commentService: CommentserviceService,
+    private toastr: ToastrService
+  ) {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      this.user = JSON.parse(user);
+    } else {
+      this.router.navigate(['/login']);
+    }
+    this.fetchRecipe();
+  }
+
+  ngOnInit(): void {}
+
+  fetchRecipe() {
+    const navigation = this.router.getCurrentNavigation();
+    const state = navigation?.extras.state as { recipe: Recipe };
+    const recipe = state.recipe;
+    if (recipe) {
+      setTimeout(async () => {
+        try {
+          const data = await this.recipeService
+            .getRecipe(recipe.recipe_id ? recipe.recipe_id : 0)
+            .toPromise();
+          if (data) {
+            this.recipe = data;
+            this.recipe.likedUser &&
+            this.recipe.likedUser.filter(
+              (user) => user.userId == this.user.userId
+            ).length > 0
+              ? (this.isLiked = true)
+              : (this.isLiked = false);
+            this.fetchComments();
+            this.calculateRating();
+          } else {
+            console.error('Recipe data is undefined');
+          }
+        } catch (error) {
+          console.error('Error fetching recipe', error);
+        }
+      }, 500);
+    } else {
+      this.router.navigate(['/view-all-recipe']);
+    }
+  }
+
+  fetchComments() {
+    this.commentService
+      .getComments(this.recipe.recipe_id ? this.recipe.recipe_id : 0)
+      .subscribe((data) => {
+        this.calculateRating();
+        this.comments = data;
+        this.canAddComment =
+          this.comments.filter(
+            (comment) => comment.user && comment.user.userId == this.user.userId
+          ).length == 0;
+        this.displayedComments = this.comments.slice(0, 2);
+      });
+  }
+
   toggleShowMore() {
     this.showMore = !this.showMore;
     if (this.showMore) {
       this.displayedComments = this.comments;
-      // Show all comments
     } else {
       this.displayedComments = this.comments.slice(0, 2);
-      // Show only the first two comments
     }
   }
+
   hasMoreComments() {
     return this.comments.length > 2;
   }
-  isLiked: boolean = false;
-  toggleLike() {
-    this.isLiked = !this.isLiked;
-    this.message = this.isLiked
-      ? 'You liked this recipe!'
-      : 'You unliked this recipe.';
+
+  async toggleLike() {
+    let recipe = this.recipe;
+    recipe.likedUser = [this.user];
+
+    try {
+      if (this.isLiked) {
+        await this.recipeService.unlikeRecipe(recipe).toPromise();
+        this.isLiked = false;
+        this.toastr.success('Recipe unliked successfully!');
+      } else {
+        await this.recipeService.likeRecipe(recipe).toPromise();
+        this.isLiked = true;
+        this.toastr.success('Recipe liked successfully!');
+      }
+      const fetchedRecipe = await this.recipeService
+        .getRecipe(this.recipe.recipe_id ? this.recipe.recipe_id : 0)
+        .toPromise();
+      if (fetchedRecipe) {
+        this.recipe = fetchedRecipe;
+      } else {
+        this.toastr.error('Error fetching updated recipe!');
+      }
+      this.calculateRating();
+    } catch (error) {
+      this.toastr.error(
+        `Error ${this.isLiked ? 'unliking' : 'liking'} recipe!`
+      );
+      console.error('Error', error);
+      this.calculateRating();
+    }
   }
-  rating: any = 0;
-  rateRecipe(star: number) {
-    this.rating = star; // Set the rating based on the star clicked
+
+  calculateRating() {
+    if (this.recipe && this.recipe.likedUser) {
+      const totalLikes = this.recipe.likedUser.length;
+      this.rating = Math.min(5, Math.floor(totalLikes / 2));
+    }
+  }
+
+  addComment() {
+    this.newComment.commentId = 0;
+    this.newComment.recipe = this.recipe;
+    this.newComment.user = this.user;
+
+    this.commentService.commentRecipe(this.newComment).subscribe(
+      (data) => {
+        this.comments.push(data);
+        this.fetchComments();
+        this.displayedComments = this.comments.slice(0, 2);
+
+        this.toastr.success('Comment added successfully!');
+      },
+      (error) => {
+        this.fetchComments();
+        this.toastr.error('Error adding comment!');
+      }
+    );
+    this.newComment = new Comments(); //reset comment;
+  }
+  deleteComment(comment: Comments) {
+    this.commentService.uncommentRecipe(comment).subscribe(
+      (data) => {
+        this.fetchComments();
+        this.toastr.success('Comment deleted successfully!');
+      },
+      (error) => {
+        this.fetchComments();
+        this.toastr.error('Error deleting comment!');
+      }
+    );
   }
 }

@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { User } from 'src/app/Models/User';
+
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
@@ -8,6 +10,11 @@ import { User } from 'src/app/Models/User';
 export class NavbarComponent {
   role: string | null = null;
   user: User | null = null;
+
+  constructor(private router: Router, private route: ActivatedRoute) {
+    this.reloadComponent();
+  }
+
   ngOnInit() {
     const user = sessionStorage.getItem('user');
     if (user) {
@@ -18,9 +25,6 @@ export class NavbarComponent {
       this.role = null;
     }
   }
-  constructor() {
-    this.reloadComponent();
-  }
 
   reloadComponent() {
     const user = sessionStorage.getItem('user');
@@ -30,5 +34,15 @@ export class NavbarComponent {
     } else {
       this.role = null;
     }
+  }
+  endorsedByMe() {
+    this.router.navigate(['/view-all-recipe'], {
+      queryParams: { endorsed: 'true' },
+    });
+  }
+  endorsedRecipe() {
+    this.router.navigate(['/view-all-recipe'], {
+      queryParams: { endorsed: 'false' },
+    });
   }
 }

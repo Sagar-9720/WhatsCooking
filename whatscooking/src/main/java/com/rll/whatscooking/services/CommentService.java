@@ -10,6 +10,8 @@ import com.rll.whatscooking.domain.Comments;
 import com.rll.whatscooking.repository.CommentRepository;
 import com.rll.whatscooking.repository.iCommentRepository;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class CommentService implements iCommentRepository {
 
@@ -40,6 +42,12 @@ public class CommentService implements iCommentRepository {
     @Override
     public List<Comments> findByRecipeId(Integer recipeId) {
         return commentRepository.findByRecipeId(recipeId);
+    }
+
+    @Transactional
+    public boolean deleteCommentByRecipeId(int recipeId) {
+        commentRepository.deleteCommentByRecipeId(recipeId);
+        return true;
     }
 
     @Override

@@ -1,263 +1,233 @@
-<head>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f8f9fa;
-    }
-    .container {
-      max-width: 600px;
-      margin: 50px auto;
-    }
-    .card {
-      border-radius: 10px;
-    }
-    .card-header {
-      background-color: #007bff;
-      color: white;
-      border-radius: 10px 10px 0 0;
-    }
-    .form-label {
-      font-size: 14px;
-    }
-    .form-control {
-      font-size: 14px;
-    }
-    .btn {
-      font-size: 14px;
-    }
-    .text-danger small,
-    .text-success {
-      font-size: 12px;
-    }
-  </style>
-</head>
 <body>
-  <div class="container">
-    <div class="card shadow-lg form-container">
-      <div class="card-header text-center">
-        <h2>User Registration</h2>
-      </div>
-      <div class="card-body">
-        <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
-            <input
-              type="text"
-              id="username"
-              class="form-control"
-              name="username"
-              [(ngModel)]="user.username"
-              required
-              minlength="3"
-              (input)="checkUsernameExistence()"
-              #username="ngModel"
-              placeholder="Enter your username"
-              autocomplete="off"
-            />
-            <div
-              *ngIf="username.invalid && username.touched"
-              class="text-danger"
-            >
-              <small *ngIf="username.errors?.['required']"
-                >Username is required.</small
-              >
-              <small *ngIf="username.errors?.['minlength']"
-                >Username must be at least 3 characters long.</small
-              >
-            </div>
-            <div *ngIf="isUsernameTaken" class="text-danger">
-              <small>Username already exists. Please choose another.</small>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="firstname" class="form-label">First Name</label>
-            <input
-              type="text"
-              id="firstname"
-              class="form-control"
-              name="firstname"
-              [(ngModel)]="user.firstName"
-              required
-              #firstname="ngModel"
-              placeholder="Enter your first name"
-              autocomplete="off"
-            />
-            <div
-              *ngIf="firstname.invalid && firstname.touched"
-              class="text-danger"
-            >
-              <small>First name is required.</small>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="lastname" class="form-label">Last Name</label>
-            <input
-              type="text"
-              id="lastname"
-              class="form-control"
-              name="lastname"
-              [(ngModel)]="user.lastName"
-              required
-              #lastname="ngModel"
-              placeholder="Enter your last name"
-              autocomplete="off"
-            />
-            <div
-              *ngIf="lastname.invalid && lastname.touched"
-              class="text-danger"
-            >
-              <small>Last name is required.</small>
-            </div>
-          </div>
-          <div class="mb-3 d-flex align-items-center">
-            <div class="flex-grow-1 me-2">
-              <label for="email" class="form-label">Email</label>
+  <h1>What's Cooking App</h1>
+  <div class="background-img">
+    <div class="container">
+      <div class="card shadow-lg form-container">
+        <div class="card-header">
+          <h2>Register With Us</h2>
+        </div>
+        <div class="card-body">
+          <form #registerForm="ngForm" (ngSubmit)="onSubmit(registerForm)">
+            <div class="mb-3">
+              <label for="username" class="form-label">Username</label>
               <input
-                type="email"
-                id="email"
+                type="text"
+                id="username"
                 class="form-control"
-                name="email"
-                [(ngModel)]="user.email"
+                name="username"
+                [(ngModel)]="user.username"
                 required
-                email
-                #email="ngModel"
-                placeholder="Enter your email"
-                [disabled]="isEmailVerified"
-                (input)="checkEmailExistence()"
+                minlength="3"
+                (input)="checkUsernameExistence()"
+                #username="ngModel"
+                placeholder="Enter your username"
                 autocomplete="off"
               />
+              <div
+                *ngIf="username.invalid && username.touched"
+                class="text-danger"
+              >
+                <small *ngIf="username.errors?.['required']"
+                  >Username is required.</small
+                >
+                <small *ngIf="username.errors?.['minlength']"
+                  >Username must be at least 3 characters long.</small
+                >
+              </div>
+              <div *ngIf="isUsernameTaken" class="text-danger">
+                <small>Username already exists. Please choose another.</small>
+              </div>
             </div>
-            <button
-              type="button"
-              class="btn btn-primary mt-4"
-              (click)="sendOtp(user.email || '')"
-              [disabled]="isEmailVerified"
-            >
-              Verify Email
-            </button>
-          </div>
-          <div *ngIf="email.invalid && email.touched" class="text-danger">
-            <small *ngIf="email.errors?.['required']">Email is required.</small>
-            <small *ngIf="email.errors?.['email']"
-              >Please enter a valid email address.</small
-            >
-          </div>
-          <div *ngIf="isEmailTaken" class="text-danger">
-            <small>Email already exists. Please choose another.</small>
-          </div>
-          <div *ngIf="showOtpInput" class="mb-3">
-            <label for="otp" class="form-label">Enter OTP</label>
-            <input
-              type="text"
-              id="otp"
-              class="form-control"
-              name="otp"
-              [(ngModel)]="otp"
-              placeholder="Enter the OTP sent to your email"
-              autocomplete="off"
-            />
-            <div class="d-grid gap-2">
+            <div class="mb-3">
+              <label for="firstname" class="form-label">First Name</label>
+              <input
+                type="text"
+                id="firstname"
+                class="form-control"
+                name="firstname"
+                [(ngModel)]="user.firstName"
+                required
+                #firstname="ngModel"
+                placeholder="Enter your first name"
+                autocomplete="off"
+              />
+              <div
+                *ngIf="firstname.invalid && firstname.touched"
+                class="text-danger"
+              >
+                <small>First name is required.</small>
+              </div>
+            </div>
+            <div class="mb-3">
+              <label for="lastname" class="form-label">Last Name</label>
+              <input
+                type="text"
+                id="lastname"
+                class="form-control"
+                name="lastname"
+                [(ngModel)]="user.lastName"
+                required
+                #lastname="ngModel"
+                placeholder="Enter your last name"
+                autocomplete="off"
+              />
+              <div
+                *ngIf="lastname.invalid && lastname.touched"
+                class="text-danger"
+              >
+                <small>Last name is required.</small>
+              </div>
+            </div>
+            <div class="mb-3 d-flex align-items-center">
+              <div class="flex-grow-1 me-2">
+                <label for="email" class="form-label">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  class="form-control"
+                  name="email"
+                  [(ngModel)]="user.email"
+                  required
+                  email
+                  #email="ngModel"
+                  placeholder="Enter your email"
+                  [disabled]="isEmailVerified"
+                  (input)="checkEmailExistence()"
+                  autocomplete="off"
+                />
+              </div>
               <button
                 type="button"
-                class="btn btn-primary"
-                (click)="verifyOtp()"
+                class="btn btn-success mt-4"
+                (click)="sendOtp(user.email || '')"
+                [disabled]="isEmailVerified"
               >
-                Verify OTP
+                Send Verification code
               </button>
             </div>
-          </div>
-          <div *ngIf="isEmailVerified" class="text-success mb-3">
-            <i class="fas fa-check-circle"></i> Email verified successfully!
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
-            <input
-              type="password"
-              id="password"
-              class="form-control"
-              name="password"
-              [(ngModel)]="user.password"
-              required
-              minlength="7"
-              #password="ngModel"
-              placeholder="Enter your password"
-              autocomplete="off"
-            />
-            <div
-              *ngIf="password.invalid && password.touched"
-              class="text-danger"
-            >
-              <small *ngIf="password.errors?.['required']"
-                >Password is required.</small
+            <div *ngIf="email.invalid && email.touched" class="text-danger">
+              <small *ngIf="email.errors?.['required']"
+                >Email is required.</small
               >
-              <small *ngIf="password.errors?.['minlength']"
-                >Password must be at least 6 characters long.</small
+              <small *ngIf="email.errors?.['email']"
+                >Please enter a valid email address.</small
               >
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="verifyPassword" class="form-label"
-              >Verify Password</label
-            >
-            <input
-              type="password"
-              id="verifyPassword"
-              class="form-control"
-              name="verifyPassword"
-              [(ngModel)]="user.verifyPassword"
-              required
-              [pattern]="user.password || ''"
-              #verifyPassword="ngModel"
-              placeholder="Re-enter your password"
-              autocomplete="off"
-            />
-            <div
-              *ngIf="verifyPassword.invalid && verifyPassword.touched"
-              class="text-danger"
-            >
-              <small *ngIf="verifyPassword.errors?.['pattern']"
-                >Passwords do not match.</small
+            <div *ngIf="isEmailTaken" class="text-danger">
+              <small>Email already exists. Please choose another.</small>
+            </div>
+            <div *ngIf="showOtpInput" class="mb-3">
+              <label for="otp" class="form-label">Enter OTP</label>
+              <input
+                type="text"
+                id="otp"
+                class="form-control"
+                name="otp"
+                [(ngModel)]="otp"
+                placeholder="Enter the OTP sent to your email"
+                autocomplete="off"
+                style="width: 25vw"
+              />
+              <div class="d-grid gap-2">
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="verifyOtp()"
+                  style="margin-top: 10px; width: 25vw"
+                >
+                  Verify OTP
+                </button>
+              </div>
+            </div>
+            <div *ngIf="isEmailVerified" class="text-success mb-3">
+              <i class="fas fa-check-circle"></i> Email verified successfully!
+            </div>
+            <div class="mb-3">
+              <label for="password" class="form-label">Password</label>
+              <input
+                type="password"
+                id="password"
+                class="form-control"
+                name="password"
+                [(ngModel)]="user.password"
+                required
+                minlength="7"
+                #password="ngModel"
+                placeholder="Enter your password"
+                autocomplete="off"
+              />
+              <div
+                *ngIf="password.invalid && password.touched"
+                class="text-danger"
               >
+                <small *ngIf="password.errors?.['required']"
+                  >Password is required.</small
+                >
+                <small *ngIf="password.errors?.['minlength']"
+                  >Password must be at least 6 characters long.</small
+                >
+              </div>
             </div>
-          </div>
-          <div class="mb-3">
-            <label for="role" class="form-label">Select Your Role</label>
-            <select
-              id="role"
-              class="form-select"
-              name="role"
-              [(ngModel)]="user.role"
-              required
-              #role="ngModel"
-              autocomplete="off"
-              aria-placeholder="Select your role"
-            >
-              <option value="" disabled selected>Select Your Role</option>
-              <option value="Admin">Admin</option>
-              <option value="Customer">Customer</option>
-              <option value="Nutritionist">Nutritionist</option>
-            </select>
-            <div *ngIf="role.invalid && role.touched" class="text-danger">
-              <small>Role is required.</small>
+            <div class="mb-3">
+              <label for="verifyPassword" class="form-label"
+                >Verify Password</label
+              >
+              <input
+                type="password"
+                id="verifyPassword"
+                class="form-control"
+                name="verifyPassword"
+                [(ngModel)]="user.verifyPassword"
+                required
+                [pattern]="user.password || ''"
+                #verifyPassword="ngModel"
+                placeholder="Re-enter your password"
+                autocomplete="off"
+              />
+              <div
+                *ngIf="verifyPassword.invalid && verifyPassword.touched"
+                class="text-danger"
+              >
+                <small *ngIf="verifyPassword.errors?.['pattern']"
+                  >Passwords do not match.</small
+                >
+              </div>
             </div>
-          </div>
-          <div class="d-grid gap-2">
-            <button
-              type="submit"
-              class="btn btn-warning"
-              [disabled]="!isEmailVerified || registerForm.invalid"
-            >
-              Register
-            </button>
-            <button
-              type="button"
-              class="btn btn-secondary"
-              (click)="goToLogin()"
-            >
-              Already registered? Login
-            </button>
-          </div>
-        </form>
+            <div class="mb-3">
+              <label for="role" class="form-label">Select Your Role</label>
+              <select
+                id="role"
+                class="form-select"
+                name="role"
+                [(ngModel)]="user.role"
+                required
+                #role="ngModel"
+                autocomplete="off"
+                aria-placeholder="Select your role"
+              >
+                <option value="" disabled selected>Select Your Role</option>
+                <option value="Admin">Admin</option>
+                <option value="Customer">Customer</option>
+                <option value="Nutritionist">Nutritionist</option>
+              </select>
+              <div *ngIf="role.invalid && role.touched" class="text-danger">
+                <small>Role is required.</small>
+              </div>
+            </div>
+            <div class="d-grid gap-2">
+              <button
+                type="submit"
+                class="btn btn-success"
+                [disabled]="!isEmailVerified || registerForm.invalid"
+              >
+                Register
+              </button>
+              <a href="" class="btn btn-danger" (click)="goToLogin()">
+                Already registered? Login
+              </a>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
   </div>

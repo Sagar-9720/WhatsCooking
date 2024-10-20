@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Recipe } from 'src/app/Models/Recipe';
 import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 
@@ -11,13 +12,39 @@ export class HomePageComponent implements OnInit {
   recipeList: Recipe[] = [];
   paginatedRecipes: Recipe[][] = [];
   currentPage: number = 0;
-  pageSize: number = 4;
+  pageSize: number = 0;
 
-  constructor(private recipeService: RecipeServiceService) {}
+  setPageSize(): void {
+    const screenWidth = window.innerWidth;
+    if (screenWidth < 600) {
+      this.pageSize = 1;
+    } else if (screenWidth < 900) {
+      this.pageSize = 2;
+    } else {
+      this.pageSize = 3;
+    }
+    if (this.recipeList.length > 0) {
+      this.paginateRecipes();
+    }
+  }
+
+  constructor(
+    private recipeService: RecipeServiceService,
+    private router: Router
+  ) {
+    this.setPageSize();
+    window.addEventListener('resize', this.setPageSize.bind(this));
+  }
 
   ngOnInit(): void {
     this.recipeService.getAllRecipes().subscribe((data) => {
       this.recipeList = data;
+      let user = JSON.parse(sessionStorage.getItem('user') || '{}');
+      if (user.role === 'Customer') {
+        this.recipeList = this.recipeList.filter(
+          (recipe) => recipe.recipe_status === true
+        );
+      }
       if (this.recipeList.length > 0) {
         this.paginateRecipes();
       }
@@ -29,7 +56,6 @@ export class HomePageComponent implements OnInit {
     for (let i = 0; i < this.recipeList.length; i += this.pageSize) {
       this.paginatedRecipes.push(this.recipeList.slice(i, i + this.pageSize));
     }
-    console.log('Paginated Recipes:', this.paginatedRecipes);
     this.currentPage = 0;
   }
 
@@ -59,5 +85,24 @@ export class HomePageComponent implements OnInit {
 
   onMouseOut(event: MouseEvent): void {
     (event.target as HTMLElement).style.transform = 'scale(1)';
+  }
+
+  viewRecipe(recipe: Recipe) {
+    if (recipe.recipe_id !== undefined) {
+      console.log('selected recipe:', recipe);
+      this.recipeService.getRecipe(recipe.recipe_id).subscribe({
+        next: (data) => {
+          console.log('Fetched recipe:', data);
+          this.router.navigate(['/viewrecipe'], {
+            state: { recipe: data },
+          });
+        },
+        error: (error) => {
+          console.error('Error fetching recipe:', error);
+        },
+      });
+    } else {
+      console.error('Recipe ID is undefined');
+    }
   }
 }

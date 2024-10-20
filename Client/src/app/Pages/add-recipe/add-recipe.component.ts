@@ -37,21 +37,17 @@ function getMealTimingList(): string[] {
 export class AddRecipeComponent implements OnInit {
   recipe: Recipe = new Recipe();
   ingredients: Ingredient[] = [{ ingredient_id: 0, name: '' }];
-
   userRole: string = '';
-
   isNutritionist: boolean = false;
-
   selectedFile: File | null = null;
   imageUrl: string | null = null;
-
   mealTypes: string[] = [];
   seasons: string[] = [];
   cuisines: string[] = [];
   mealTimings: string[] = [];
-
   loggedInUser: User = new User();
   nutrition: Nutrition = new Nutrition();
+
   constructor(
     private recipeService: RecipeServiceService,
     private toast: ToastrService
@@ -69,6 +65,17 @@ export class AddRecipeComponent implements OnInit {
 
   addIngredient() {
     this.ingredients.push({ ingredient_id: 0, name: '' });
+  }
+
+  removeIngredient(index: number) {
+    let ingredients: Ingredient[] = [];
+    this.ingredients.forEach((ingredient, i) => {
+      if (i !== index) {
+        ingredients.push(ingredient);
+      }
+    });
+    this.ingredients = ingredients;
+    console.log('Ingredients:', this.ingredients);
   }
 
   onSubmit(recipeForm: NgForm) {
@@ -98,7 +105,28 @@ export class AddRecipeComponent implements OnInit {
         next: (response: string) => {
           if (response) {
             this.toast.success('Recipe added successfully');
+            let newImageName = newRecipe.recipe_name?.split(' ').join('');
+            newRecipe.recipe_name;
+            this.recipeService
+              .uploadImage(this.selectedFile!.name, newImageName!)
+              .subscribe({
+                next: (response: string) => {
+                  if (response) {
+                    this.toast.success('Image uploaded successfully');
+                  } else {
+                    this.toast.error('Failed to upload image');
+                    console.error('Error uploading image: Unknown error');
+                  }
+                },
+                error: (error) => {
+                  this.toast.error('Failed to upload image');
+                  console.error('Error uploading image:', error);
+                },
+              });
             recipeForm.reset();
+            this.selectedFile = null;
+            this.ingredients = [{ ingredient_id: 0, name: '' }];
+            this.imageUrl = null;
           } else {
             this.toast.error('Failed to add recipe');
             console.error('Error adding recipe: Unknown error');
@@ -115,6 +143,30 @@ export class AddRecipeComponent implements OnInit {
         const control = recipeForm.controls[key];
         console.log('Invalid control:', control);
       });
+    }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      console.log('Selected File:', this.selectedFile);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  onUpload() {
+    if (this.selectedFile) {
+      console.log('Uploading:', this.selectedFile.name);
+      alert('Image Uploaded Successfully...');
+    } else {
+      console.error('No file selected!');
+      alert('Failed to Upload the Image');
     }
   }
 }

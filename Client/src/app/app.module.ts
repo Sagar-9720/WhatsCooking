@@ -25,6 +25,7 @@ import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.compone
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
 import { LogoutComponent } from './Pages/logout/logout.component';
 import { ToastrModule } from 'ngx-toastr';
+import { ConfirmdeleteComponent } from './Components/confirmdelete/confirmdelete.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,6 +46,7 @@ import { ToastrModule } from 'ngx-toastr';
     ModifyrecipeComponent,
     ViewrecipeComponent,
     LogoutComponent,
+    ConfirmdeleteComponent,
   ],
   imports: [
     BrowserModule,

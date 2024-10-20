@@ -1,0 +1,71 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Align to the top */
+  height: fit-content;
+
+  background-color: #f0f2f5;
+  background-image: url("/assets/Images/addrecipe.jfif");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+h4 {
+  text-align: center; /* Center the title */
+  margin-bottom: 1.25rem; /* Add some space below the title */
+}
+
+.container {
+  max-width: 37.5rem; /* Limit the width of the container */
+  margin-top: 3.125rem; /* Move the whole container down */
+}
+
+form {
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 1.25rem;
+  border-radius: 0.625rem;
+  box-shadow: 0 0.25rem 1.25rem rgba(0, 0, 0, 0.2);
+}
+
+.form-group {
+  margin-bottom: 0.9375rem;
+}
+
+.form-control {
+  border-radius: 0.3125rem;
+}
+
+.btn-secondary {
+  background-color: #6c757d; /* Secondary button color */
+  border-color: #6c757d;
+  margin: 0.625rem;
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
+  border-color: #545b62;
+}
+
+.upload-container {
+  display: flex; /* Use flexbox for alignment */
+  align-items: center;
+  margin: 1.25rem 0;
+}
+
+.custom-file-upload {
+  display: inline-block;
+  padding: 0.625rem 1.25rem;
+  cursor: pointer;
+  color: white;
+  background-color: #6c757d; /* Secondary color */
+  border-radius: 0.3125rem;
+  transition: background-color 0.3s;
+}
+
+.custom-file-upload:hover {
+  background-color: #5a6268;
+}
+
+input[type="file"] {
+  display: none; /* Hide the actual file input */
+}

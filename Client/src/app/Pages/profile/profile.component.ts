@@ -5,6 +5,7 @@ import { User } from 'src/app/Models/User';
 import { UserserviceService } from 'src/app/Services/userservice.service';
 import emailjs from 'emailjs-com';
 import { ToastrService } from 'ngx-toastr';
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -16,7 +17,13 @@ export class ProfileComponent {
   originalEmail: string = '';
 
   currentSection: string = 'userDetails';
-  isUserDetailsEditable = false;
+
+  // Fields to keep track of which input is editable
+  isFieldEditable: { firstName: boolean; lastName: boolean; email: boolean } = {
+    firstName: false,
+    lastName: false,
+    email: false,
+  };
 
   otp: string = '';
   sentOtp: string = '';
@@ -26,7 +33,11 @@ export class ProfileComponent {
   isPasswordEditable = false;
   showPasswordErrorButtons = false;
   passwordChangeFailed = false;
-
+  showPassword = {
+    current: false,
+    new: false,
+    verify: false,
+  };
   constructor(
     private userService: UserserviceService,
     private router: Router,
@@ -36,7 +47,7 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.loadUserDetailsFromSession();
   }
-
+  // Removed duplicate togglePasswordVisibility function
   loadUserDetailsFromSession(): void {
     const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     if (storedUser) {
@@ -53,12 +64,87 @@ export class ProfileComponent {
     this.currentSection = section;
   }
 
-  enableUserDetails() {
-    this.isUserDetailsEditable = true;
+  enableField(field: 'firstName' | 'lastName' | 'email') {
+    this.isFieldEditable = {
+      firstName: false,
+      lastName: false,
+      email: false,
+    };
+    this.isFieldEditable[field] = true;
   }
 
-  enablePasswordChange() {
-    this.isPasswordEditable = true;
+  onUpdateProfile(form: NgForm) {
+    if (form.valid) {
+      if (this.user.email && this.user.email !== this.originalEmail) {
+        this.sendOtp(this.user.email);
+      } else {
+        this.updateUserProfile();
+      }
+    }
+  }
+
+  // Call user service to update profile
+  updateUserProfile() {
+    this.userService.updateProfile(this.user).subscribe(
+      (updatedUser: User) => {
+        this.toastr.success('Profile updated successfully!');
+        console.log('Profile updated successfully:', updatedUser);
+        sessionStorage.setItem('user', JSON.stringify(updatedUser)); // Update session with new details
+        this.isFieldEditable = {
+          firstName: false,
+          lastName: false,
+          email: false,
+        };
+      },
+      (error) => {
+        this.toastr.error('Error updating profile');
+        console.error('Error updating profile:', error);
+      }
+    );
+  }
+
+  // Function to send OTP via email
+  sendOtp(email: string) {
+    this.sentOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
+    const templateParams = {
+      to_email: email,
+      otp: this.sentOtp,
+    };
+
+    emailjs
+      .send(
+        'service_y2qrmep',
+        'template_drot7nw',
+        templateParams,
+        '9Jdz3Gwg5Pv4TNysU'
+      )
+      .then(() => {
+        this.toastr.success('OTP sent successfully');
+        this.showOtpInput = true;
+        this.startOtpTimer();
+      })
+      .catch((err) => this.toastr.error('Error sending OTP'));
+  }
+
+  startOtpTimer() {
+    clearTimeout(this.otpTimeout);
+    this.otpTimeout = setTimeout(() => {
+      this.toastr.error('OTP expired. Please request a new one.');
+      this.showOtpInput = false;
+      this.sentOtp = '';
+    }, 300000);
+  }
+
+  verifyOtp() {
+    if (this.otp === this.sentOtp) {
+      this.toastr.success('OTP verified successfully!');
+      this.isEmailVerified = true;
+      this.updateUserProfile();
+      clearTimeout(this.otpTimeout);
+      this.showOtpInput = false;
+    } else {
+      this.toastr.error('Invalid OTP. Please try again.');
+    }
   }
 
   onChangePassword(form: NgForm) {
@@ -71,6 +157,7 @@ export class ProfileComponent {
               console.log('Password changed successfully');
               this.isPasswordEditable = false;
               this.passwordChangeFailed = false;
+              this.router.navigate(['/login']);
             },
             (error) => {
               this.toastr.error('Error changing password');
@@ -100,75 +187,7 @@ export class ProfileComponent {
     this.router.navigate(['/login']);
   }
 
-  onUpdateProfile(form: NgForm) {
-    if (form.valid) {
-      if (this.user.email && this.user.email !== this.originalEmail) {
-        this.sendOtp(this.user.email);
-      } else {
-        this.updateUserProfile();
-      }
-    }
-  }
-
-  updateUserProfile() {
-    this.userService.updateProfile(this.user).subscribe(
-      (updatedUser: User) => {
-        this.toastr.success('Profile updated successfully!');
-        console.log('Profile updated successfully:', updatedUser);
-        this.isUserDetailsEditable = false;
-        sessionStorage.setItem('user', JSON.stringify(updatedUser));
-      },
-      (error) => {
-        this.toastr.error('Error updating profile');
-        console.error('Error updating profile:', error);
-      }
-    );
-  }
-
-  sendOtp(email: string) {
-    this.sentOtp = Math.floor(100000 + Math.random() * 900000).toString();
-    const templateParams = {
-      to_email: email,
-      otp: this.sentOtp,
-    };
-
-    emailjs
-      .send(
-        'service_nv5lxnp',
-        'template_lgelbyd',
-        templateParams,
-        'SjgihAB4UCeme8PYg'
-      )
-      .then(() => {
-        this.toastr.success('OTP sent successfully');
-        this.showOtpInput = true;
-        this.startOtpTimer();
-      })
-      .catch((err) => this.toastr.error('Error sending OTP'));
-  }
-
-  startOtpTimer() {
-    clearTimeout(this.otpTimeout);
-
-    this.otpTimeout = setTimeout(() => {
-      this.toastr.error('OTP expired. Please verify your email again.');
-      console.log('OTP expired. Please verify your email again.');
-      this.showOtpInput = false;
-      this.isEmailVerified = false;
-    }, 2 * 60 * 1000); // 2 minutes
-  }
-
-  verifyOtp() {
-    if (this.otp === this.sentOtp) {
-      clearTimeout(this.otpTimeout);
-      this.isEmailVerified = true;
-      this.toastr.success('Email verified successfully!');
-      console.log('Email verified successfully!');
-      this.showOtpInput = false;
-      this.updateUserProfile();
-    } else {
-      this.toastr.error('Invalid OTP. Please try again.');
-      console.log('Invalid OTP. Please try again.');
-    }
+  togglePasswordVisibility(field: 'current' | 'new' | 'verify') {
+    this.showPassword[field] = !this.showPassword[field];
   }
 }

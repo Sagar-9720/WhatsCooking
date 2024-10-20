@@ -1,37 +1,74 @@
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9;
-  color: #333;
-  background-image: url("../../../assets/Images/bg.avif");
+  background-image: url("/assets/Images/register.jfif");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
-  height: 100vh;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-.contact-form {
-  background: rgba(255, 255, 255, 0.9);
-  width: 90%;
-  max-width: 600px;
-  margin: 0 auto;
   padding: 2rem;
-  border-radius: 1rem;
+  border-radius: 0.8rem;
+  height: 80vh;
+  box-shadow: 0 0.4rem 1rem rgba(0, 0, 0, 0.3);
+  opacity: 0.9;
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.contact-form .form-control {
-  border-radius: 0.5rem;
+.container {
+  width: 60vw;
+  height: auto;
 }
 
-.contact-form h3 {
-  color: #0062cc;
+.contactus {
+  width: 100%;
+  max-width: 50rem;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  padding: 2rem;
+  margin: 3rem;
+  background-color: rgba(12, 120, 142, 0.3);
+  border-radius: 1.5rem;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-control {
+  background-color: rgba(255, 255, 255, 0.8);
+  border: 0.1rem solid #ccc;
+  border-radius: 0.4rem;
+}
+
+.error {
+  color: #ff4d4d;
+  font-size: 0.9rem;
 }
 
 .btn-primary {
-  background-color: #0062cc;
-  border: none;
+  width: 100%;
+}
+
+.success {
+  text-align: center;
+  color: #4caf50;
+  margin-top: 1.5rem;
+}
+
+#view-footer app-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100vw;
+}
+
+@media (max-width: 60rem) {
+  .contactus {
+    margin: 1rem;
+  }
 }

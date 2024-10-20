@@ -1,74 +1,78 @@
 body {
-  min-height: 100vh; /* Ensures the body takes at least the full viewport height */
+  margin-top: 0rem;
   width: 100%;
-  background-image: url("../../../assets/Images/bg.avif");
+  background-image: url("../../../assets/Images/viewimage.jfif");
   background-size: cover;
   background-repeat: no-repeat;
+  margin-bottom: 1rem;
 }
+
 .div-main {
-  /* background-color:white; */
-  backdrop-filter: blur(20px);
+  backdrop-filter: blur(100px);
   width: 80%;
   height: auto;
   justify-content: center;
-  /* text-align: center; */
-  margin-left: 180px;
+  margin-left: 10vw; /* Converted from 180px */
 }
+
 .image-container {
   position: relative;
   display: inline-block;
-  cursor: pointer; /* Change cursor to pointer */
+  cursor: pointer;
 }
 
 .image {
-  width: 100%; /* Adjust as necessary */
-  height: auto; /* Maintain aspect ratio */
+  width: 100%;
+  height: auto;
 }
 
 .heart-symbol {
-  position: absolute; /* Position the heart symbol over the image */
-  top: 10px; /* Adjust to position the heart */
-  right: 10px; /* Adjust to position the heart */
-  font-size: 50px; /* Size of the heart */
-  color: white; /* Default color for the outline */
-  pointer-events: none; /* Prevent clicking on the heart */
+  position: absolute;
+  top: 0.625rem; /* Converted from 10px */
+  right: 0.625rem; /* Converted from 10px */
+  font-size: 3.125rem; /* Converted from 50px */
+  color: white;
+  pointer-events: none;
 }
 
 .heart-symbol.filled {
-  color: rgb(240, 13, 13); /* Color when filled */
+  color: rgb(240, 13, 13);
 }
+
 .text-overlay {
-  position: absolute; /* Position the text overlay */
-  bottom: 10px; /* Distance from the bottom */
-  left: 10px; /* Distance from the left */
-  color: white; /* Text color */
-  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
-  padding: 5px 10px; /* Padding around the text */
-  border-radius: 4px; /* Rounded corners */
-  font-size: 18px; /* Font size */
+  position: absolute;
+  bottom: 0.625rem; /* Converted from 10px */
+  left: 0.625rem; /* Converted from 10px */
+  color: white;
+  background-color: rgba(0, 0, 0, 0.5);
+  border-radius: 0.25rem; /* Converted from 4px */
+  font-size: 1.125rem; /* Converted from 18px */
+  font-weight: 600;
 }
 
 h1 {
-  margin-top: 15px;
-  margin-bottom: 20px;
+  margin-top: 0.9375rem; /* Converted from 15px */
+  margin-bottom: 1.25rem; /* Converted from 20px */
   color: white;
+  font-weight: 600;
 }
 
 .recipe-list {
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 20px;
+  margin: 1.25rem auto; /* Converted from 20px */
+  max-width: 75rem; /* Converted from 1200px */
+  padding: 1.25rem; /* Converted from 20px */
   background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem; /* Converted from 8px */
+  box-shadow: 0 0 0.625rem rgba(0, 0, 0, 0.1); /* Converted from 10px */
+  font-weight: 600;
 }
 
 .styled-table {
   width: 100%;
-  /* border:solid; */
   font-size: 1em;
   font-family: "Arial", sans-serif;
-  margin-top: 20px;
+  margin-top: 1.25rem; /* Converted from 20px */
+  font-weight: 600;
 }
 
 .styled-table thead tr {
@@ -79,71 +83,88 @@ h1 {
 
 .styled-table th,
 .styled-table td {
-  padding: 12px 15px;
+  padding: 0.75rem 0.9375rem; /* Converted from 12px 15px */
+  font-weight: 600;
 }
 
 .styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 0.0625rem solid #dddddd; /* Converted from 1px */
 }
 
 .comments-section {
-  max-width: 600px; /* Max width for the comments section */
-  margin: 20px auto; /* Center the section */
-  padding: 20px;
-  /* border: 1px solid #ddd; Light border */
-  border-radius: 8px; /* Rounded corners */
-  /* background-color: #f9f9f9; Light background color */
+  max-width: 37.5rem; /* Converted from 600px */
+  margin: 1.25rem auto; /* Converted from 20px */
+  padding: 1.25rem; /* Converted from 20px */
+  border-radius: 0.5rem; /* Converted from 8px */
+  font-weight: 600;
 }
 
 .comments {
-  margin-bottom: 20px; /* Space between comments and button */
+  margin-bottom: 1.25rem; /* Converted from 20px */
 }
 
 .comment {
-  padding: 10px;
-  border: 1px solid #ccc; /* Border for each comment */
-  border-radius: 4px; /* Rounded corners */
-  margin-bottom: 10px; /* Space between comments */
-  margin-top: 10px;
-  /* background-color: wheat; White background for comments */
+  padding: 0.625rem; /* Converted from 10px */
+  border: 0.0625rem solid #ccc; /* Converted from 1px */
+  border-radius: 0.25rem; /* Converted from 4px */
+  margin-bottom: 0.625rem; /* Converted from 10px */
+  margin-top: 0.625rem; /* Converted from 10px */
+  font-weight: 600;
 }
 
 .comment .author {
-  font-weight: bold; /* Bold author name */
+  font-weight: bold;
 }
 
 .comment .text {
-  margin-top: 5px; /* Space above comment text */
+  margin-top: 0.3125rem; /* Converted from 5px */
+  font-weight: 600;
 }
 
 .btn-primary {
-  background-color: #007bff; /* Bootstrap primary color */
+  background-color: #007bff;
   color: white;
-  border: none; /* No border */
-  padding: 10px 20px; /* Padding */
-  border-radius: 4px; /* Rounded corners */
-  cursor: pointer; /* Pointer cursor on hover */
+  border: none;
+  padding: 0.625rem 1.25rem; /* Converted from 10px 20px */
+  border-radius: 0.25rem; /* Converted from 4px */
+  cursor: pointer;
+  font-weight: 600;
 }
 
 .btn-primary:hover {
-  background-color: #0056b3; /* Darker blue on hover */
+  background-color: #0056b3;
 }
 
 .ingredient-item {
-  background-color: #e0f7fa; /* Light blue for ingredient items */
-  padding: 5px;
-  border-radius: 4px;
-  margin-bottom: 5px;
+  background-color: #e0f7fa;
+  padding: 0.3125rem; /* Converted from 5px */
+  border-radius: 0.25rem; /* Converted from 4px */
+  margin-bottom: 0.3125rem; /* Converted from 5px */
+  font-weight: 600;
 }
+
 .rating-section {
-  margin-top: 20px;
+  margin-top: 1.25rem; /* Converted from 20px */
+  font-weight: 600;
 }
 
 .stars {
-  font-size: 24px; /* Size of the stars */
-  color: white; /* Default color for unfilled stars */
+  font-size: 1.5rem; /* Converted from 24px */
+  color: white;
+  font-weight: 600;
 }
 
 .stars .filled {
-  color: black; /* Color for filled stars */
+  color: orange;
+}
+
+#view-more {
+  margin-top: 1.25rem; /* Converted from 20px */
+  margin-bottom: 1.25rem; /* Converted from 20px */
+  background: transparent;
+  color: black;
+  text-decoration: solid;
+  text-size-adjust: 1.875rem; /* Converted from 30px */
+  border: none;
+  font-weight: 600;
 }

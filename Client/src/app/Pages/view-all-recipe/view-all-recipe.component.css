@@ -1,10 +1,11 @@
 .recipe-list {
-  margin: 20px auto;
-  max-width: 1200px;
-  padding: 20px;
-  background-color: #f9f9f9;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
+  margin: 2rem auto;
+  max-width: 75rem; /* 1200px to rem */
+  padding: 2rem;
+  background-color: transparent;
+  border-radius: 0.5rem; /* 8px to rem */
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 10px to rem */
 }
 
 .styled-table {
@@ -12,6 +13,14 @@
   border-collapse: collapse;
   font-size: 1em;
   font-family: "Arial", sans-serif;
+  backdrop-filter: blur(1rem); /* 10px to rem */
+  background-color: transparent;
+  border-radius: 0.5rem; /* 8px to rem */
+  overflow: hidden;
+}
+
+.styled-table tbody tr:hover {
+  background-color: transparent;
 }
 
 .styled-table thead tr {
@@ -22,27 +31,73 @@
 
 .styled-table th,
 .styled-table td {
-  padding: 12px 15px;
+  padding: 0.8rem 1rem; /* 12px 15px to rem */
 }
 
 .styled-table tbody tr {
-  border-bottom: 1px solid #dddddd;
+  border-bottom: 0.1rem solid #dddddd; /* 1px to rem */
 }
 
 .styled-table tbody tr:nth-of-type(even) {
-  background-color: #f3f3f3;
+  background-color: transparent;
 }
 
 .styled-table tbody tr:last-of-type {
-  border-bottom: 2px solid #009879;
+  border-bottom: 0.2rem solid #009879; /* 2px to rem */
 }
 
-.styled-table tbody tr:hover {
-  background-color: #f1f1f1;
-}
-.div{
+.div {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
+  margin-bottom: 5rem; /* 50px to rem */
+}
+
+body {
+  background-image: url("/assets/images/about.jfif");
+  background-size: cover;
+  background-position: center;
+  min-height: 94vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-repeat: no-repeat;
+}
+
+button {
+  border: none;
+  border-radius: 0.5rem; /* 8px to rem */
+  padding: 0.5rem 1rem; /* 10px 15px to rem */
+  background-color: rgb(51, 218, 196);
+  color: black;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+.dialogbox {
+  margin-top: 10vh;
+  margin-left: 24vw;
+  margin-bottom: 20vh;
+  display: flex;
+  flex-direction: column;
+  height: 50vh;
+  width: 50vw;
+  padding: 2rem;
+  background-color: wheat;
+  border-radius: 0.5rem; /* 8px to rem */
+  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 10px to rem */
+}
+button:hover {
+  background-color: #007a65;
+}
+
+.viewallfooter {
+  position: inherit;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  color: #ffffff;
+  text-align: center;
+  padding: 0;
 }
