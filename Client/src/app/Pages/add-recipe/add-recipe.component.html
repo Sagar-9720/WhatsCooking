@@ -22,6 +22,7 @@
         maxlength="50"
         [(ngModel)]="recipe.recipe_name"
         #recipeName="ngModel"
+        autocomplete="off"
       />
       <div *ngIf="recipeName.invalid && recipeName.touched" class="text-danger">
         <small *ngIf="recipeName.errors?.['required']"
@@ -51,7 +52,21 @@
           placeholder="Enter ingredient"
           class="form-control"
           #ingredientName="ngModel"
+          (keyup)="ingredient.name ? filterIngredients(ingredient.name) : null"
+          [matAutocomplete]="auto"
         />
+        <mat-autocomplete
+          #auto="matAutocomplete"
+          (optionSelected)="optionSelected($event.option.value, i)"
+        >
+          <mat-option
+            *ngFor="let suggestion of filteredIngredients"
+            [value]="suggestion.name"
+          >
+            {{ suggestion.name }}
+          </mat-option>
+        </mat-autocomplete>
+
         <div class="input-group-append">
           <button
             *ngIf="i === ingredients.length - 1"

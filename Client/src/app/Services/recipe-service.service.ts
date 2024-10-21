@@ -58,9 +58,9 @@ export class RecipeServiceService {
   }
 
   endorseRecipe(recipe: Recipe): Observable<string> {
-    return this.httpModule
-      .put(`${this.apiUrl}/endorse`, recipe, { observe: 'response' })
-      .pipe(map((response: HttpResponse<any>) => response.body));
+    return this.httpModule.put(`${this.apiUrl}/endorse`, recipe, {
+      responseType: 'text',
+    });
   }
 
   enableRecipe(recipe: Recipe): Observable<string> {

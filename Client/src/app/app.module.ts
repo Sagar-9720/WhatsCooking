@@ -25,7 +25,10 @@ import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.compone
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
 import { LogoutComponent } from './Pages/logout/logout.component';
 import { ToastrModule } from 'ngx-toastr';
+import { MatInputModule } from '@angular/material/input';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { ConfirmdeleteComponent } from './Components/confirmdelete/confirmdelete.component';
+import { EndorseRecipeComponent } from './Pages/endorse-recipe/endorse-recipe.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,6 +50,7 @@ import { ConfirmdeleteComponent } from './Components/confirmdelete/confirmdelete
     ViewrecipeComponent,
     LogoutComponent,
     ConfirmdeleteComponent,
+    EndorseRecipeComponent,
   ],
   imports: [
     BrowserModule,
@@ -57,6 +61,8 @@ import { ConfirmdeleteComponent } from './Components/confirmdelete/confirmdelete
     ReactiveFormsModule,
     RouterModule,
     ToastrModule.forRoot(),
+    MatAutocompleteModule,
+    MatInputModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

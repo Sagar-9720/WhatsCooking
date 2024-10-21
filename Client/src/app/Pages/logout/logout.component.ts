@@ -22,6 +22,7 @@ export class LogoutComponent {
       this.cd.detectChanges();
       this.toastr.info('Logging out in ' + this.countdown + ' seconds');
       sessionStorage.removeItem('user');
+      sessionStorage.clear();
       if (this.countdown === 0) {
         clearInterval(interval);
         this.router.navigate(['/']);

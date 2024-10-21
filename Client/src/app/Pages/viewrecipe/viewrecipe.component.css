@@ -5,6 +5,7 @@ body {
   background-size: cover;
   background-repeat: no-repeat;
   margin-bottom: 1rem;
+  min-height: fit-content;
 }
 
 .div-main {
@@ -167,4 +168,16 @@ h1 {
   text-size-adjust: 1.875rem; /* Converted from 30px */
   border: none;
   font-weight: 600;
+}
+
+.viewfooter{
+  /* position: fixed;
+  left: 0;
+  bottom: 0; */
+  width: 100%;
+  background-color: #f8f9fa;
+  color: black;
+  text-align: center;
+  font-weight: 600;
+  padding: 0.625rem; /* Converted from 10px */
 }

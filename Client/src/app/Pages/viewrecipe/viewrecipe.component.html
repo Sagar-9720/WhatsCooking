@@ -68,6 +68,37 @@
                 </table>
               </td>
             </tr>
+            <tr [hidden]="!isEditable">
+              <tbody>
+                <tr>
+                  <th>Carbs</th>
+                  <td>
+                    <input type="number" [(ngModel)]="nutrition.carbs" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Fats</th>
+                  <td>
+                    <input type="number" [(ngModel)]="nutrition.fat" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Proteins</th>
+                  <td>
+                    <input type="number" [(ngModel)]="nutrition.protein" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Calories</th>
+                  <td>
+                    <input type="number" [(ngModel)]="nutrition.calories" />
+                  </td>
+                </tr>
+              </tbody>
+              <button class="btn btn-success" (click)="endorseRecipe()">
+                Endorse!
+              </button>
+            </tr>
           </tbody>
         </table>
       </div>
@@ -174,4 +205,6 @@
   </div>
 </body>
 
-<app-footer></app-footer>
+<div class="viewfooter">
+  <app-footer></app-footer>
+</div>

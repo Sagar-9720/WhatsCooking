@@ -26,7 +26,6 @@ export class UserserviceService {
       .pipe(
         tap((response) => {
           if (response) {
-            console.log('User logged in:', response);
             sessionStorage.setItem('user', JSON.stringify(response));
           }
         })
@@ -67,6 +66,6 @@ export class UserserviceService {
 
   getAllUsers(): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.get<any>(`${this.apiUrl}/usernames`, { headers });
+    return this.http.get<any>(`${this.apiUrl}`, { headers });
   }
 }

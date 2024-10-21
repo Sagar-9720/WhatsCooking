@@ -1,3 +1,4 @@
+import { Nutrition } from './../../Models/Nutrition';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
@@ -23,7 +24,8 @@ export class ViewrecipeComponent implements OnInit {
   rating: number = 0;
   newComment: Comments = new Comments();
   canAddComment: boolean = true;
-
+  isEditable: boolean = false;
+  nutrition: Nutrition = new Nutrition();
   constructor(
     private recipeService: RecipeServiceService,
     private router: Router,
@@ -45,6 +47,11 @@ export class ViewrecipeComponent implements OnInit {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { recipe: Recipe };
     const recipe = state.recipe;
+
+    const queryParams = navigation?.extras.queryParams as { endorse: boolean };
+    if (queryParams && queryParams.endorse) {
+      this.isEditable = true;
+    }
     if (recipe) {
       setTimeout(async () => {
         try {
@@ -170,5 +177,30 @@ export class ViewrecipeComponent implements OnInit {
         this.toastr.error('Error deleting comment!');
       }
     );
+  }
+  endorseRecipe() {
+    let recipe = this.recipe;
+    recipe.endorsed = true;
+    recipe.nutrition = this.nutrition;
+    recipe.nutrition.user = this.user;
+    this.recipeService.endorseRecipe(recipe).subscribe({
+      next: (response: string) => {
+        if (response) {
+          this.toastr.success('Recipe endorsed successfully');
+          this.isEditable = false;
+          this.nutrition = new Nutrition();
+          this.router.navigate(['/viewrecipe'], {
+            state: { recipe: recipe },
+          });
+        } else {
+          this.toastr.error('Failed to endorse recipe');
+          console.error('Error endorsing recipe: Unknown error');
+        }
+      },
+      error: (error) => {
+        this.toastr.error('Failed to endorse recipe');
+        console.error('Error endorsing recipe:', error);
+      },
+    });
   }
 }

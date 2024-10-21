@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Ingredient } from './../../Models/Ingredients';
+import { Component, OnInit, OnChanges } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 import {
@@ -8,10 +9,11 @@ import {
   Seasonal,
   Cuisine,
 } from '../../Models/Recipe';
-import { Ingredient } from '../../Models/Ingredients';
+
 import { Nutrition } from '../../Models/Nutrition';
 import { User } from 'src/app/Models/User';
 import { ToastrService } from 'ngx-toastr';
+import { IngredientserviceService } from 'src/app/Services/ingredientservice.service';
 
 function getMealTypeList(): string[] {
   return Object.keys(MealType).filter((key) => isNaN(Number(key)));
@@ -47,10 +49,12 @@ export class AddRecipeComponent implements OnInit {
   mealTimings: string[] = [];
   loggedInUser: User = new User();
   nutrition: Nutrition = new Nutrition();
-
+  allIngredients: Ingredient[] = [];
+  filteredIngredients: Ingredient[] = [];
   constructor(
     private recipeService: RecipeServiceService,
-    private toast: ToastrService
+    private toast: ToastrService,
+    private ingredientService: IngredientserviceService
   ) {}
 
   ngOnInit(): void {
@@ -61,6 +65,34 @@ export class AddRecipeComponent implements OnInit {
     this.seasons = getSeasonalList(); // ['WINTER', 'SPRING', 'SUMMER', 'FALL']
     this.cuisines = getCuisineList(); // ['ITALIAN', 'CHINESE', 'MEXICAN', ...]
     this.mealTimings = getMealTimingList(); // ['BREAKFAST', 'LUNCH', 'DINNER', ...]
+    this.ingredientService.getAllIngredients().subscribe({
+      next: (response: Ingredient[]) => {
+        if (response) {
+          this.allIngredients = response;
+          console.log('Ingredients :', this.allIngredients);
+        } else {
+          console.error('Error fetching ingredients: Unknown error');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching ingredients:', error);
+      },
+    });
+  }
+  ngOnChanges(): void {
+    this.ingredientService.getAllIngredients().subscribe({
+      next: (response: Ingredient[]) => {
+        if (response) {
+          this.allIngredients = response;
+          console.log('Ingredients :', this.allIngredients);
+        } else {
+          console.error('Error fetching ingredients: Unknown error');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching ingredients:', error);
+      },
+    });
   }
 
   addIngredient() {
@@ -75,9 +107,20 @@ export class AddRecipeComponent implements OnInit {
       }
     });
     this.ingredients = ingredients;
-    console.log('Ingredients:', this.ingredients);
   }
-
+  filterIngredients(value: string): void {
+    this.filteredIngredients = this.allIngredients.filter((ingredient) =>
+      ingredient.name?.toLowerCase().includes(value.toLowerCase())
+    );
+  }
+  optionSelected(ingredientName: string, index: number): void {
+    const selectedIngredient = this.allIngredients.find(
+      (ingredient) => ingredient.name === ingredientName
+    );
+    if (selectedIngredient) {
+      this.ingredients[index] = selectedIngredient;
+    }
+  }
   onSubmit(recipeForm: NgForm) {
     if (recipeForm.valid) {
       const nutrition = this.isNutritionist ? this.nutrition : undefined;

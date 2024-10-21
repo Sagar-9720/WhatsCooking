@@ -8,8 +8,6 @@ body {
   background-image: url("/assets/Images/login.jfif");
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  /* backdrop-filter: blur(0.5rem);
-    -webkit-backdrop-filter: blur(0.5rem); */
 }
 
 .container {

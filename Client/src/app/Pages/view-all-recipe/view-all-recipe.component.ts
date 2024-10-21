@@ -166,6 +166,9 @@ export class ViewAllRecipeComponent implements OnInit {
   }
 
   endorseRecipe(recipe: Recipe) {
-    // Placeholder function for endorsing a recipe
+    this.router.navigate(['/viewrecipe'], {
+      state: { recipe: recipe },
+      queryParams: { endorse: true },
+    });
   }
 }

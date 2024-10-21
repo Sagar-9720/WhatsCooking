@@ -116,9 +116,22 @@
               [(ngModel)]="user.email"
               name="email"
               class="form-control"
+              pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+              #email="ngModel"
               [disabled]="!isFieldEditable.email"
               required
             />
+            <div *ngIf="email.invalid && email.touched" class="text-danger">
+              <small *ngIf="email.errors?.['required']"
+                >Email is required.</small
+              >
+              <small *ngIf="email.errors?.['email']"
+                >Please enter a valid email address.</small
+              >
+              <small *ngIf="email.errors?.['pattern']"
+                >Email must follow the Email format
+              </small>
+            </div>
           </div>
           <div class="col-sm-2">
             <button
@@ -297,7 +310,9 @@
           >
             Try Again
           </button>
-          <a class="btn btn-link" routerLink="/login">forgot password??</a>
+          <a class="btn btn-link" (click)="forgotPassword()"
+            >forgot password??</a
+          >
         </div>
 
         <div class="text-center">

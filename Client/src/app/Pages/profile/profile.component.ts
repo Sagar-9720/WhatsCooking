@@ -190,4 +190,8 @@ export class ProfileComponent {
   togglePasswordVisibility(field: 'current' | 'new' | 'verify') {
     this.showPassword[field] = !this.showPassword[field];
   }
+  forgotPassword() {
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
+  }
 }

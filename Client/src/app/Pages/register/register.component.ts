@@ -119,8 +119,4 @@ export class RegisterComponent {
       console.log('Invalid OTP. Please try again.');
     }
   }
-
-  goToLogin() {
-    this.router.navigate(['/login']);
-  }
 }

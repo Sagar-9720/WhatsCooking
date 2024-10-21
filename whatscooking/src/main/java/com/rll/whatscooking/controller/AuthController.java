@@ -76,7 +76,7 @@ public class AuthController {
         }
     }
 
-    @GetMapping("/usernames")
+    @GetMapping
     public ResponseEntity<List<UserView>> getAllUsers() {
         List<UserView> userViews = userService.getAllUsers();
         return new ResponseEntity<>(userViews, HttpStatus.OK);

@@ -47,6 +47,7 @@
                 name="firstname"
                 [(ngModel)]="user.firstName"
                 required
+                pattern="^[A-Za-z]+$"
                 #firstname="ngModel"
                 placeholder="Enter your first name"
                 autocomplete="off"
@@ -55,7 +56,12 @@
                 *ngIf="firstname.invalid && firstname.touched"
                 class="text-danger"
               >
-                <small>First name is required.</small>
+                <small *ngIf="firstname.errors?.['required']"
+                  >First name is required.</small
+                >
+                <small *ngIf="firstname.errors?.['pattern']"
+                  >First name must only contain letters.</small
+                >
               </div>
             </div>
             <div class="mb-3">
@@ -67,6 +73,7 @@
                 name="lastname"
                 [(ngModel)]="user.lastName"
                 required
+                pattern="^[A-Za-z]+$"
                 #lastname="ngModel"
                 placeholder="Enter your last name"
                 autocomplete="off"
@@ -75,7 +82,12 @@
                 *ngIf="lastname.invalid && lastname.touched"
                 class="text-danger"
               >
-                <small>Last name is required.</small>
+                <small *ngIf="lastname.errors?.['required']"
+                  >Last name is required.</small
+                >
+                <small *ngIf="lastname.errors?.['pattern']"
+                  >Last name must only contain letters.</small
+                >
               </div>
             </div>
             <div class="mb-3 d-flex align-items-center">
@@ -89,6 +101,7 @@
                   [(ngModel)]="user.email"
                   required
                   email
+                  pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                   #email="ngModel"
                   placeholder="Enter your email"
                   [disabled]="isEmailVerified"
@@ -152,6 +165,7 @@
                 [(ngModel)]="user.password"
                 required
                 minlength="7"
+                pattern="^(?=.*[0-9])(?=.*[A-Z])(?=.*[\W_]).{7,}$"
                 #password="ngModel"
                 placeholder="Enter your password"
                 autocomplete="off"
@@ -164,7 +178,11 @@
                   >Password is required.</small
                 >
                 <small *ngIf="password.errors?.['minlength']"
-                  >Password must be at least 6 characters long.</small
+                  >Password must be at least 7 characters long.</small
+                >
+                <small *ngIf="password.errors?.['pattern']"
+                  >Password must contain at least one number, one UpperCase
+                  Letter, and one special character.</small
                 >
               </div>
             </div>
@@ -222,7 +240,7 @@
               >
                 Register
               </button>
-              <a href="" class="btn btn-danger" (click)="goToLogin()">
+              <a routerLink="/login" class="btn btn-danger">
                 Already registered? Login
               </a>
             </div>

@@ -33,8 +33,6 @@ export class LoginComponent {
           this.user = response;
           if (this.user && this.user.role) {
             localStorage.setItem('role', this.user.role);
-
-            console.log('Logged in successfully!');
             this.toastr.success('Logged in successfully!');
             this.router.navigate(['/welcome']);
           }
