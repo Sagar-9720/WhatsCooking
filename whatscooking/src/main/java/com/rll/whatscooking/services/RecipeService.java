@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import com.rll.whatscooking.View.recipeCard;
@@ -40,36 +41,33 @@ public class RecipeService implements iRecipeRepository {
     @Autowired
     private CommentService commentService;
 
+    @Value("${assetPath}")
+    private String assetPath;
+
     @Override
     public Recipe addRecipe(Recipe recipe) {
         recipe.setNutrition(null);
-
-        // Initialize endorsed and likedUser
         recipe.setEndorsed(false);
         recipe.setLikedUser(new ArrayList<>());
 
-        // Ensure that ingredients are properly handled
         List<Ingredients> ingredients = recipe.getIngredients();
 
         if (ingredients != null && !ingredients.isEmpty()) {
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredients ingredient = ingredients.get(i);
 
-                // Fetch or save the ingredient based on its ID
-                if (ingredient.getIngredientId() == 0) {
-                    // New ingredient, so save it
+                if (ingredient.getName().compareTo("") != 0) {
+                    continue;
+                } else if (ingredient.getIngredientId() == 0) {
                     ingredient = ingredientsRepository.save(ingredient);
                 } else {
-                    // Fetch existing ingredient
                     ingredient = ingredientsRepository.findById(ingredient.getIngredientId())
                             .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
                 }
-                // Update the ingredient in the recipe's list with the managed entity
                 ingredients.set(i, ingredient);
             }
         }
 
-        // Finally, save the recipe with the updated ingredients
         return recipeRepository.save(recipe);
     }
 
@@ -83,28 +81,25 @@ public class RecipeService implements iRecipeRepository {
             existingRecipe.setMeal_type(recipe.getMeal_type());
             existingRecipe.setSeasonal(recipe.getSeasonal());
             existingRecipe.setCuisine(recipe.getCuisine());
-            existingRecipe.setRecipe_status(recipe.isRecipe_status());
             existingRecipe.setRecipe_steps(recipe.getRecipe_steps());
-            existingRecipe.setNutrition(recipe.getNutrition());
-            existingRecipe.setLikedUser(recipe.getLikedUser());
-            existingRecipe.setEndorsed(recipe.isEndorsed());
+            existingRecipe.getIngredients().clear();
 
-            // Ensure that ingredients are properly handled
             List<Ingredients> ingredients = recipe.getIngredients();
-
-            // If ingredients are not empty, ensure they are managed
             if (ingredients != null && !ingredients.isEmpty()) {
                 for (Ingredients ingredient : ingredients) {
-                    // Fetch the ingredient if it exists, or save it if it's a new entity
-                    if (ingredient.getIngredientId() == 0) {
-                        // This is a new ingredient, so persist it
+                    if (ingredient.getName().compareTo("") != 0) {
+                        continue;
+                    } else if (ingredient.getIngredientId() == 0) {
                         ingredient = ingredientsRepository.save(ingredient);
                     } else {
-                        // Fetch the existing ingredient to ensure it's managed
                         ingredient = ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
+                    }
+                    if (ingredient != null) {
+                        existingRecipe.getIngredients().add(ingredient);
                     }
                 }
             }
+
             return recipeRepository.save(existingRecipe);
         }
         return null;
@@ -132,7 +127,6 @@ public class RecipeService implements iRecipeRepository {
         if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
             existingRecipe.setEndorsed(true);
-
             existingRecipe.setNutrition(recipe.getNutrition());
             return recipeRepository.save(existingRecipe);
         }
@@ -144,13 +138,10 @@ public class RecipeService implements iRecipeRepository {
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (optionalRecipe.isPresent()) {
             Recipe existingRecipe = optionalRecipe.get();
-            // Ensure that ingredients are properly handled
             List<Ingredients> ingredients = existingRecipe.getIngredients();
 
-            // If ingredients are not empty, ensure they are managed
             if (ingredients != null && !ingredients.isEmpty()) {
                 for (Ingredients ingredient : ingredients) {
-                    // Fetch the existing ingredient to ensure it's managed
                     ingredient = ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
                 }
             }
@@ -185,12 +176,10 @@ public class RecipeService implements iRecipeRepository {
         if (recipe == null) {
             throw new IllegalArgumentException("Recipe must not be null");
         }
-        // Check if the recipe exists in the database
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (!optionalRecipe.isPresent()) {
             throw new IllegalArgumentException("Recipe does not exist");
         }
-        // Check if the user exists in the database
         User user = recipe.getLikedUser().get(0);
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (!optionalUser.isPresent()) {
@@ -198,12 +187,10 @@ public class RecipeService implements iRecipeRepository {
         }
 
         user = optionalUser.get();
-        // Check if the user already liked the recipe
         Recipe existingRecipe = optionalRecipe.get();
         if (!existingRecipe.getLikedUser().contains(user)) {
             existingRecipe.getLikedUser().add(user);
             return recipeRepository.save(existingRecipe);
-
         }
         return null;
     }
@@ -213,12 +200,10 @@ public class RecipeService implements iRecipeRepository {
         if (recipe == null) {
             throw new IllegalArgumentException("Recipe must not be null");
         }
-        // Check if the recipe exists in the database
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (!optionalRecipe.isPresent()) {
             throw new IllegalArgumentException("Recipe does not exist");
         }
-        // Check if the user exists in the database
         User user = recipe.getLikedUser().get(0);
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (!optionalUser.isPresent()) {
@@ -226,12 +211,10 @@ public class RecipeService implements iRecipeRepository {
         }
 
         user = optionalUser.get();
-        // Check if the user already liked the recipe
         Recipe existingRecipe = optionalRecipe.get();
         if (existingRecipe.getLikedUser().contains(user)) {
             existingRecipe.getLikedUser().remove(user);
             return recipeRepository.save(existingRecipe);
-
         }
         return null;
     }
@@ -254,27 +237,22 @@ public class RecipeService implements iRecipeRepository {
             Recipe existingRecipe = optionalRecipe.get();
             existingRecipe.setRecipe_status(false);
             return recipeRepository.save(existingRecipe);
-
         }
         return null;
     }
 
     public String uploadImage(String previousFileName, String recipeName) {
-        // Locate the image file in the asset/recipe_images directory
         Path imagePath = Paths.get(
-                "C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\",
+                assetPath,
                 previousFileName);
         if (!Files.exists(imagePath)) {
             throw new RuntimeException("Image file not found: " + previousFileName);
         }
 
-        // Define the new file name and path
         Path newImagePath = Paths.get(
-                "C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\",
-                recipeName);
+                assetPath, recipeName);
 
         try {
-            // Rename the file
             Files.move(imagePath, newImagePath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             throw new RuntimeException("Failed to rename image file", e);

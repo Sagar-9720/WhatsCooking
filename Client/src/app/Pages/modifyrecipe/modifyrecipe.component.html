@@ -30,7 +30,6 @@
               minlength="3"
               maxlength="50"
               [(ngModel)]="recipe.recipe_name"
-              [disabled]="!submitted"
               #recipeName="ngModel"
             />
             <div
@@ -57,7 +56,6 @@
               name="meal_timing"
               [(ngModel)]="recipe.meal_timing"
               class="form-control"
-              [disabled]="!submitted"
             >
               <option value="">None</option>
               <option *ngFor="let timing of mealTimings" [value]="timing">
@@ -74,7 +72,6 @@
               name="meal_type"
               [(ngModel)]="recipe.meal_type"
               class="form-control"
-              [disabled]="!submitted"
             >
               <option value="">None</option>
               <option *ngFor="let type of mealTypes" [value]="type">
@@ -91,7 +88,6 @@
               name="seasonal"
               [(ngModel)]="recipe.seasonal"
               class="form-control"
-              [disabled]="!submitted"
             >
               <option value="">None</option>
               <option *ngFor="let season of seasons" [value]="season">
@@ -108,7 +104,6 @@
               name="cuisine"
               [(ngModel)]="recipe.cuisine"
               class="form-control"
-              [disabled]="!submitted"
             >
               <option value="">None</option>
               <option *ngFor="let cuisine of cuisines" [value]="cuisine">
@@ -125,7 +120,6 @@
               id="calories"
               name="calories"
               [(ngModel)]="nutrition.calories"
-              [disabled]="!submitted"
               class="form-control"
             />
             <label for="protein" class="font-weight-bold">Protein</label>
@@ -143,7 +137,6 @@
               id="fat"
               name="fat"
               [(ngModel)]="nutrition.fat"
-              [disabled]="!submitted"
               class="form-control"
             />
             <label for="carbs" class="font-weight-bold">Carbohydrates</label>
@@ -152,26 +145,69 @@
               id="carbs"
               name="carbs"
               [(ngModel)]="nutrition.carbs"
-              [disabled]="!submitted"
               class="form-control"
             />
           </div>
 
           <!-- Ingredients -->
-          <div class="form-group">
-            <label for="ingredients">Ingredients</label>
-            <div id="ingredients">
-              <div
-                class="input-group mb-2"
-                *ngFor="let ingredient of recipe.ingredients; let i = index"
+          <div class="form-group" style="display: flex;flex-direction: column;">
+            <label for="ingredients" class="font-weight-bold"
+              >Ingredients</label
+            >
+            <div
+              *ngFor="let ingredient of ingredients; let i = index"
+              class="input-group mb-2"
+            >
+              <input
+                type="text"
+                name="ingredient{{ i }}"
+                [(ngModel)]="ingredients[i].name"
+                required
+                placeholder="Enter ingredient"
+                class="form-control"
+                #ingredientName="ngModel"
+                (keyup)="
+                  ingredient.name ? filterIngredients(ingredient.name) : null
+                "
+                [matAutocomplete]="auto"
+              />
+              <mat-autocomplete
+                #auto="matAutocomplete"
+                (optionSelected)="optionSelected($event.option.value, i)"
               >
-                <input
-                  type="text"
-                  class="form-control"
-                  [(ngModel)]="ingredient.name"
-                  name="ingredient{{ i }}"
-                  [disabled]="!submitted"
-                />
+                <mat-option
+                  *ngFor="let suggestion of filteredIngredients"
+                  [value]="suggestion.name"
+                >
+                  {{ suggestion.name }}
+                </mat-option>
+              </mat-autocomplete>
+
+              <div class="input-group-append">
+                <button
+                  *ngIf="i === ingredients.length - 1"
+                  (click)="addIngredient()"
+                  type="button"
+                  class="btn btn-outline-secondary"
+                >
+                  +
+                </button>
+                <button
+                  *ngIf="i < ingredients.length - 1"
+                  (click)="removeIngredient(i)"
+                  type="button"
+                  class="btn btn-outline-secondary"
+                >
+                  -
+                </button>
+              </div>
+              <div
+                *ngIf="ingredientName.invalid && ingredientName.touched"
+                class="text-danger"
+              >
+                <small *ngIf="ingredientName.errors?.['required']"
+                  >Ingredient is required.</small
+                >
               </div>
             </div>
           </div>
@@ -187,7 +223,6 @@
               required
               minlength="10"
               [(ngModel)]="recipe.recipe_steps"
-              [disabled]="!submitted"
               class="form-control"
               #recipeSteps="ngModel"
             ></textarea>
@@ -208,9 +243,9 @@
           <button
             type="button"
             class="btn btn-secondary"
-            (click)="toggleEdit()"
+            (click)="updateRecipe()"
           >
-            {{ submitted ? "Update" : "Edit" }}
+            Update
           </button>
         </form>
       </div>

@@ -11,6 +11,8 @@ import {
 import { ToastrService } from 'ngx-toastr';
 import { User } from 'src/app/Models/User';
 import { Nutrition } from 'src/app/Models/Nutrition';
+import { Ingredient } from 'src/app/Models/Ingredients';
+import { IngredientserviceService } from 'src/app/Services/ingredientservice.service';
 
 function getMealTypeList(): string[] {
   return Object.keys(MealType).filter((key) => isNaN(Number(key)));
@@ -47,26 +49,93 @@ export class ModifyrecipeComponent implements OnInit {
   loggedInUser: User = new User();
   nutrition: Nutrition = new Nutrition();
 
+  ingredients: Ingredient[] = [];
+  allIngredients: Ingredient[] = [];
+  filteredIngredients: Ingredient[] = [];
   ngOnInit(): void {
     this.loggedInUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.userRole = this.loggedInUser.role || '';
-    console.log(this.userRole);
-    this.isNutritionist = this.userRole === 'Nutritionist';
+    this.isNutritionist = this.userRole === 'nutritionist';
+    this.mealTypes = getMealTypeList(); // ['VEGETARIAN', 'NON_VEGETARIAN', ...]
+    this.seasons = getSeasonalList(); // ['WINTER', 'SPRING', 'SUMMER', 'FALL']
+    this.cuisines = getCuisineList(); // ['ITALIAN', 'CHINESE', 'MEXICAN', ...]
+    this.mealTimings = getMealTimingList(); // ['BREAKFAST', 'LUNCH', 'DINNER', ...]
+    this.ingredientService.getAllIngredients().subscribe({
+      next: (response: Ingredient[]) => {
+        if (response) {
+          this.allIngredients = response;
+          console.log('Ingredients :', this.allIngredients);
+        } else {
+          console.error('Error fetching ingredients: Unknown error');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching ingredients:', error);
+      },
+    });
 
-    this.mealTypes = getMealTypeList();
-    this.seasons = getSeasonalList();
-    this.cuisines = getCuisineList();
-    this.mealTimings = getMealTimingList();
+    // Fetch the recipe data
+    this.fetchRecipe();
+  }
+
+  ngOnChanges(): void {
+    this.ingredientService.getAllIngredients().subscribe({
+      next: (response: Ingredient[]) => {
+        if (response) {
+          this.allIngredients = response;
+          console.log('Ingredients :', this.allIngredients);
+        } else {
+          console.error('Error fetching ingredients: Unknown error');
+        }
+      },
+      error: (error) => {
+        console.error('Error fetching ingredients:', error);
+      },
+    });
+  }
+
+  addIngredient() {
+    this.ingredients.push({ ingredient_id: 0, name: '' });
+    this.recipe.ingredients = this.ingredients;
+  }
+
+  removeIngredient(index: number) {
+    this.ingredients.splice(index, 1);
+    this.recipe.ingredients = this.ingredients;
+  }
+
+  filterIngredients(value: string): void {
+    this.filteredIngredients = this.allIngredients.filter((ingredient) =>
+      ingredient.name?.toLowerCase().includes(value.toLowerCase())
+    );
+  }
+
+  optionSelected(ingredientName: string, index: number): void {
+    // Find the selected ingredient from the list of all available ingredients
+    const selectedIngredient = this.allIngredients.find(
+      (ingredient) => ingredient.name === ingredientName
+    );
+
+    if (selectedIngredient) {
+      // Ensure that 'this.ingredients' is defined as an array and update the correct index
+      if (this.ingredients && Array.isArray(this.ingredients)) {
+        this.ingredients[index] = selectedIngredient;
+      } else {
+        console.error('Ingredients list is not properly initialized.');
+      }
+    } else {
+      console.error('Selected ingredient not found.');
+    }
   }
 
   constructor(
     private router: Router,
     private recipeService: RecipeServiceService,
-    private toastr: ToastrService
+    private toastr: ToastrService,
+    private ingredientService: IngredientserviceService
   ) {
     this.fetchRecipe();
   }
-
   fetchRecipe() {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { recipe: Recipe };
@@ -79,6 +148,9 @@ export class ModifyrecipeComponent implements OnInit {
             .toPromise();
           if (data) {
             this.recipe = data;
+            this.ingredients = data.ingredients || [];
+
+            this.submitted = false;
           }
         } catch (error) {
           this.toastr.error('Error fetching recipe');
@@ -87,17 +159,8 @@ export class ModifyrecipeComponent implements OnInit {
     }
   }
 
-  toggleEdit() {
-    this.submitted = !this.submitted;
-    if (!this.submitted) {
-      this.updateRecipe();
-    }
-  }
-
-  // Placeholder for your update function
   updateRecipe() {
     console.log('Updating recipe:', this.recipe);
-
     this.recipeService
       .updateRecipe(this.recipe)
       .subscribe((data: any) => (data = this.recipe));
