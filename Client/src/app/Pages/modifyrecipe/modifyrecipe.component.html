@@ -1,4 +1,5 @@
 <app-navbar></app-navbar>
+
 <body>
   <div class="container">
     <div class="row">
@@ -13,25 +14,153 @@
           class="img-fluid"
         />
       </div>
+
       <div class="col-md-8">
         <form>
-          <div class="form-group d-flex align-items-center">
-            <label for="recipeName" class="mr-2">Name of Recipe</label>
+          <div class="form-group">
+            <label for="recipeName" class="font-weight-bold"
+              >Name of Recipe</label
+            >
             <input
               type="text"
+              id="recipeName"
+              name="recipe_name"
               class="form-control"
+              required
+              minlength="3"
+              maxlength="50"
               [(ngModel)]="recipe.recipe_name"
-              name="recipeName"
-              [readonly]="!editName"
+              [disabled]="!submitted"
+              #recipeName="ngModel"
             />
-            <i
-              class="fas fa-pencil-alt ml-2"
-              (click)="editName = !editName"
-            ></i>
+            <div
+              *ngIf="recipeName.invalid && recipeName.touched"
+              class="text-danger"
+            >
+              <small *ngIf="recipeName.errors?.['required']"
+                >Recipe name is required.</small
+              >
+              <small *ngIf="recipeName.errors?.['minlength']"
+                >Minimum length is 3 characters.</small
+              >
+              <small *ngIf="recipeName.errors?.['maxlength']"
+                >Maximum length is 50 characters.</small
+              >
+            </div>
           </div>
-          <div class="form-group d-flex align-items-center">
-            <label for="ingredients" class="mr-2">Ingredients</label>
-            <div id="ingredients" class="flex-grow-1">
+
+          <!-- Meal Timing -->
+          <div class="form-group">
+            <label for="mealTiming" class="font-weight-bold">Meal Timing</label>
+            <select
+              id="mealTiming"
+              name="meal_timing"
+              [(ngModel)]="recipe.meal_timing"
+              class="form-control"
+              [disabled]="!submitted"
+            >
+              <option value="">None</option>
+              <option *ngFor="let timing of mealTimings" [value]="timing">
+                {{ timing }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Meal Type -->
+          <div class="form-group">
+            <label for="mealType" class="font-weight-bold">Meal Type</label>
+            <select
+              id="mealType"
+              name="meal_type"
+              [(ngModel)]="recipe.meal_type"
+              class="form-control"
+              [disabled]="!submitted"
+            >
+              <option value="">None</option>
+              <option *ngFor="let type of mealTypes" [value]="type">
+                {{ type }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Season -->
+          <div class="form-group">
+            <label for="seasonal" class="font-weight-bold">Season</label>
+            <select
+              id="seasonal"
+              name="seasonal"
+              [(ngModel)]="recipe.seasonal"
+              class="form-control"
+              [disabled]="!submitted"
+            >
+              <option value="">None</option>
+              <option *ngFor="let season of seasons" [value]="season">
+                {{ season }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Cuisine -->
+          <div class="form-group">
+            <label for="cuisine" class="font-weight-bold">Cuisine</label>
+            <select
+              id="cuisine"
+              name="cuisine"
+              [(ngModel)]="recipe.cuisine"
+              class="form-control"
+              [disabled]="!submitted"
+            >
+              <option value="">None</option>
+              <option *ngFor="let cuisine of cuisines" [value]="cuisine">
+                {{ cuisine }}
+              </option>
+            </select>
+          </div>
+
+          <!-- Conditional Nutrition Fields -->
+          <div *ngIf="isNutritionist" class="form-group">
+            <label for="calories" class="font-weight-bold">Calories</label>
+            <input
+              type="number"
+              id="calories"
+              name="calories"
+              [(ngModel)]="nutrition.calories"
+              [disabled]="!submitted"
+              class="form-control"
+            />
+            <label for="protein" class="font-weight-bold">Protein</label>
+            <input
+              type="number"
+              id="protein"
+              name="protein"
+              [(ngModel)]="nutrition.protein"
+              [disabled]="!submitted"
+              class="form-control"
+            />
+            <label for="fat" class="font-weight-bold">Fat</label>
+            <input
+              type="number"
+              id="fat"
+              name="fat"
+              [(ngModel)]="nutrition.fat"
+              [disabled]="!submitted"
+              class="form-control"
+            />
+            <label for="carbs" class="font-weight-bold">Carbohydrates</label>
+            <input
+              type="number"
+              id="carbs"
+              name="carbs"
+              [(ngModel)]="nutrition.carbs"
+              [disabled]="!submitted"
+              class="form-control"
+            />
+          </div>
+
+          <!-- Ingredients -->
+          <div class="form-group">
+            <label for="ingredients">Ingredients</label>
+            <div id="ingredients">
               <div
                 class="input-group mb-2"
                 *ngFor="let ingredient of recipe.ingredients; let i = index"
@@ -39,39 +168,54 @@
                 <input
                   type="text"
                   class="form-control"
-                  [value]="ingredient.name"
-                  [readonly]="!editIngredients[i]"
+                  [(ngModel)]="ingredient.name"
+                  name="ingredient{{ i }}"
+                  [disabled]="!submitted"
                 />
-                <i
-                  class="fas fa-pencil-alt ml-2"
-                  (click)="editIngredients[i] = !editIngredients[i]"
-                ></i>
               </div>
             </div>
           </div>
-          <div class="form-group d-flex align-items-center">
-            <label for="recipeSteps" class="mr-2">Recipe Steps</label>
+
+          <!-- Recipe Steps -->
+          <div class="form-group">
+            <label for="recipeSteps" class="font-weight-bold"
+              >Preparation Steps</label
+            >
             <textarea
-              class="form-control flex-grow-1"
+              id="recipeSteps"
+              name="recipe_steps"
+              required
+              minlength="10"
               [(ngModel)]="recipe.recipe_steps"
-              name="recipeSteps"
-              [readonly]="!editSteps"
+              [disabled]="!submitted"
+              class="form-control"
+              #recipeSteps="ngModel"
             ></textarea>
-            <i
-              class="fas fa-pencil-alt ml-2"
-              (click)="editSteps = !editSteps"
-            ></i>
+            <div
+              *ngIf="recipeSteps.invalid && recipeSteps.touched"
+              class="text-danger"
+            >
+              <small *ngIf="recipeSteps.errors?.['required']"
+                >Steps are required.</small
+              >
+              <small *ngIf="recipeSteps.errors?.['minlength']"
+                >Minimum 10 characters required.</small
+              >
+            </div>
           </div>
+
+          <!-- Edit/Update Button -->
           <button
             type="button"
             class="btn btn-secondary"
-            (click)="updateRecipe()"
+            (click)="toggleEdit()"
           >
-            Update
+            {{ submitted ? "Update" : "Edit" }}
           </button>
         </form>
       </div>
     </div>
   </div>
 </body>
+
 <app-footer></app-footer>

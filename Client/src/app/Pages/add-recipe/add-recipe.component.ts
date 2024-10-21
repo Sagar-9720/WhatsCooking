@@ -170,6 +170,19 @@ export class AddRecipeComponent implements OnInit {
             this.selectedFile = null;
             this.ingredients = [{ ingredient_id: 0, name: '' }];
             this.imageUrl = null;
+            this.ingredientService.getAllIngredients().subscribe({
+              next: (response: Ingredient[]) => {
+                if (response) {
+                  this.allIngredients = response;
+                  console.log('Ingredients :', this.allIngredients);
+                } else {
+                  console.error('Error fetching ingredients: Unknown error');
+                }
+              },
+              error: (error) => {
+                console.error('Error fetching ingredients:', error);
+              },
+            });
           } else {
             this.toast.error('Failed to add recipe');
             console.error('Error adding recipe: Unknown error');

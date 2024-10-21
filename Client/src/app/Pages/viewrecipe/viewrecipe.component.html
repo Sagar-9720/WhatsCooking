@@ -3,7 +3,7 @@
 <body>
   <div class="container mt-4" class="div-main" style="margin-top: 3vh">
     <div class="row rounded p-3">
-      <h1 style="text-align: center">{{ recipe.recipe_name }}</h1>
+      <h1 style="text-align: center; color: black">{{ recipe.recipe_name }}</h1>
       <div class="col-lg-8">
         <table
           class="table table-borderd"
@@ -11,7 +11,7 @@
           style="color: white"
         >
           <tbody>
-            <tr>
+            <tr style="color: black">
               <th>Ingredients</th>
               <td>
                 <div style="display: flex; flex-direction: column">
@@ -21,7 +21,7 @@
                 </div>
               </td>
             </tr>
-            <tr>
+            <tr style="color: black">
               <th>Description</th>
               <td>
                 <div style="white-space: pre-wrap">
@@ -30,7 +30,7 @@
               </td>
             </tr>
             <tr *ngIf="recipe.endorsed">
-              <th>Nutrition</th>
+              <th style="color: black">Nutrition</th>
               <td>
                 <table
                   class="table table-borderd table-striped"
@@ -69,7 +69,8 @@
               </td>
             </tr>
             <tr [hidden]="!isEditable">
-              <tbody>
+              <th style="color: black">Nutrition</th>
+              <tbody style="color: black">
                 <tr>
                   <th>Carbs</th>
                   <td>
@@ -94,10 +95,15 @@
                     <input type="number" [(ngModel)]="nutrition.calories" />
                   </td>
                 </tr>
+                <tr>
+                  <td>Confirm To Endorse</td>
+                  <td>
+                    <button class="btn btn-success" (click)="endorseRecipe()">
+                      Endorse!
+                    </button>
+                  </td>
+                </tr>
               </tbody>
-              <button class="btn btn-success" (click)="endorseRecipe()">
-                Endorse!
-              </button>
             </tr>
           </tbody>
         </table>

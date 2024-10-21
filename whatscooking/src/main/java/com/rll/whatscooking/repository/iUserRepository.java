@@ -11,7 +11,7 @@ public interface iUserRepository {
 
     User deleteUser(User user);
 
-    User updateUser(User user);
+    UserView updateUser(User user);
 
     UserView loginUser(User user);
 

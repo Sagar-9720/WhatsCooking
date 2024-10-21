@@ -1,100 +1,110 @@
 <app-navbar></app-navbar>
-
-<div
-  [hidden]="dialogbox"
-  class="recipe-list"
-  style="width: 90vw; overflow-x: auto"
->
-  <table class="styled-table">
-    <thead>
-      <tr>
-        <th>Sr No</th>
-        <th>Recipe Name</th>
-        <th>Meal Type</th>
-        <th>Meal Timing</th>
-        <th>Cuisine</th>
-        <th>Seasonal</th>
-        <th>Endorsed By</th>
-        <th *ngIf="role !== 'Customer'">Enable/Disable</th>
-        <th *ngIf="role !== 'Customer'">Want To Modify</th>
-        <th *ngIf="role !== 'Customer'">Want To Remove</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr
-        *ngFor="let recipe of recipeList; let i = index"
-        (click)="viewRecipe(recipe)"
-      >
-        <td>{{ i + 1 }}</td>
-        <td>{{ recipe.recipe_name }}</td>
-        <td>{{ recipe.meal_type }}</td>
-        <td>{{ recipe.meal_timing }}</td>
-        <td>{{ recipe.cuisine }}</td>
-        <td>{{ recipe.seasonal }}</td>
-        <td>
-          <!-- Display the user's first name if the recipe is endorsed -->
-          <span *ngIf="recipe.endorsed">
-            {{ recipe.nutrition?.user?.firstName }}
-          </span>
-          <span *ngIf="!recipe.endorsed">
-            <span *ngIf="role === 'Nutritionist'">
-              <button (click)="endorseRecipe(recipe)">Endorse!</button>
+<body>
+  <div
+    [hidden]="dialogbox"
+    class="recipe-list"
+    style="width: 90vw; overflow-x: auto"
+  >
+    <div
+      style="display: flex; justify-content: space-between; margin-bottom: 1rem"
+    >
+      <button class="btn btn-primary" (click)="toggleSortOrder()">
+        Sort {{ sortOrder === "asc" ? "Z-A" : "A-Z" }}
+      </button>
+    </div>
+    <table class="styled-table">
+      <thead>
+        <tr>
+          <th>Sr No</th>
+          <th>Recipe Name</th>
+          <th>Meal Type</th>
+          <th>Meal Timing</th>
+          <th>Cuisine</th>
+          <th>Seasonal</th>
+          <th>Endorsed By</th>
+          <th *ngIf="role !== 'Customer'">Enable/Disable</th>
+          <th *ngIf="role !== 'Customer'">Want To Modify</th>
+          <th *ngIf="role !== 'Customer'">Want To Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="
+            let recipe of recipeList | sortRecipes : sortOrder;
+            let i = index
+          "
+          (click)="viewRecipe(recipe)"
+        >
+          <td>{{ i + 1 }}</td>
+          <td>{{ recipe.recipe_name }}</td>
+          <td>{{ recipe.meal_type }}</td>
+          <td>{{ recipe.meal_timing }}</td>
+          <td>{{ recipe.cuisine }}</td>
+          <td>{{ recipe.seasonal }}</td>
+          <td>
+            <!-- Display the user's first name if the recipe is endorsed -->
+            <span *ngIf="recipe.endorsed">
+              {{ recipe.nutrition?.user?.firstName }}
             </span>
-            <span *ngIf="role !== 'Nutritionist'">None</span>
-          </span>
-        </td>
+            <span *ngIf="!recipe.endorsed">
+              <span *ngIf="role === 'Nutritionist'">
+                <button (click)="endorseRecipe(recipe)">Endorse!</button>
+              </span>
+              <span *ngIf="role !== 'Nutritionist'">None</span>
+            </span>
+          </td>
 
-        <td *ngIf="role !== 'Customer'">
-          <button
-            class="btn btn-primary"
-            (click)="$event.stopPropagation(); enableDisableRecipe(recipe)"
-          >
-            {{ recipe.recipe_status ? "Disable" : "Enable" }}
+          <td *ngIf="role !== 'Customer'">
+            <button
+              class="btn btn-primary"
+              (click)="$event.stopPropagation(); enableDisableRecipe(recipe)"
+            >
+              {{ recipe.recipe_status ? "Disable" : "Enable" }}
+            </button>
+          </td>
+          <td *ngIf="role !== 'Customer'">
+            <button
+              class="btn btn-primary"
+              (click)="$event.stopPropagation(); modifyRecipe(recipe)"
+            >
+              Modify
+            </button>
+          </td>
+          <td *ngIf="role !== 'Customer'">
+            <button
+              class="btn btn-primary"
+              (click)="$event.stopPropagation(); dialogBox(recipe)"
+            >
+              Remove
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div [hidden]="!dialogbox">
+    <div class="dialogbox">
+      <div class="dialogbox-content">
+        <h2>Are you sure you want to remove this recipe?</h2>
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            gap: 4rem;
+            margin-top: 4rem;
+          "
+        >
+          <button class="btn btn-danger" (click)="deleteRecipe(selectedRecipe)">
+            Yes
           </button>
-        </td>
-        <td *ngIf="role !== 'Customer'">
-          <button
-            class="btn btn-primary"
-            (click)="$event.stopPropagation(); modifyRecipe(recipe)"
-          >
-            Modify
+          <button class="btn btn-secondary" (click)="dialogbox = false">
+            No
           </button>
-        </td>
-        <td *ngIf="role !== 'Customer'">
-          <button
-            class="btn btn-primary"
-            (click)="$event.stopPropagation(); dialogBox(recipe)"
-          >
-            Remove
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-<div [hidden]="!dialogbox">
-  <div class="dialogbox">
-    <div class="dialogbox-content">
-      <h2>Are you sure you want to remove this recipe?</h2>
-      <div
-        style="
-          display: flex;
-          justify-content: center;
-          gap: 4rem;
-          margin-top: 4rem;
-        "
-      >
-        <button class="btn btn-danger" (click)="deleteRecipe(selectedRecipe)">
-          Yes
-        </button>
-        <button class="btn btn-secondary" (click)="dialogbox = false">
-          No
-        </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
+</body>
 <div class="viewallfooter">
   <app-footer></app-footer>
 </div>

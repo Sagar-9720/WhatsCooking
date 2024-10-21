@@ -1,5 +1,5 @@
 #myTab a {
-  color: white;
+  color: black;
   background: transparent;
   backdrop-filter: blur(12px);
   margin: 0 0.3125rem; /* 5px to rem */
@@ -16,11 +16,11 @@
 }
 
 .list-group-item:hover {
-  background-color: black;
+  background-color: white;
 }
 
 .dropdown-menu {
   background: transparent;
   backdrop-filter: blur(12px);
-  color: antiquewhite;
+  color: black;
 }

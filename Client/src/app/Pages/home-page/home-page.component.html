@@ -1,8 +1,31 @@
+<!-- 
+
+  This HTML template represents the structure of the home page component for the WhatsCooking application.
+
+  Components:
+  - <app-navbar>: The navigation bar at the top of the page.
+  - <app-navs>: Additional navigation elements.
+  - <app-search>: A search component that emits a search event.
+  - <app-recipe>: A recipe card component that displays individual recipes.
+  - <app-footer>: The footer component at the bottom of the page.
+
+  Structure:
+  - The body has a minimum height of 100vh to ensure it covers the full viewport height.
+  - The recipe-container div is a flex container that holds the recipe cards and pagination controls.
+  - The recipe cards are displayed in a grid layout with flex-wrap to handle responsiveness.
+  - Pagination buttons (< and >) allow navigation between pages of recipes.
+  - Pagination info displays the current page number and total number of pages.
+
+  Styles:
+  - Inline styles are used for layout and appearance, including flexbox properties, margins, padding, and transitions.
+  - Recipe cards have a box-shadow, border-radius, and transition effects for hover interactions.
+  - Pagination buttons have a transparent background, rounded borders, and a transition effect for background color changes.
+-->
 <app-navbar></app-navbar>
 <body style="min-height: 100vh">
   <app-navs></app-navs>
-  <!-- Search Component -->
-  <app-search></app-search>
+  <!-- Search Componevnt -->
+  <app-search (search)="onSearch($event)"></app-search>
 
   <!-- Recipe Cards and Pagination -->
   <div
@@ -47,7 +70,9 @@
       </button>
       <div
         class="recipe-card"
-        *ngFor="let recipe of paginatedRecipes[currentPage]"
+        *ngFor="
+          let recipe of paginatedRecipes[currentPage] | search : searchText
+        "
         style="
           flex: 1 1 calc(25% - 20px);
           margin: 10px;

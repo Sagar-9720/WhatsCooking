@@ -11,9 +11,20 @@
       type="text"
       class="searchTerm"
       placeholder="What are you looking for?"
+      [(ngModel)]="searchText"
+      (input)="onInputChange()"
     />
-    <button type="submit" class="searchButton">
+    <button type="submit" class="searchButton" (click)="onSearch()">
       <i class="fas fa-search"></i>
     </button>
   </div>
+  <!-- Suggestions List -->
+  <ul class="suggestions" *ngIf="suggestions.length > 0">
+    <li
+      *ngFor="let suggestion of suggestions"
+      (click)="selectSuggestion(suggestion)"
+    >
+      {{ suggestion?.trim() || "" }}
+    </li>
+  </ul>
 </div>

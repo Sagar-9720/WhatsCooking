@@ -120,16 +120,7 @@ public class RecipeService implements iRecipeRepository {
             if (comments != null && !comments.isEmpty()) {
                 commentService.deleteCommentByRecipeId(existingRecipe.getRecipe_id());
             }
-            // Ensure that ingredients are properly handled
-            List< Ingredients> ingredients = existingRecipe.getIngredients();
-
-            // If ingredients are not empty, ensure they are managed
-            if (ingredients != null && !ingredients.isEmpty()) {
-                for (Ingredients ingredient : ingredients) {
-                    // Fetch the existing ingredient to ensure it's managed
-                    ingredient = ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
-                }
-            }
+            
             recipeRepository.delete(existingRecipe);
             return existingRecipe;
         }
@@ -271,13 +262,13 @@ public class RecipeService implements iRecipeRepository {
 
     public String uploadImage(String previousFileName, String recipeName) {
         // Locate the image file in the asset/recipe_images directory
-        Path imagePath = Paths.get("E:\\RLL\\Client\\src\\assets\\Recipe_Images\\", previousFileName);
+        Path imagePath = Paths.get("C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\", previousFileName);
         if (!Files.exists(imagePath)) {
             throw new RuntimeException("Image file not found: " + previousFileName);
         }
 
         // Define the new file name and path
-        Path newImagePath = Paths.get("E:\\RLL\\Client\\src\\assets\\Recipe_Images\\", recipeName);
+        Path newImagePath = Paths.get("C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\", recipeName);
 
         try {
             // Rename the file

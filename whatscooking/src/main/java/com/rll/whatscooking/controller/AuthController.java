@@ -47,12 +47,12 @@ public class AuthController {
     }
 
     @PutMapping("/updateUser")
-    public ResponseEntity<String> updateUser(@RequestBody User user) {
-        User updatedUser = userService.updateUser(user);
+    public ResponseEntity<UserView> updateUser(@RequestBody User user) {
+        UserView updatedUser = userService.updateUser(user);
         if (updatedUser != null) {
-            return new ResponseEntity<>("Successfully Updated", HttpStatus.OK);
+            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
         } else {
-            return new ResponseEntity<>("Error Updating the User", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
     }
 

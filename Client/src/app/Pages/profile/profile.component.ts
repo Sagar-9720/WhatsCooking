@@ -15,16 +15,8 @@ export class ProfileComponent {
   user: User = new User();
   prevUser: User = new User();
   originalEmail: string = '';
-
   currentSection: string = 'userDetails';
-
-  // Fields to keep track of which input is editable
-  isFieldEditable: { firstName: boolean; lastName: boolean; email: boolean } = {
-    firstName: false,
-    lastName: false,
-    email: false,
-  };
-
+  isFieldEditable = { firstName: false, lastName: false, email: false };
   otp: string = '';
   sentOtp: string = '';
   showOtpInput = false;
@@ -33,11 +25,8 @@ export class ProfileComponent {
   isPasswordEditable = false;
   showPasswordErrorButtons = false;
   passwordChangeFailed = false;
-  showPassword = {
-    current: false,
-    new: false,
-    verify: false,
-  };
+  showPassword = { current: false, new: false, verify: false };
+
   constructor(
     private userService: UserserviceService,
     private router: Router,
@@ -47,14 +36,17 @@ export class ProfileComponent {
   ngOnInit(): void {
     this.loadUserDetailsFromSession();
   }
-  // Removed duplicate togglePasswordVisibility function
+
   loadUserDetailsFromSession(): void {
     const storedUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     if (storedUser) {
       this.user = storedUser;
       this.originalEmail = storedUser.email;
-      this.prevUser.userId = storedUser.userId;
-      this.prevUser.username = storedUser.username;
+      this.prevUser = {
+        userId: storedUser.userId,
+        username: storedUser.username,
+        role: storedUser.role,
+      };
     } else {
       console.error('No user data found in session storage.');
     }
@@ -64,66 +56,55 @@ export class ProfileComponent {
     this.currentSection = section;
   }
 
-  enableField(field: 'firstName' | 'lastName' | 'email') {
-    this.isFieldEditable = {
-      firstName: false,
-      lastName: false,
-      email: false,
-    };
+  enableField(field: keyof typeof this.isFieldEditable) {
+    Object.keys(this.isFieldEditable).forEach(
+      (key) =>
+        (this.isFieldEditable[key as keyof typeof this.isFieldEditable] = false)
+    );
     this.isFieldEditable[field] = true;
   }
 
-  onUpdateProfile(form: NgForm) {
+  async onUpdateProfile(form: NgForm) {
     if (form.valid) {
       if (this.user.email && this.user.email !== this.originalEmail) {
-        this.sendOtp(this.user.email);
+        await this.sendOtp(this.user.email);
       } else {
-        this.updateUserProfile();
+        await this.updateUserProfile();
       }
     }
   }
 
-  // Call user service to update profile
-  updateUserProfile() {
-    this.userService.updateProfile(this.user).subscribe(
-      (updatedUser: User) => {
-        this.toastr.success('Profile updated successfully!');
-        console.log('Profile updated successfully:', updatedUser);
-        sessionStorage.setItem('user', JSON.stringify(updatedUser)); // Update session with new details
-        this.isFieldEditable = {
-          firstName: false,
-          lastName: false,
-          email: false,
-        };
-      },
-      (error) => {
-        this.toastr.error('Error updating profile');
-        console.error('Error updating profile:', error);
-      }
-    );
+  async updateUserProfile() {
+    try {
+      const updatedUser = await this.userService
+        .updateProfile(this.user)
+        .toPromise();
+      this.toastr.success('Profile updated successfully!');
+      console.log('Profile updated:', updatedUser);
+      this.resetEditableFields();
+    } catch (error) {
+      this.toastr.error('Error updating profile');
+      console.error('Error updating profile:', error);
+    }
   }
 
-  // Function to send OTP via email
-  sendOtp(email: string) {
+  async sendOtp(email: string) {
     this.sentOtp = Math.floor(100000 + Math.random() * 900000).toString(); // Generate 6-digit OTP
-    const templateParams = {
-      to_email: email,
-      otp: this.sentOtp,
-    };
+    const templateParams = { to_email: email, otp: this.sentOtp };
 
-    emailjs
-      .send(
+    try {
+      await emailjs.send(
         'service_y2qrmep',
         'template_drot7nw',
         templateParams,
         '9Jdz3Gwg5Pv4TNysU'
-      )
-      .then(() => {
-        this.toastr.success('OTP sent successfully');
-        this.showOtpInput = true;
-        this.startOtpTimer();
-      })
-      .catch((err) => this.toastr.error('Error sending OTP'));
+      );
+      this.toastr.success('OTP sent successfully');
+      this.showOtpInput = true;
+      this.startOtpTimer();
+    } catch {
+      this.toastr.error('Error sending OTP');
+    }
   }
 
   startOtpTimer() {
@@ -135,11 +116,11 @@ export class ProfileComponent {
     }, 300000);
   }
 
-  verifyOtp() {
+  async verifyOtp() {
     if (this.otp === this.sentOtp) {
       this.toastr.success('OTP verified successfully!');
       this.isEmailVerified = true;
-      this.updateUserProfile();
+      await this.updateUserProfile();
       clearTimeout(this.otpTimeout);
       this.showOtpInput = false;
     } else {
@@ -147,32 +128,20 @@ export class ProfileComponent {
     }
   }
 
-  onChangePassword(form: NgForm) {
+  async onChangePassword(form: NgForm) {
     if (form.valid) {
-      this.userService.loginUser(this.prevUser).subscribe(
-        (response) => {
-          this.userService.changePassword(this.user).subscribe(
-            (response) => {
-              this.toastr.success('Password changed successfully!');
-              console.log('Password changed successfully');
-              this.isPasswordEditable = false;
-              this.passwordChangeFailed = false;
-              this.router.navigate(['/login']);
-            },
-            (error) => {
-              this.toastr.error('Error changing password');
-              console.error('Error changing password:', error);
-              this.passwordChangeFailed = true;
-            }
-          );
-        },
-        (error) => {
-          this.toastr.error('Incorrect Current Password!');
-          console.log('Incorrect Current Password!');
-          this.showPasswordErrorButtons = true;
-          this.passwordChangeFailed = true;
-        }
-      );
+      try {
+        await this.userService.loginUser(this.prevUser).toPromise();
+        const response = await this.userService
+          .changePassword(this.user)
+          .toPromise();
+        this.toastr.success('Password changed successfully!');
+        console.log('Password changed:', response);
+
+        this.resetPasswordFields();
+      } catch (error) {
+        this.handlePasswordChangeError(error);
+      }
     }
   }
 
@@ -183,15 +152,28 @@ export class ProfileComponent {
     this.showPasswordErrorButtons = false;
   }
 
-  navigateToLogin() {
-    this.router.navigate(['/login']);
-  }
-
   togglePasswordVisibility(field: 'current' | 'new' | 'verify') {
     this.showPassword[field] = !this.showPassword[field];
   }
+
   forgotPassword() {
     sessionStorage.clear();
     this.router.navigate(['/login']);
+  }
+
+  private resetEditableFields() {
+    this.isFieldEditable = { firstName: false, lastName: false, email: false };
+  }
+
+  private handlePasswordChangeError(error: any) {
+    if (error.status === 401) {
+      this.toastr.error('Incorrect Current Password!');
+      this.showPasswordErrorButtons = true;
+      this.passwordChangeFailed = true;
+    } else {
+      this.toastr.error('Error changing password');
+      console.error('Error changing password:', error);
+      this.passwordChangeFailed = true;
+    }
   }
 }

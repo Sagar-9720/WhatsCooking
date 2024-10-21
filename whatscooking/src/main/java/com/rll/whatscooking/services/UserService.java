@@ -42,14 +42,23 @@ public class UserService implements iUserRepository {
     }
 
     @Override
-    public User updateUser(User user) {
+    public UserView updateUser(User user) {
         Optional<User> existingUserOpt = userRepository.findById(user.getUserId());
         if (existingUserOpt.isPresent()) {
             User existingUser = existingUserOpt.get();
+            UserView userView = new UserView();
             existingUser.setFirstName(user.getFirstName());
             existingUser.setLastName(user.getLastName());
             existingUser.setEmail(user.getEmail());
-            return userRepository.save(existingUser);
+            userRepository.save(existingUser);
+            userView.setUserId(existingUser.getUserId());
+            userView.setUsername(existingUser.getUsername());
+            userView.setFirstName(existingUser.getFirstName());
+            userView.setLastName(existingUser.getLastName());
+            userView.setEmail(existingUser.getEmail());
+            userView.setRole(existingUser.getRole());
+            return userView;
+
         } else {
             return null;
         }

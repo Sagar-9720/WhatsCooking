@@ -1,8 +1,32 @@
 import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 import { Router } from '@angular/router';
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from 'src/app/Models/Recipe';
+import {
+  Cuisine,
+  MealTiming,
+  MealType,
+  Recipe,
+  Seasonal,
+} from 'src/app/Models/Recipe';
 import { ToastrService } from 'ngx-toastr';
+import { User } from 'src/app/Models/User';
+import { Nutrition } from 'src/app/Models/Nutrition';
+
+function getMealTypeList(): string[] {
+  return Object.keys(MealType).filter((key) => isNaN(Number(key)));
+}
+
+function getSeasonalList(): string[] {
+  return Object.keys(Seasonal).filter((key) => isNaN(Number(key)));
+}
+
+function getCuisineList(): string[] {
+  return Object.keys(Cuisine).filter((key) => isNaN(Number(key)));
+}
+
+function getMealTimingList(): string[] {
+  return Object.keys(MealTiming).filter((key) => isNaN(Number(key)));
+}
 
 @Component({
   selector: 'app-modifyrecipe',
@@ -11,19 +35,40 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class ModifyrecipeComponent implements OnInit {
   recipe: Recipe = new Recipe();
+  submitted: boolean = false;
+
+  mealTypes: string[] = [];
+  seasons: string[] = [];
+  cuisines: string[] = [];
+  mealTimings: string[] = [];
+
+  userRole: string = '';
+  isNutritionist: boolean = false;
+  loggedInUser: User = new User();
+  nutrition: Nutrition = new Nutrition();
+
+  ngOnInit(): void {
+    this.loggedInUser = JSON.parse(sessionStorage.getItem('user') || '{}');
+    this.userRole = this.loggedInUser.role || '';
+    console.log(this.userRole);
+    this.isNutritionist = this.userRole === 'Nutritionist';
+
+    this.mealTypes = getMealTypeList();
+    this.seasons = getSeasonalList();
+    this.cuisines = getCuisineList();
+    this.mealTimings = getMealTimingList();
+  }
 
   constructor(
-    private route: Router,
+    private router: Router,
     private recipeService: RecipeServiceService,
     private toastr: ToastrService
   ) {
     this.fetchRecipe();
   }
 
-  ngOnInit(): void {}
-
   fetchRecipe() {
-    const navigation = this.route.getCurrentNavigation();
+    const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { recipe: Recipe };
     const recipe = state.recipe;
     if (recipe) {
@@ -41,21 +86,22 @@ export class ModifyrecipeComponent implements OnInit {
       }, 1000);
     }
   }
-  editName: boolean = false;
-  editSteps: boolean = false;
-  editIngredients: boolean[] = [];
 
+  toggleEdit() {
+    this.submitted = !this.submitted;
+    if (!this.submitted) {
+      this.updateRecipe();
+    }
+  }
+
+  // Placeholder for your update function
   updateRecipe() {
-    // this.recipeService.updateRecipe(this.recipe).subscribe(
-    //   (data) => {
-    //     this.toastr.success('Recipe updated successfully');
-    //     this.route.navigate(['/viewrecipe'], {
-    //       state: { recipe: this.recipe },
-    //     });
-    //   },
-    //   (error) => {
-    //     this.toastr.error('Error updating recipe');
-    //   }
-    // );
+    console.log('Updating recipe:', this.recipe);
+
+    this.recipeService
+      .updateRecipe(this.recipe)
+      .subscribe((data: any) => (data = this.recipe));
+    console.log('updated data', this.recipe);
+    this.router.navigate(['/view-all-recipe']);
   }
 }

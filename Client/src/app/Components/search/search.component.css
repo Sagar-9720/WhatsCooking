@@ -53,3 +53,28 @@ body {
   backdrop-filter: blur(2rem);
   margin-bottom: 5vh;
 }
+
+.suggestions {
+  list-style: none;
+  padding: 0px;
+  margin-top: 270px;
+  margin-left: 20px;
+  border: 1px solid #ccc;
+  width: 570px;
+  background-color: #fff;
+  position: absolute;
+  z-index: 1000;
+}
+.suggestions li {
+  padding: 10px;
+  cursor: pointer;
+  border: none;
+}
+
+.suggestions li:empty {
+  display: none;
+}
+
+.suggestions li:hover {
+  background-color: #f0f0f0;
+}

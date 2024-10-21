@@ -12,6 +12,7 @@ export class HomePageComponent implements OnInit {
   recipeList: Recipe[] = [];
   paginatedRecipes: Recipe[][] = [];
   currentPage: number = 0;
+  searchText: string = '';
   pageSize: number = 0;
 
   setPageSize(): void {
@@ -104,5 +105,10 @@ export class HomePageComponent implements OnInit {
     } else {
       console.error('Recipe ID is undefined');
     }
+  }
+
+  onSearch(searchText: string): void {
+    this.searchText = searchText;
+    this.paginateRecipes();
   }
 }

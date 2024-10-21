@@ -34,10 +34,18 @@ export class UserserviceService {
 
   updateProfile(user: User): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.put(`${this.apiUrl}/updateUser`, user, {
-      responseType: 'text',
-      headers,
-    });
+    return this.http
+      .put<any>(`${this.apiUrl}/updateUser`, user, {
+        headers,
+      })
+      .pipe(
+        tap((response) => {
+          if (response) {
+            sessionStorage.clear();
+            sessionStorage.setItem('user', JSON.stringify(response));
+          }
+        })
+      );
   }
 
   changePassword(user: User): Observable<any> {
@@ -49,7 +57,7 @@ export class UserserviceService {
       .pipe(
         tap((response) => {
           if (response) {
-            console.log('User Password Changed :', response);
+            sessionStorage.clear();
             sessionStorage.setItem('user', JSON.stringify(response));
           }
         })
@@ -60,7 +68,7 @@ export class UserserviceService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get<any>(`${this.apiUrl}/username`, {
       headers,
-      params: { userName: userName },
+      params: { username: userName },
     });
   }
 

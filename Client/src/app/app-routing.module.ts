@@ -13,7 +13,6 @@ import { ModifyrecipeComponent } from './Pages/modifyrecipe/modifyrecipe.compone
 import { ViewrecipeComponent } from './Pages/viewrecipe/viewrecipe.component';
 import { LogoutComponent } from './Pages/logout/logout.component';
 import { AuthGuard } from './Services/auth.guard';
-import { EndorseRecipeComponent } from './Pages/endorse-recipe/endorse-recipe.component';
 const routes: Routes = [
   {
     path: 'welcome',
@@ -72,11 +71,6 @@ const routes: Routes = [
     path: 'view-all-recipe',
     component: ViewAllRecipeComponent,
     data: { endorsed: true },
-    canActivate: [AuthGuard],
-  },
-  {
-    path: 'endorserecipe',
-    component: EndorseRecipeComponent,
     canActivate: [AuthGuard],
   },
 ];

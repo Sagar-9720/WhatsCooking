@@ -14,6 +14,7 @@ export class ViewAllRecipeComponent implements OnInit {
   role: string | null = null;
   recipeList: Recipe[] = [];
   dialogbox = false;
+  sortOrder: string = '';
   selectedRecipe: Recipe = new Recipe();
   user: User = new User();
 
@@ -170,5 +171,8 @@ export class ViewAllRecipeComponent implements OnInit {
       state: { recipe: recipe },
       queryParams: { endorse: true },
     });
+  }
+  toggleSortOrder() {
+    this.sortOrder = this.sortOrder === 'asc' ? 'desc' : 'asc';
   }
 }

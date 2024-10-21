@@ -1,11 +1,13 @@
 .recipe-list {
-  flex-grow: 1;
-  margin: 2rem auto;
-  max-width: 75rem; /* 1200px to rem */
-  padding: 2rem;
+  margin: 20px auto;
+  max-width: 1200px;
+  max-height: 60vh; /* Adjust the height as needed */
+  padding: 20px;
   background-color: transparent;
-  border-radius: 0.5rem; /* 8px to rem */
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 10px to rem */
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  /* Enable vertical scrolling */
+  margin-bottom: 20vh;
 }
 
 .styled-table {
@@ -13,11 +15,13 @@
   border-collapse: collapse;
   font-size: 1em;
   font-family: "Arial", sans-serif;
-  backdrop-filter: blur(1rem); /* 10px to rem */
+  backdrop-filter: blur(10px);
   background-color: transparent;
-  border-radius: 0.5rem; /* 8px to rem */
+  border-radius: 8px;
   overflow: hidden;
 }
+
+/* Rest of your styles */
 
 .styled-table tbody tr:hover {
   background-color: transparent;
@@ -31,11 +35,11 @@
 
 .styled-table th,
 .styled-table td {
-  padding: 0.8rem 1rem; /* 12px 15px to rem */
+  padding: 12px 15px;
 }
 
 .styled-table tbody tr {
-  border-bottom: 0.1rem solid #dddddd; /* 1px to rem */
+  border-bottom: 1px solid #dddddd;
 }
 
 .styled-table tbody tr:nth-of-type(even) {
@@ -43,7 +47,7 @@
 }
 
 .styled-table tbody tr:last-of-type {
-  border-bottom: 0.2rem solid #009879; /* 2px to rem */
+  border-bottom: 2px solid #075545;
 }
 
 .div {
@@ -51,53 +55,53 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  margin-bottom: 5rem; /* 50px to rem */
+  margin-bottom: 50px;
 }
 
 body {
-  background-image: url("/assets/images/about.jfif");
+  background-image: url("/assets/Images/viewall.jfif");
   background-size: cover;
   background-position: center;
-  min-height: 94vh;
+  height: 94vh;
   margin: 0;
   display: flex;
   justify-content: center;
   align-items: center;
+
   background-repeat: no-repeat;
 }
 
 button {
   border: none;
-  border-radius: 0.5rem; /* 8px to rem */
-  padding: 0.5rem 1rem; /* 10px 15px to rem */
-  background-color: rgb(51, 218, 196);
+  border-radius: 8px;
+  padding: 10px 15px;
+  background-color: #7ad6c7;
   color: black;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
-.dialogbox {
-  margin-top: 10vh;
-  margin-left: 24vw;
-  margin-bottom: 20vh;
-  display: flex;
-  flex-direction: column;
-  height: 50vh;
-  width: 50vw;
-  padding: 2rem;
-  background-color: wheat;
-  border-radius: 0.5rem; /* 8px to rem */
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.1); /* 10px to rem */
-}
-button:hover {
-  background-color: #007a65;
-}
 
-.viewallfooter {
-  position: inherit;
-  bottom: 0;
+button:hover {
+  background-color: #98e0d2;
+}
+.dialogbox {
+  position: fixed;
+  top: 0;
   left: 0;
   width: 100%;
-  color: #ffffff;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.dialogbox-content {
+  background-color: white;
+  padding: 2rem;
+  border-radius: 8px;
+
+  width: 400px;
   text-align: center;
-  padding: 0;
 }

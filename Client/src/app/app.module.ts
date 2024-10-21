@@ -27,8 +27,8 @@ import { LogoutComponent } from './Pages/logout/logout.component';
 import { ToastrModule } from 'ngx-toastr';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { ConfirmdeleteComponent } from './Components/confirmdelete/confirmdelete.component';
-import { EndorseRecipeComponent } from './Pages/endorse-recipe/endorse-recipe.component';
+import { SortRecipesPipe } from './Pipes/sort-recipes.pipe';
+import { SearchPipe } from './Pipes/search.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,8 +49,8 @@ import { EndorseRecipeComponent } from './Pages/endorse-recipe/endorse-recipe.co
     ModifyrecipeComponent,
     ViewrecipeComponent,
     LogoutComponent,
-    ConfirmdeleteComponent,
-    EndorseRecipeComponent,
+    SortRecipesPipe,
+    SearchPipe,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +60,9 @@ import { EndorseRecipeComponent } from './Pages/endorse-recipe/endorse-recipe.co
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule,
-    ToastrModule.forRoot(),
+    ToastrModule.forRoot({
+      timeOut: 1500,
+    }),
     MatAutocompleteModule,
     MatInputModule,
   ],
