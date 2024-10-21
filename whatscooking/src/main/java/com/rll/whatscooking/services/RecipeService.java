@@ -64,7 +64,6 @@ public class RecipeService implements iRecipeRepository {
                     ingredient = ingredientsRepository.findById(ingredient.getIngredientId())
                             .orElseThrow(() -> new EntityNotFoundException("Ingredient not found"));
                 }
-
                 // Update the ingredient in the recipe's list with the managed entity
                 ingredients.set(i, ingredient);
             }
@@ -120,7 +119,7 @@ public class RecipeService implements iRecipeRepository {
             if (comments != null && !comments.isEmpty()) {
                 commentService.deleteCommentByRecipeId(existingRecipe.getRecipe_id());
             }
-            
+
             recipeRepository.delete(existingRecipe);
             return existingRecipe;
         }
@@ -262,13 +261,17 @@ public class RecipeService implements iRecipeRepository {
 
     public String uploadImage(String previousFileName, String recipeName) {
         // Locate the image file in the asset/recipe_images directory
-        Path imagePath = Paths.get("C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\", previousFileName);
+        Path imagePath = Paths.get(
+                "C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\",
+                previousFileName);
         if (!Files.exists(imagePath)) {
             throw new RuntimeException("Image file not found: " + previousFileName);
         }
 
         // Define the new file name and path
-        Path newImagePath = Paths.get("C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\", recipeName);
+        Path newImagePath = Paths.get(
+                "C:\\Users\\sagar.gupta1\\Desktop\\21-10-24\\WhatsCooking\\Client\\src\\assets\\Recipe_Images\\",
+                recipeName);
 
         try {
             // Rename the file
@@ -278,5 +281,26 @@ public class RecipeService implements iRecipeRepository {
         }
 
         return newImagePath.toString();
+    }
+
+    public List<recipeCard> searchRecipes(String search) {
+        List<recipeCard> recipeCardList = new ArrayList<>();
+        recipeRepository.findByRecipeNameContaining(search).stream().forEach(recipe -> {
+            Nutrition nutrition = (recipe.getNutrition() != null) ? recipe.getNutrition() : null;
+            recipeCardList.add(new recipeCard(
+                    recipe.getRecipe_id(),
+                    recipe.getRecipe_name(),
+                    recipe.getMeal_timing(),
+                    recipe.getMeal_type(),
+                    recipe.getSeasonal(),
+                    recipe.getCuisine(),
+                    recipe.getLikedUser().size(),
+                    recipe.isRecipe_status(),
+                    recipe.isEndorsed(),
+                    nutrition
+            ));
+        });
+
+        return recipeCardList;
     }
 }

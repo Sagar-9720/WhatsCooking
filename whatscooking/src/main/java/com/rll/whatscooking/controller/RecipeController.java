@@ -69,8 +69,13 @@ public class RecipeController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<recipeCard>> getRecipes() {
-        List<recipeCard> recipes = recipeService.viewAllRecipes();
+    public ResponseEntity<List<recipeCard>> getRecipes(@RequestParam(required = false) String search) {
+        List<recipeCard> recipes;
+        if (search != null && !search.isEmpty()) {
+            recipes = recipeService.searchRecipes(search);
+        } else {
+            recipes = recipeService.viewAllRecipes();
+        }
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 

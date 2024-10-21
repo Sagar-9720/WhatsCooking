@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Router } from '@angular/router';
 import { Recipe } from 'src/app/Models/Recipe';
 import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
 
@@ -8,7 +9,10 @@ import { RecipeServiceService } from 'src/app/Services/recipe-service.service';
   styleUrls: ['./search.component.css'],
 })
 export class SearchComponent implements OnInit {
-  constructor(private recipeService: RecipeServiceService) {}
+  constructor(
+    private recipeService: RecipeServiceService,
+    private router: Router
+  ) {}
 
   recipies: Recipe[] = [];
   searchText: string = '';
@@ -23,7 +27,10 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch(): void {
-    this.search.emit(this.searchText);
+    // this.search.emit(this.searchText);
+    this.router.navigate(['/view-all-recipe'], {
+      queryParams: { search: this.searchText },
+    });
   }
 
   onInputChange(): void {

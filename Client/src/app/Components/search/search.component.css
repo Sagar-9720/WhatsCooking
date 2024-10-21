@@ -2,34 +2,48 @@ body {
   background: #f2f2f2;
   font-family: "Open Sans", sans-serif;
 }
-
+/* .input-container {
+  position: relative;
+  width: 100%;
+} */
 .search {
   width: 100%;
   display: flex;
   flex-direction: row;
 }
-
+ 
 .searchTerm {
   width: 100%;
-  border: 0.2rem solid rgb(153, 226, 159);
+  border: 0.2rem solid transparent;
   border-right: none;
-  padding: 2rem;
-  height: 2rem;
+  padding: 1rem;
+  height: 1rem;
   border-radius: 2rem;
   outline: none;
   color: black;
   margin-bottom: 20vh;
 }
-
+ 
+ 
+.searchTerm::before {
+  content: '\f002'; /* Font Awesome search icon code */
+  font-family: 'Font Awesome 5 Free'; /* Ensure this matches your Font Awesome version */
+  font-weight: 900; /* Make sure to adjust based on the version you use */
+  position: absolute;
+  left: 1rem; /* Adjust for padding */
+  top: 40%;
+  transform: translateY(-50%);
+  color: gray; /* Change color as needed */
+}
 .searchTerm:focus {
   color: black;
 }
-
+ 
 .searchButton {
-  width: 5rem;
-  height: 4.5rem;
-  border: 0.1rem solid rgb(153, 226, 159);
-  background: lightgreen;
+  width: 3rem;
+  height: 2rem;
+  border: 0.1rem solid transparent;
+  background: transparent;
   text-align: center;
   color: #fff;
   border-radius: 1rem;
@@ -37,7 +51,7 @@ body {
   font-size: 2rem;
   margin-bottom: 3.5rem;
 }
-
+ 
 .wrap {
   width: fit-content;
   margin-top: 30vh;
@@ -46,35 +60,12 @@ body {
   flex-direction: column;
   justify-content: center;
 }
-
+ 
 .note {
   font-family: "Sofia", sans-serif;
-  color: rebeccapurple;
-  backdrop-filter: blur(2rem);
+  color: white;
+  /* backdrop-filter: blur(2rem); */
+  background: transparent;
   margin-bottom: 5vh;
-}
-
-.suggestions {
-  list-style: none;
-  padding: 0px;
-  margin-top: 270px;
-  margin-left: 20px;
-  border: 1px solid #ccc;
-  width: 570px;
-  background-color: #fff;
-  position: absolute;
-  z-index: 1000;
-}
-.suggestions li {
-  padding: 10px;
-  cursor: pointer;
-  border: none;
-}
-
-.suggestions li:empty {
-  display: none;
-}
-
-.suggestions li:hover {
-  background-color: #f0f0f0;
+  margin-top: 5hv;
 }

@@ -42,9 +42,12 @@ export class RecipeServiceService {
       );
   }
 
-  getAllRecipes(): Observable<any> {
+  getAllRecipes(searchText?: string): Observable<any> {
     return this.httpModule
-      .get<any>(`${this.apiUrl}/all`, { observe: 'response' })
+      .get<any>(`${this.apiUrl}/all`, {
+        params: searchText ? { search: searchText } : {},
+        observe: 'response',
+      })
       .pipe(map((response: HttpResponse<any>) => response.body));
   }
 

@@ -55,11 +55,17 @@ export class ViewAllRecipeComponent implements OnInit {
       this.filterRecipes('cuisine', params['cuisine']);
     } else if (params['seasonal']) {
       this.filterRecipes('seasonal', params['seasonal']);
+    } else if (params['search']) {
+      this.fetchRecipesBySearch(params['search']);
     } else {
       this.updateList();
     }
   }
-
+  fetchRecipesBySearch(searchText: string) {
+    this.recipeService.getAllRecipes(searchText).subscribe((data) => {
+      this.recipeList = this.filterByRole(data);
+    });
+  }
   filterRecipes(filterKey: string, filterValue: string) {
     this.recipeService.getAllRecipes().subscribe((data) => {
       this.recipeList = this.filterByRole(data);
