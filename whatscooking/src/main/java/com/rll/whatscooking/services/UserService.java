@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.rll.whatscooking.View.UserView;
 import com.rll.whatscooking.domain.User;
+import com.rll.whatscooking.exception.UserNotFoundException;
 import com.rll.whatscooking.repository.UserRepository;
 import com.rll.whatscooking.repository.iUserRepository;
 
@@ -20,7 +21,12 @@ public class UserService implements iUserRepository {
 
     @Override
     public User addUser(User user) {
-        return userRepository.save(user);
+        try {
+            userRepository.save(user);
+            return user;
+        } catch (Exception e) {
+            throw new UserNotFoundException("User already exists");
+        }
     }
 
     @Override
@@ -37,7 +43,7 @@ public class UserService implements iUserRepository {
             userView.setRole(existingUser.getRole());
             return userView;
         } else {
-            return null;
+            throw new UserNotFoundException("User not found or invalid credentials");
         }
     }
 
@@ -58,9 +64,8 @@ public class UserService implements iUserRepository {
             userView.setEmail(existingUser.getEmail());
             userView.setRole(existingUser.getRole());
             return userView;
-
         } else {
-            return null;
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -76,7 +81,7 @@ public class UserService implements iUserRepository {
             userView.setRole(user.get().getRole());
             return userView;
         } else {
-            return null;
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -87,7 +92,7 @@ public class UserService implements iUserRepository {
             userRepository.delete(existingUserOpt.get());
             return user;
         } else {
-            return null;
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -107,7 +112,7 @@ public class UserService implements iUserRepository {
             userView.setRole(existingUser.getRole());
             return userView;
         } else {
-            return null;
+            throw new UserNotFoundException("User not found");
         }
     }
 
@@ -126,5 +131,21 @@ public class UserService implements iUserRepository {
             userViews.add(userView);
         }
         return userViews;
+    }
+
+    public UserView getUserByEmail(String email) {
+        Optional<User> user = userRepository.findByEmail(email);
+        if (user.isPresent()) {
+            UserView userView = new UserView();
+            userView.setUserId(user.get().getUserId());
+            userView.setUsername(user.get().getUsername());
+            userView.setFirstName(user.get().getFirstName());
+            userView.setLastName(user.get().getLastName());
+            userView.setEmail(user.get().getEmail());
+            userView.setRole(user.get().getRole());
+            return userView;
+        } else {
+            throw new UserNotFoundException("User not found");
+        }
     }
 }

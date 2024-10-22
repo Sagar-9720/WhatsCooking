@@ -19,10 +19,6 @@ public interface CommentRepository extends JpaRepository<Comments, Integer> {
     @Query("SELECT c FROM Comments c WHERE c.recipe.recipe_id = :recipeId")
     List<Comments> findByRecipeId(@Param("recipeId") int recipeId);
 
-    // Get comment by user ID and recipe ID
-    @Query("SELECT c FROM Comments c WHERE c.recipe.recipe_id = :recipeId AND c.user.userId = :userId")
-    Comments getCommentByUserIdAndRecipeId(@Param("recipeId") int recipeId, @Param("userId") int userId);
-
     // Delete comment by recipe ID
     @Modifying
     @Transactional

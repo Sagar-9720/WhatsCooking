@@ -2,7 +2,7 @@
 <div class="background-img">
   <div class="container profile-container p-4 border rounded">
     <h2 class="text-center mb-4">User Profile</h2>
-
+ 
     <!-- Navigation bar with two options -->
     <nav>
       <ul class="nav nav-tabs justify-content-center mb-4">
@@ -26,87 +26,97 @@
         </li>
       </ul>
     </nav>
-
+ 
     <!-- Show User Details section when 'Modify User Details' is selected -->
     <div *ngIf="currentSection === 'userDetails'">
       <h3 class="text-center mb-4">Modify User Details</h3>
-
+ 
       <form
         #userDetailsForm="ngForm"
         (ngSubmit)="onUpdateProfile(userDetailsForm)"
       >
-        <div class="form-group row mb-4">
-          <label for="firstName" class="col-sm-3 col-form-label"
-            >First Name:</label
-          >
-          <div class="col-sm-7">
-            <input
-              type="text"
-              id="firstName"
-              [(ngModel)]="user.firstName"
-              name="firstName"
-              class="form-control"
-              [disabled]="!isFieldEditable.firstName"
-              required
-            />
-          </div>
-          <div class="col-sm-2">
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="enableField('firstName')"
-              [disabled]="isFieldEditable.firstName"
-              [hidden]="isFieldEditable.firstName"
-            >
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button
-              type="submit"
-              class="btn btn-success"
-              [disabled]="!isFieldEditable.firstName"
-              [hidden]="!isFieldEditable.firstName"
-            >
-              <i class="fas fa-check"></i>
-            </button>
+      <div class="form-group row mb-4">
+        <label for="firstName" class="col-sm-3 col-form-label">First Name:</label>
+        <div class="col-sm-7">
+          <input
+            type="text"
+            id="firstName"
+            [(ngModel)]="user.firstName"
+            name="firstName"
+            class="form-control"
+            [disabled]="!isFieldEditable.firstName"
+            required
+            pattern="^[a-zA-Z]+$"
+            #firstName="ngModel"
+          />
+          <!-- Error message for invalid input -->
+          <div *ngIf="firstName.invalid && firstName.touched" class="text-danger">
+            <small *ngIf="firstName.errors?.['required']">First Name is required.</small>
+            <small *ngIf="firstName.errors?.['pattern']">First Name must contain letters only.</small>
           </div>
         </div>
-
-        <div class="form-group row mb-4">
-          <label for="lastName" class="col-sm-3 col-form-label"
-            >Last Name:</label
+        <div class="col-sm-2">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="enableField('firstName')"
+            [disabled]="isFieldEditable.firstName"
+            [hidden]="isFieldEditable.firstName"
           >
-          <div class="col-sm-7">
-            <input
-              type="text"
-              id="lastName"
-              [(ngModel)]="user.lastName"
-              name="lastName"
-              class="form-control"
-              [disabled]="!isFieldEditable.lastName"
-              required
-            />
-          </div>
-          <div class="col-sm-2">
-            <button
-              type="button"
-              class="btn btn-primary"
-              (click)="enableField('lastName')"
-              [disabled]="isFieldEditable.lastName"
-              [hidden]="isFieldEditable.lastName"
-            >
-              <i class="fas fa-pencil-alt"></i>
-            </button>
-            <button
-              type="submit"
-              class="btn btn-success"
-              [disabled]="!isFieldEditable.lastName"
-              [hidden]="!isFieldEditable.lastName"
-            >
-              <i class="fas fa-check"></i>
-            </button>
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!isFieldEditable.firstName"
+            [hidden]="!isFieldEditable.firstName"
+          >
+            <i class="fas fa-check"></i>
+          </button>
+        </div>
+      </div>
+     
+      <div class="form-group row mb-4">
+        <label for="lastName" class="col-sm-3 col-form-label">Last Name:</label>
+        <div class="col-sm-7">
+          <input
+            type="text"
+            id="lastName"
+            [(ngModel)]="user.lastName"
+            name="lastName"
+            class="form-control"
+            [disabled]="!isFieldEditable.lastName"
+            required
+            pattern="^[a-zA-Z]+$"
+            #lastName="ngModel"
+          />
+          <!-- Error message for invalid input -->
+          <div *ngIf="lastName.invalid && lastName.touched" class="text-danger">
+            <small *ngIf="lastName.errors?.['required']">Last Name is required.</small>
+            <small *ngIf="lastName.errors?.['pattern']">Last Name must contain letters only.</small>
           </div>
         </div>
-
+        <div class="col-sm-2">
+          <button
+            type="button"
+            class="btn btn-primary"
+            (click)="enableField('lastName')"
+            [disabled]="isFieldEditable.lastName"
+            [hidden]="isFieldEditable.lastName"
+          >
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button
+            type="submit"
+            class="btn btn-success"
+            [disabled]="!isFieldEditable.lastName"
+            [hidden]="!isFieldEditable.lastName"
+          >
+            <i class="fas fa-check"></i>
+          </button>
+        </div>
+      </div>
+     
         <div class="form-group row mb-4">
           <label for="email" class="col-sm-3 col-form-label">Email:</label>
           <div class="col-sm-7">
@@ -153,7 +163,7 @@
             </button>
           </div>
         </div>
-
+ 
         <div *ngIf="showOtpInput" class="form-group row mb-4">
           <label for="otp" class="col-sm-3 col-form-label">Enter OTP:</label>
           <div class="col-sm-7">
@@ -174,11 +184,11 @@
         </div>
       </form>
     </div>
-
+ 
     <!-- Show Change Password section when 'Change Password' is selected -->
     <div *ngIf="currentSection === 'changePassword'">
       <h3 class="text-center mb-4">Change Password</h3>
-
+ 
       <form
         #changePasswordForm="ngForm"
         (ngSubmit)="onChangePassword(changePasswordForm)"
@@ -224,7 +234,7 @@
             >
           </div>
         </div>
-
+ 
         <!-- New Password -->
         <div class="mb-3">
           <label for="password" class="form-label">New Password</label>
@@ -237,6 +247,7 @@
               [(ngModel)]="user.password"
               required
               minlength="7"
+              pattern="^(?=.*[0-9])(?=.*[A-Z])(?=.*[\W_]).{7,}$"
               #password="ngModel"
               placeholder="Enter your new password"
               autocomplete="off"
@@ -259,9 +270,14 @@
             <small *ngIf="password.errors?.['minlength']"
               >New Password must be at least 7 characters long.</small
             >
+            <small *ngIf="password.errors?.['pattern']"
+                  >Password must contain at least one number, one UpperCase
+                  Letter, and one special character.</small
+                >
+           
           </div>
         </div>
-
+ 
         <!-- Verify New Password -->
         <div class="mb-3">
           <label for="verifyPassword" class="form-label"
@@ -300,7 +316,7 @@
             >
           </div>
         </div>
-
+ 
         <div *ngIf="showPasswordErrorButtons" class="text-danger mt-3">
           <small>Incorrect current password. Please try again.</small><br />
           <button
@@ -314,7 +330,7 @@
             >forgot password??</a
           >
         </div>
-
+ 
         <div class="text-center">
           <button
             type="submit"
@@ -329,3 +345,5 @@
   </div>
 </div>
 <app-footer></app-footer>
+ 
+ 

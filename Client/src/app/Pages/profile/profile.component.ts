@@ -57,10 +57,6 @@ export class ProfileComponent {
   }
 
   enableField(field: keyof typeof this.isFieldEditable) {
-    Object.keys(this.isFieldEditable).forEach(
-      (key) =>
-        (this.isFieldEditable[key as keyof typeof this.isFieldEditable] = false)
-    );
     this.isFieldEditable[field] = true;
   }
 

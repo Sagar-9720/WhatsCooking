@@ -39,18 +39,19 @@ function getMealTimingList(): string[] {
 export class AddRecipeComponent implements OnInit {
   recipe: Recipe = new Recipe();
   ingredients: Ingredient[] = [{ ingredient_id: 0, name: '' }];
-  userRole: string = '';
-  isNutritionist: boolean = false;
   selectedFile: File | null = null;
   imageUrl: string | null = null;
+
   mealTypes: string[] = [];
   seasons: string[] = [];
   cuisines: string[] = [];
   mealTimings: string[] = [];
-  loggedInUser: User = new User();
+
   nutrition: Nutrition = new Nutrition();
+
   allIngredients: Ingredient[] = [];
   filteredIngredients: Ingredient[] = [];
+
   constructor(
     private recipeService: RecipeServiceService,
     private toast: ToastrService,
@@ -58,13 +59,11 @@ export class AddRecipeComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loggedInUser = JSON.parse(sessionStorage.getItem('user') || '{}');
-    this.userRole = this.loggedInUser.role || '';
-    this.isNutritionist = this.userRole === 'nutritionist';
     this.mealTypes = getMealTypeList(); // ['VEGETARIAN', 'NON_VEGETARIAN', ...]
     this.seasons = getSeasonalList(); // ['WINTER', 'SPRING', 'SUMMER', 'FALL']
     this.cuisines = getCuisineList(); // ['ITALIAN', 'CHINESE', 'MEXICAN', ...]
     this.mealTimings = getMealTimingList(); // ['BREAKFAST', 'LUNCH', 'DINNER', ...]
+
     this.ingredientService.getAllIngredients().subscribe({
       next: (response: Ingredient[]) => {
         if (response) {
@@ -79,6 +78,7 @@ export class AddRecipeComponent implements OnInit {
       },
     });
   }
+
   ngOnChanges(): void {
     this.ingredientService.getAllIngredients().subscribe({
       next: (response: Ingredient[]) => {
@@ -123,10 +123,6 @@ export class AddRecipeComponent implements OnInit {
   }
   onSubmit(recipeForm: NgForm) {
     if (recipeForm.valid) {
-      const nutrition = this.isNutritionist ? this.nutrition : undefined;
-      if (nutrition) {
-        nutrition.user = this.loggedInUser;
-      }
       const likedUsers: User[] = [];
       const newRecipe = new Recipe(
         undefined,
@@ -137,7 +133,7 @@ export class AddRecipeComponent implements OnInit {
         recipeForm.value.meal_type || null,
         recipeForm.value.seasonal || null,
         recipeForm.value.cuisine || null,
-        nutrition,
+        this.nutrition,
         this.ingredients,
         0,
         likedUsers,
@@ -195,10 +191,6 @@ export class AddRecipeComponent implements OnInit {
       });
     } else {
       this.toast.error('Invalid form. Please check the form for errors.');
-      Object.keys(recipeForm.controls).forEach((key) => {
-        const control = recipeForm.controls[key];
-        console.log('Invalid control:', control);
-      });
     }
   }
 

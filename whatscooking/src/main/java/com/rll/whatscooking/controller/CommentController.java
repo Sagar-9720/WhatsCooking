@@ -41,12 +41,8 @@ public class CommentController {
     // GET request to retrieve comments
     @GetMapping
     public ResponseEntity<?> getComments(
-            @RequestParam(required = false) Integer recipeId,
-            @RequestParam(required = false) Integer userId) {
-        if (recipeId != null && userId != null) {
-            Comments comment = commentService.getCommentByUserIdAndRecipeId(recipeId, userId);
-            return new ResponseEntity<>(comment, HttpStatus.OK);
-        } else if (recipeId != null) {
+            @RequestParam(required = false) Integer recipeId) {
+        if (recipeId != null) {
             List<Comments> commentsList = commentService.findByRecipeId(recipeId);
             return new ResponseEntity<>(commentsList, HttpStatus.OK);
         } else {

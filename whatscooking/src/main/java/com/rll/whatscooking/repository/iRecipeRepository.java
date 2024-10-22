@@ -27,4 +27,7 @@ public interface iRecipeRepository {
 
     Recipe disableRecipe(Recipe recipe);
 
+    String uploadImage(String previousFileName, String newFileName);
+
+    List<recipeCard> searchRecipes(String search);
 }

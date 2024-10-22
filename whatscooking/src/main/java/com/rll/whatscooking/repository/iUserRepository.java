@@ -17,5 +17,11 @@ public interface iUserRepository {
 
     UserView changePassword(User user);
 
+    UserView getUserByUsername(String username);
+
     List<UserView> getAllUsers();
+
+    UserView getUserByEmail(String email);
+
+
 }

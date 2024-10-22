@@ -21,7 +21,6 @@ import lombok.Data;
 @Entity
 @Data
 public class Recipe {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int recipe_id;

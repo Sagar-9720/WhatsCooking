@@ -150,7 +150,7 @@
           </div>
 
           <!-- Ingredients -->
-          <div class="form-group" style="display: flex;flex-direction: column;">
+          <div class="form-group" style="display: flex; flex-direction: column">
             <label for="ingredients" class="font-weight-bold"
               >Ingredients</label
             >
@@ -236,6 +236,34 @@
               <small *ngIf="recipeSteps.errors?.['minlength']"
                 >Minimum 10 characters required.</small
               >
+            </div>
+          </div>
+
+          <!-- Update Image -->
+          <div class="upload-container">
+            <label
+              for="file-upload"
+              class="custom-file-upload"
+              style="margin-right: 3vw"
+            >
+              Browse Image
+            </label>
+            <input
+              type="file"
+              id="file-upload"
+              (change)="onFileSelected($event)"
+              accept="image/*"
+            />
+            <br /><br />
+
+            <div *ngIf="imageUrl">
+              <h5>Uploaded Image Preview:</h5>
+              <img
+                [src]="imageUrl"
+                alt="Uploaded Image"
+                style="width: 200px; height: auto"
+              />
+              <br />
             </div>
           </div>
 

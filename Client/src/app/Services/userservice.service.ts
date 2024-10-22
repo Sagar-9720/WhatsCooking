@@ -76,4 +76,11 @@ export class UserserviceService {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.get<any>(`${this.apiUrl}`, { headers });
   }
+  getUserDetailsByEmail(email: string): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.get<any>(`${this.apiUrl}/email`, {
+      headers,
+      params: { email },
+    });
+  }
 }

@@ -123,42 +123,6 @@
       </div>
     </div>
 
-    <!-- Conditional Nutrition Fields -->
-    <div *ngIf="isNutritionist" class="form-group">
-      <label for="calories" class="font-weight-bold">Calories</label>
-      <input
-        type="number"
-        id="calories"
-        name="calories"
-        [(ngModel)]="nutrition.calories"
-        class="form-control"
-      />
-      <label for="protein" class="font-weight-bold">Protein</label>
-      <input
-        type="number"
-        id="protein"
-        name="protein"
-        [(ngModel)]="nutrition.protein"
-        class="form-control"
-      />
-      <label for="fat" class="font-weight-bold">Fat</label>
-      <input
-        type="number"
-        id="fat"
-        name="fat"
-        [(ngModel)]="nutrition.fat"
-        class="form-control"
-      />
-      <label for="carbs" class="font-weight-bold">Carbohydrates</label>
-      <input
-        type="number"
-        id="carbs"
-        name="carbs"
-        [(ngModel)]="nutrition.carbs"
-        class="form-control"
-      />
-    </div>
-
     <!-- Meal Timing, Type, Season, and Cuisine -->
     <div class="form-group">
       <label for="mealTiming" class="font-weight-bold">Meal Timing</label>

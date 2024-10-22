@@ -14,7 +14,6 @@ public interface iCommentRepository {
 
     List<Comments> getAllComments();
 
-    List<Comments> findByRecipeId(@Param("recipeId") Integer recipeId);
+    List<Comments> findByRecipeId(Integer recipeId);
 
-    Comments getCommentByUserIdAndRecipeId(@Param("recipeId") int recipeId, @Param("userId") int userId);
 }

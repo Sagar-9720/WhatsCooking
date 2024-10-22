@@ -19,6 +19,8 @@ import com.rll.whatscooking.domain.Ingredients;
 import com.rll.whatscooking.domain.Nutrition;
 import com.rll.whatscooking.domain.Recipe;
 import com.rll.whatscooking.domain.User;
+import com.rll.whatscooking.exception.RecipeNotFoundException;
+import com.rll.whatscooking.exception.UserNotFoundException;
 import com.rll.whatscooking.repository.IngredientRepository;
 import com.rll.whatscooking.repository.RecipeRepository;
 import com.rll.whatscooking.repository.UserRepository;
@@ -28,7 +30,6 @@ import jakarta.persistence.EntityNotFoundException;
 
 @Service
 public class RecipeService implements iRecipeRepository {
-
     @Autowired
     private RecipeRepository recipeRepository;
 
@@ -56,9 +57,7 @@ public class RecipeService implements iRecipeRepository {
             for (int i = 0; i < ingredients.size(); i++) {
                 Ingredients ingredient = ingredients.get(i);
 
-                if (ingredient.getName().compareTo("") != 0) {
-                    continue;
-                } else if (ingredient.getIngredientId() == 0) {
+                if (ingredient.getIngredientId() == 0) {
                     ingredient = ingredientsRepository.save(ingredient);
                 } else {
                     ingredient = ingredientsRepository.findById(ingredient.getIngredientId())
@@ -87,9 +86,7 @@ public class RecipeService implements iRecipeRepository {
             List<Ingredients> ingredients = recipe.getIngredients();
             if (ingredients != null && !ingredients.isEmpty()) {
                 for (Ingredients ingredient : ingredients) {
-                    if (ingredient.getName().compareTo("") != 0) {
-                        continue;
-                    } else if (ingredient.getIngredientId() == 0) {
+                    if (ingredient.getIngredientId() == 0) {
                         ingredient = ingredientsRepository.save(ingredient);
                     } else {
                         ingredient = ingredientsRepository.findById(ingredient.getIngredientId()).orElse(null);
@@ -100,9 +97,10 @@ public class RecipeService implements iRecipeRepository {
                 }
             }
 
-            return recipeRepository.save(existingRecipe);
+            Recipe savedRecipe = recipeRepository.save(existingRecipe);
+            return savedRecipe;
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     @Override
@@ -118,7 +116,7 @@ public class RecipeService implements iRecipeRepository {
             recipeRepository.delete(existingRecipe);
             return existingRecipe;
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     @Override
@@ -130,7 +128,7 @@ public class RecipeService implements iRecipeRepository {
             existingRecipe.setNutrition(recipe.getNutrition());
             return recipeRepository.save(existingRecipe);
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     @Override
@@ -147,7 +145,7 @@ public class RecipeService implements iRecipeRepository {
             }
             return existingRecipe;
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     @Override
@@ -165,8 +163,7 @@ public class RecipeService implements iRecipeRepository {
                     recipe.getLikedUser().size(),
                     recipe.isRecipe_status(),
                     recipe.isEndorsed(),
-                    nutrition
-            ));
+                    nutrition));
         });
         return recipeCardList;
     }
@@ -178,12 +175,12 @@ public class RecipeService implements iRecipeRepository {
         }
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (!optionalRecipe.isPresent()) {
-            throw new IllegalArgumentException("Recipe does not exist");
+            throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
         }
         User user = recipe.getLikedUser().get(0);
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (!optionalUser.isPresent()) {
-            throw new IllegalArgumentException("User does not exist");
+            throw new UserNotFoundException("User not found with id: " + user.getUserId());
         }
 
         user = optionalUser.get();
@@ -202,12 +199,12 @@ public class RecipeService implements iRecipeRepository {
         }
         Optional<Recipe> optionalRecipe = recipeRepository.findById(recipe.getRecipe_id());
         if (!optionalRecipe.isPresent()) {
-            throw new IllegalArgumentException("Recipe does not exist");
+            throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
         }
         User user = recipe.getLikedUser().get(0);
         Optional<User> optionalUser = userRepository.findById(user.getUserId());
         if (!optionalUser.isPresent()) {
-            throw new IllegalArgumentException("User does not exist");
+            throw new UserNotFoundException("User not found with id: " + user.getUserId());
         }
 
         user = optionalUser.get();
@@ -227,7 +224,7 @@ public class RecipeService implements iRecipeRepository {
             existingRecipe.setRecipe_status(true);
             return recipeRepository.save(existingRecipe);
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     @Override
@@ -238,19 +235,16 @@ public class RecipeService implements iRecipeRepository {
             existingRecipe.setRecipe_status(false);
             return recipeRepository.save(existingRecipe);
         }
-        return null;
+        throw new RecipeNotFoundException("Recipe not found with id: " + recipe.getRecipe_id());
     }
 
     public String uploadImage(String previousFileName, String recipeName) {
-        Path imagePath = Paths.get(
-                assetPath,
-                previousFileName);
+        Path imagePath = Paths.get(assetPath, previousFileName);
         if (!Files.exists(imagePath)) {
             throw new RuntimeException("Image file not found: " + previousFileName);
         }
 
-        Path newImagePath = Paths.get(
-                assetPath, recipeName);
+        Path newImagePath = Paths.get(assetPath, recipeName);
 
         try {
             Files.move(imagePath, newImagePath, StandardCopyOption.REPLACE_EXISTING);
@@ -275,8 +269,7 @@ public class RecipeService implements iRecipeRepository {
                     recipe.getLikedUser().size(),
                     recipe.isRecipe_status(),
                     recipe.isEndorsed(),
-                    nutrition
-            ));
+                    nutrition));
         });
 
         return recipeCardList;

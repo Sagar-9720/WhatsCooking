@@ -147,6 +147,12 @@ export class LoginComponent {
       return 'Verify OTP';
     } else if (this.otpVerified) {
       return 'Reset Password';
+    } else if (this.currentView === 'forgotUserName') {
+      return 'Forgot Username';
+    } else if (this.currentView === 'otpusername') {
+      return 'Verify OTP';
+    } else if (this.currentView === 'showUserName') {
+      return 'Username';
     } else {
       return 'Login';
     }
@@ -164,10 +170,10 @@ export class LoginComponent {
 
       emailjs
         .send(
-          'service_nv5lxnp',
-          'template_lgelbyd',
+          'service_y2qrmep',
+          'template_sunauvg',
           emailParams,
-          'SjgihAB4UCeme8PYg'
+          '9Jdz3Gwg5Pv4TNysU'
         )
         .then(
           (response: { status: number; text: string }) => {
@@ -192,11 +198,26 @@ export class LoginComponent {
       if (this.user.otp === this.generatedOtp) {
         this.otpVerified = true;
         this.toastr.success('OTP verified successfully');
+        this.userService
+          .getUserDetailsByEmail(this.user.email!)
+          .subscribe((existingUser) => {
+            this.user = existingUser;
+          });
         this.setView('showUserName');
       } else {
         this.toastr.error('Invalid OTP');
         console.log('Invalid OTP');
       }
     }
+  }
+  SetToLogin() {
+    this.user = new User();
+    this.forgotPasswordActive = false;
+    this.otpSent = false;
+    this.otpVerified = false;
+    this.flag = false;
+    this.generatedOtp = '';
+
+    this.setView('login');
   }
 }

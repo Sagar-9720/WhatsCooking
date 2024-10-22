@@ -42,7 +42,9 @@ export class RegisterComponent {
 
   checkEmailExistence() {
     this.isEmailTaken =
-      this.allUser.filter((u: User) => u.email === this.user.email).length > 0;
+      this.allUser.filter(
+        (u: User) => u.email?.toLowerCase === this.user.email?.toLocaleUpperCase
+      ).length > 0;
   }
 
   onSubmit(registerForm: any) {
@@ -97,14 +99,14 @@ export class RegisterComponent {
     // Clear any existing timers
     clearTimeout(this.otpTimeout);
 
-    // Set a 2-minute timeout
+    // Set a 1-minute timeout
     this.otpTimeout = setTimeout(() => {
       this.toastr.error('OTP expired. Please verify your email again.');
       console.log('OTP expired. Please verify your email again.');
       this.showOtpInput = false;
       this.user.email = ''; // Reset the email field
       this.isEmailVerified = false;
-    }, 2 * 60 * 1000); // 2 minutes
+    }, 60 * 1000); // 1 minutes
   }
 
   verifyOtp() {

@@ -79,13 +79,7 @@ public class RecipeController {
         return new ResponseEntity<>(recipes, HttpStatus.OK);
     }
 
-    @GetMapping("/byIngredients")
-    public ResponseEntity<List<Recipe>> getRecipesByIngredients(@RequestParam List<Long> ingredientIds) {
-
-        // Implement logic to get recipes by ingredients
-        // This method needs to be implemented in RecipeService
-        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
-    }
+    
 
     @PutMapping("/endorse")
     public ResponseEntity<String> endorseRecipe(@RequestBody Recipe recipe) {

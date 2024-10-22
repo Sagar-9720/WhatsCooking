@@ -61,7 +61,7 @@
                       name="password"
                       [(ngModel)]="user.password"
                       required
-                      minlength="6"
+                      minlength="7"
                       #password="ngModel"
                       placeholder="Enter your password"
                       autocomplete="off"
@@ -74,7 +74,7 @@
                         >Password is required.</small
                       >
                       <small *ngIf="password.errors?.['minlength']"
-                        >Password must be at least 6 characters long.</small
+                        >Password must be at least 7 characters long.</small
                       >
                     </div>
                   </div>
@@ -161,7 +161,7 @@
                       >
                     </div>
                   </div>
-
+                  <!-- forget username button -->
                   <div class="form-forgot-username">
                     <button
                       type="button"
@@ -243,7 +243,7 @@
                       name="newPassword"
                       [(ngModel)]="user.password"
                       required
-                      minlength="6"
+                      minlength="7"
                       #newPassword="ngModel"
                       placeholder="Enter your new password"
                       autocomplete="off"
@@ -256,7 +256,7 @@
                         >Password is required.</small
                       >
                       <small *ngIf="newPassword.errors?.['minlength']"
-                        >Password must be at least 6 characters long.</small
+                        >Password must be at least 7 characters long.</small
                       >
                     </div>
                   </div>
@@ -364,7 +364,7 @@
                 <button
                   type="button"
                   class="btn btn-primary"
-                  (click)="setView('login')"
+                  (click)="SetToLogin()"
                 >
                   Back To Login
                 </button>

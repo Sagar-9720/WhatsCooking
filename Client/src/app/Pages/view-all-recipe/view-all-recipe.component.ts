@@ -31,6 +31,12 @@ export class ViewAllRecipeComponent implements OnInit {
       this.handleQueryParams(params)
     );
   }
+  ngOnChanges() {
+    this.loadUserFromSession();
+    this.route.queryParams.subscribe((params) =>
+      this.handleQueryParams(params)
+    );
+  }
 
   loadUserFromSession() {
     const user = sessionStorage.getItem('user');

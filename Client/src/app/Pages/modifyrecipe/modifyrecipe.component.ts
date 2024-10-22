@@ -38,7 +38,8 @@ function getMealTimingList(): string[] {
 export class ModifyrecipeComponent implements OnInit {
   recipe: Recipe = new Recipe();
   submitted: boolean = false;
-
+  selectedFile: File | null = null;
+  imageUrl: string | null = null;
   mealTypes: string[] = [];
   seasons: string[] = [];
   cuisines: string[] = [];
@@ -52,6 +53,17 @@ export class ModifyrecipeComponent implements OnInit {
   ingredients: Ingredient[] = [];
   allIngredients: Ingredient[] = [];
   filteredIngredients: Ingredient[] = [];
+
+  constructor(
+    private router: Router,
+    private recipeService: RecipeServiceService,
+    private toastr: ToastrService,
+    private ingredientService: IngredientserviceService
+  ) {
+    // Fetch the recipe data
+    this.fetchRecipe();
+  }
+
   ngOnInit(): void {
     this.loggedInUser = JSON.parse(sessionStorage.getItem('user') || '{}');
     this.userRole = this.loggedInUser.role || '';
@@ -73,9 +85,6 @@ export class ModifyrecipeComponent implements OnInit {
         console.error('Error fetching ingredients:', error);
       },
     });
-
-    // Fetch the recipe data
-    this.fetchRecipe();
   }
 
   ngOnChanges(): void {
@@ -128,14 +137,6 @@ export class ModifyrecipeComponent implements OnInit {
     }
   }
 
-  constructor(
-    private router: Router,
-    private recipeService: RecipeServiceService,
-    private toastr: ToastrService,
-    private ingredientService: IngredientserviceService
-  ) {
-    this.fetchRecipe();
-  }
   fetchRecipe() {
     const navigation = this.router.getCurrentNavigation();
     const state = navigation?.extras.state as { recipe: Recipe };
@@ -149,8 +150,10 @@ export class ModifyrecipeComponent implements OnInit {
           if (data) {
             this.recipe = data;
             this.ingredients = data.ingredients || [];
-
+            this.ingredients.push({ ingredient_id: 0, name: '' });
             this.submitted = false;
+          } else {
+            this.toastr.error('Error fetching recipe');
           }
         } catch (error) {
           this.toastr.error('Error fetching recipe');
@@ -161,10 +164,61 @@ export class ModifyrecipeComponent implements OnInit {
 
   updateRecipe() {
     console.log('Updating recipe:', this.recipe);
-    this.recipeService
-      .updateRecipe(this.recipe)
-      .subscribe((data: any) => (data = this.recipe));
-    console.log('updated data', this.recipe);
-    this.router.navigate(['/view-all-recipe']);
+    this.recipe.ingredients = this.ingredients.filter(
+      (ingredient) => ingredient.name !== ''
+    );
+    this.recipeService.updateRecipe(this.recipe).subscribe((data: any) => {
+      this.toastr.success('Recipe updated successfully');
+      console.log('updated data', this.recipe);
+
+      let newImageName = this.recipe.recipe_name?.split(' ').join('');
+      this.recipeService
+        .uploadImage(this.selectedFile!.name, newImageName!)
+        .subscribe({
+          next: (response: string) => {
+            if (response) {
+              this.toastr.success('Image uploaded successfully');
+            } else {
+              this.toastr.error('Error uploading image');
+            }
+          },
+          error: (error) => {
+            this.toastr.error('Error uploading image');
+          },
+        });
+    });
+    this.recipeService.getRecipe(this.recipe.recipe_id ?? 0).subscribe({
+      next: (data) => {
+        this.recipe = data;
+      },
+      error: (error) => {
+        console.error('Error fetching recipe:', error);
+      },
+    });
+
+    this.router.navigate(['/view-all-recipe'], { state: { changed: true } });
+  }
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      this.selectedFile = input.files[0];
+      console.log('Selected File:', this.selectedFile);
+      const reader = new FileReader();
+
+      reader.onload = () => {
+        this.imageUrl = reader.result as string;
+      };
+      reader.readAsDataURL(this.selectedFile);
+    }
+  }
+
+  onUpload() {
+    if (this.selectedFile) {
+      console.log('Uploading:', this.selectedFile.name);
+      alert('Image Uploaded Successfully...');
+    } else {
+      console.error('No file selected!');
+      alert('Failed to Upload the Image');
+    }
   }
 }

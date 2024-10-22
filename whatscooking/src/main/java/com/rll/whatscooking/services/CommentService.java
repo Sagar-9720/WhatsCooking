@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.rll.whatscooking.domain.Comments;
+import com.rll.whatscooking.exception.CommentNotFoundException;
 import com.rll.whatscooking.repository.CommentRepository;
 import com.rll.whatscooking.repository.iCommentRepository;
 
@@ -30,8 +31,9 @@ public class CommentService implements iCommentRepository {
             Comments deletedComments = optionalComments.get();
             commentRepository.delete(deletedComments);
             return deletedComments;
+        } else {
+            throw new CommentNotFoundException("Comment not found with id: " + comments.getCommentId());
         }
-        return null;
     }
 
     @Override
@@ -46,12 +48,11 @@ public class CommentService implements iCommentRepository {
 
     @Transactional
     public boolean deleteCommentByRecipeId(int recipeId) {
+        List<Comments> comments = commentRepository.findByRecipeId(recipeId);
+        if (comments.isEmpty()) {
+            throw new CommentNotFoundException("No comments found for recipe id: " + recipeId);
+        }
         commentRepository.deleteCommentByRecipeId(recipeId);
         return true;
-    }
-
-    @Override
-    public Comments getCommentByUserIdAndRecipeId(int recipeId, int userId) {
-        return commentRepository.getCommentByUserIdAndRecipeId(recipeId, userId);
     }
 }
