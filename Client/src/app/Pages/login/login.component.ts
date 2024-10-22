@@ -73,10 +73,10 @@ export class LoginComponent {
 
       emailjs
         .send(
-          'service_nv5lxnp',
-          'template_lgelbyd',
+          'service_y2qrmep',
+          'template_sunauvg',
           emailParams,
-          'SjgihAB4UCeme8PYg'
+          '9Jdz3Gwg5Pv4TNysU'
         )
         .then(
           (response: { status: number; text: string }) => {
@@ -149,6 +149,54 @@ export class LoginComponent {
       return 'Reset Password';
     } else {
       return 'Login';
+    }
+  }
+  forgotUserName() {
+    this.setView('forgotUserName');
+  }
+  sendOtpUserName(forgotUserName: any): void {
+    if (forgotUserName.valid) {
+      this.generatedOtp = this.generateOtp();
+      const emailParams = {
+        to_email: this.user.email,
+        otp: this.generatedOtp,
+      };
+
+      emailjs
+        .send(
+          'service_nv5lxnp',
+          'template_lgelbyd',
+          emailParams,
+          'SjgihAB4UCeme8PYg'
+        )
+        .then(
+          (response: { status: number; text: string }) => {
+            console.log(
+              'OTP sent successfully',
+              response.status,
+              response.text
+            );
+            this.toastr.success('OTP sent successfully');
+            this.otpSent = true;
+            this.setView('otpusername');
+          },
+          (err: any) => {
+            this.toastr.error('Failed to send OTP');
+            console.error('Failed to send OTP', err);
+          }
+        );
+    }
+  }
+  verifyOtpUserName(otpForm: any): void {
+    if (otpForm.valid) {
+      if (this.user.otp === this.generatedOtp) {
+        this.otpVerified = true;
+        this.toastr.success('OTP verified successfully');
+        this.setView('showUserName');
+      } else {
+        this.toastr.error('Invalid OTP');
+        console.log('Invalid OTP');
+      }
     }
   }
 }

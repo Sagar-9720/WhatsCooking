@@ -162,6 +162,16 @@
                     </div>
                   </div>
 
+                  <div class="form-forgot-username">
+                    <button
+                      type="button"
+                      class="btn btn-link"
+                      (click)="forgotUserName()"
+                    >
+                      Forget Username?
+                    </button>
+                  </div>
+
                   <div class="form-group text-center">
                     <button
                       type="submit"
@@ -206,7 +216,6 @@
                       >
                     </div>
                   </div>
-
                   <div class="form-group text-center">
                     <button
                       type="submit"
@@ -262,6 +271,103 @@
                     </button>
                   </div>
                 </form>
+              </div>
+              <!-- Forgot username -->
+              <div *ngSwitchCase="'forgotUserName'">
+                <form
+                  #forgotUserName="ngForm"
+                  (ngSubmit)="sendOtpUserName(forgotUserName)"
+                >
+                  <div class="form-group">
+                    <label for="email">Email</label>
+                    <input
+                      type="email"
+                      class="form-control"
+                      id="email"
+                      name="email"
+                      [(ngModel)]="user.email"
+                      required
+                      #email="ngModel"
+                      placeholder="Enter your email"
+                      autocomplete="off"
+                    />
+                    <div
+                      *ngIf="email.invalid && email.touched"
+                      class="text-danger"
+                    >
+                      <small *ngIf="email.errors?.['required']"
+                        >Email is required.</small
+                      >
+                    </div>
+                  </div>
+
+                  <div class="form-group text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="forgotUserName.invalid"
+                    >
+                      Send OTP
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <!-- otp for username forgot -->
+              <div *ngSwitchCase="'otpusername'">
+                <form #otpForm="ngForm" (ngSubmit)="verifyOtpUserName(otpForm)">
+                  <div class="form-group">
+                    <label for="otp">OTP</label>
+                    <input
+                      type="text"
+                      class="form-control text-center"
+                      id="otp"
+                      name="otp"
+                      [(ngModel)]="user.otp"
+                      required
+                      minlength="6"
+                      maxlength="6"
+                      #otp="ngModel"
+                      placeholder="Enter OTP"
+                      autocomplete="off"
+                      style="
+                        font-size: 2rem;
+                        letter-spacing: 0.5rem;
+                        width: 100%;
+                      "
+                    />
+                    <div *ngIf="otp.invalid && otp.touched" class="text-danger">
+                      <small *ngIf="otp.errors?.['required']"
+                        >OTP is required.</small
+                      >
+                      <small *ngIf="otp.errors?.['minlength']"
+                        >OTP must be 6 characters long.</small
+                      >
+                    </div>
+                  </div>
+                  <div class="form-group text-center">
+                    <button
+                      type="submit"
+                      class="btn btn-primary"
+                      [disabled]="otpForm.invalid"
+                    >
+                      Verify OTP
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <!-- show username -->
+              <div *ngSwitchCase="'showUserName'">
+                <div>
+                  <h3>Your Username is: {{ user.username }}</h3>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  (click)="setView('login')"
+                >
+                  Back To Login
+                </button>
               </div>
             </div>
           </div>

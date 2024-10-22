@@ -77,10 +77,10 @@ export class RegisterComponent {
 
     emailjs
       .send(
-        'service_nv5lxnp',
-        'template_lgelbyd',
+        'service_y2qrmep',
+        'template_sunauvg',
         templateParams,
-        'SjgihAB4UCeme8PYg'
+        '9Jdz3Gwg5Pv4TNysU'
       )
       .then(() => {
         this.toastr.success('OTP sent successfully!');
