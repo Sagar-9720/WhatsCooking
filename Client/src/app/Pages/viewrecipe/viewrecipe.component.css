@@ -181,3 +181,7 @@ h1 {
   font-weight: 600;
   padding: 0.625rem; /* Converted from 10px */
 }
+
+input{
+  width: 50%;
+}

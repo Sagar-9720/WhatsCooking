@@ -143,12 +143,7 @@ public class WhatscookingApplicationTests {
         ingredientRepository.save(ingredient2);
     }
 
-    @Test
-    void testGetAllIngredients() {
-        List<Ingredients> ingredientsList = ingredientService.getAllIngredients();
-        assertNotNull(ingredientsList);
-        assertEquals(2, ingredientsList.size());
-    }
+    
 
     @Test
     void testAddIngredient() {

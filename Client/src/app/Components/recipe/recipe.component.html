@@ -3,7 +3,7 @@
     class="card-header text-white d-flex align-items-center justify-content-between"
   >
     <!-- Display endorsement status -->
-    <h6 *ngIf="recipe?.endorsed">
+    <h6 *ngIf="recipe?.endorsed" style="color:black">
       Endorsed by {{ recipe?.nutrition?.user?.firstName }}
     </h6>
   </div>

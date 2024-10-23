@@ -50,19 +50,19 @@
                     </tr>
                     <tr>
                       <th>Carbs</th>
-                      <td>{{ recipe.nutrition?.carbs }}</td>
+                      <td>{{ recipe.nutrition?.carbs + " " }} per 100 gm</td>
                     </tr>
                     <tr>
                       <th>Fats</th>
-                      <td>{{ recipe.nutrition?.fat }}</td>
+                      <td>{{ recipe.nutrition?.fat + " " }} per 100 gm</td>
                     </tr>
                     <tr>
                       <th>Proteins</th>
-                      <td>{{ recipe.nutrition?.protein }}</td>
+                      <td>{{ recipe.nutrition?.protein + " " }} per 100 gm</td>
                     </tr>
                     <tr>
                       <th>Calories</th>
-                      <td>{{ recipe.nutrition?.calories }}</td>
+                      <td>{{ recipe.nutrition?.calories + " " }} KCal</td>
                     </tr>
                   </tbody>
                 </table>
@@ -75,24 +75,28 @@
                   <th>Carbs</th>
                   <td>
                     <input type="number" [(ngModel)]="nutrition.carbs" />
+                    per 100 gm
                   </td>
                 </tr>
                 <tr>
                   <th>Fats</th>
                   <td>
                     <input type="number" [(ngModel)]="nutrition.fat" />
+                    per 100 gm
                   </td>
                 </tr>
                 <tr>
                   <th>Proteins</th>
                   <td>
                     <input type="number" [(ngModel)]="nutrition.protein" />
+                    per 100 gm
                   </td>
                 </tr>
                 <tr>
                   <th>Calories</th>
                   <td>
                     <input type="number" [(ngModel)]="nutrition.calories" />
+                    KCal
                   </td>
                 </tr>
                 <tr>
